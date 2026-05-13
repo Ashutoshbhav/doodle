@@ -1,0 +1,1 @@
+- 2026-05-03 17:00 — check-1 — FAIL — 2 TS errors block build (`Icon` type not in SSR subpath, PatchWall.tsx:31 + Founders.tsx:12); Hero.tsx:53 dynamic `bg-${c}` Tailwind classes purge (invisible avatar dots); Footer.tsx:111 gratuitous dSIH; 2 ESLint errors (WhyDoodle.tsx:173 unescaped `'`, PatchScrubber.tsx:303 setState-in-effect); 2 unused imports
