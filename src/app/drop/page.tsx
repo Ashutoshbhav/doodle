@@ -112,8 +112,6 @@ export default async function DropPage({
               <span>Sizes 3&ndash;6 yrs</span>
               <span className="opacity-40">/</span>
               <span>100% combed cotton</span>
-              <span className="opacity-40">/</span>
-              <span>From &#8377;370</span>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-2.5">
