@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckCircle, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
 import { joinWaitlist, type WaitlistResult } from "@/app/actions/waitlist";
+import { env } from "@/env";
 
 type Props = {
   /** Optional accent — defaults to orange (primary). */
@@ -12,6 +13,10 @@ type Props = {
   /** Where the form sits — affects label colour for contrast. */
   surface?: "canvas" | "tile";
   className?: string;
+  /** Campaign attribution token written to waitlist.source (e.g. "lcl_may26:meta:m1"). */
+  source?: string;
+  /** Fire Meta Pixel + Google Ads conversion events on a successful signup. */
+  conversionTrack?: boolean;
 };
 
 const ACCENT_BG: Record<NonNullable<Props["accent"]>, string> = {
@@ -24,11 +29,34 @@ export function WaitlistForm({
   accent = "orange",
   surface = "canvas",
   className = "",
+  source,
+  conversionTrack = false,
 }: Props) {
   const [state, formAction, isPending] = useActionState<WaitlistResult | null, FormData>(
     joinWaitlist,
     null,
   );
+
+  // Fire ad-platform conversion events exactly once, and only for a
+  // genuinely NEW persisted signup (state.isNew). Duplicates, DB failures,
+  // and refreshes do not fire — so the Pixel/Google count matches the real
+  // captured-lead count in Neon. Used by the /drop campaign LP; no-ops
+  // elsewhere (conversionTrack=false) and when platform IDs are unset.
+  const conversionFired = useRef(false);
+  useEffect(() => {
+    if (conversionFired.current) return;
+    if (!conversionTrack) return;
+    if (!state || !state.ok || !state.isNew) return;
+    conversionFired.current = true;
+    type Tracker = (...args: unknown[]) => void;
+    const w = window as unknown as { fbq?: Tracker; gtag?: Tracker };
+    w.fbq?.("track", "Lead");
+    const gadsId = env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+    const gadsLabel = env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL;
+    if (gadsId && gadsLabel) {
+      w.gtag?.("event", "conversion", { send_to: `${gadsId}/${gadsLabel}` });
+    }
+  }, [conversionTrack, state]);
 
   const inputColor =
     surface === "canvas"
@@ -91,6 +119,9 @@ export function WaitlistForm({
               />
             </div>
             <input type="hidden" name="name" value="" />
+            {source ? (
+              <input type="hidden" name="source" value={source} />
+            ) : null}
             <motion.button
               type="submit"
               disabled={isPending}
