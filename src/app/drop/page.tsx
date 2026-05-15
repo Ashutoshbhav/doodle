@@ -135,16 +135,52 @@ export default async function DropPage({
             </p>
           </section>
 
-          {/* ---------- RIGHT — the ad creative (photo-bridge) ---------- */}
-          <section className="relative order-1 min-h-[42vh] lg:order-2 lg:col-span-5 lg:min-h-0">
-            <Image
-              src="/campaign/lp-hero.jpg"
-              alt="A child in a DOODLE tee with swappable patches, surrounded by their things"
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 42vw"
-              className="object-cover object-[35%_28%]"
-            />
+          {/* ---------- RIGHT — creative collage (the running ads + clip) ----------
+              Cream scrapboard with stitched, slightly-rotated photo cards
+              (DOODLE's sticker/stitch motif). 16:9 tiles match the source
+              1600x893 ratio, so next/image downscales — crisp, never upscaled. */}
+          <section className="order-1 bg-doodle-canvas lg:order-2 lg:col-span-5">
+            <div className="flex h-full flex-col justify-center gap-3 p-4 sm:gap-4 sm:p-6 lg:p-7">
+              {/* Video is portrait 404x720 — match the frame to its real
+                  aspect + object-contain so the WHOLE video is always
+                  visible, never cropped. Width-capped + centred. */}
+              <div className="mx-auto w-full max-w-[300px] sm:max-w-[340px] lg:max-w-[380px]">
+                <div className="relative aspect-[404/720] overflow-hidden rounded-2xl stitch-ink bg-doodle-ink shadow-[6px_8px_0_rgba(26,26,26,0.14)] -rotate-1">
+                  <video
+                    className="absolute inset-0 h-full w-full object-contain"
+                    src="/campaign/clip.mp4"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-hidden
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                {[
+                  { src: "/campaign/c1.jpg", alt: "Kid in a DOODLE tee with swappable patches, back-to-school flat-lay", rot: "rotate-1" },
+                  { src: "/campaign/c2.jpg", alt: "DOODLE backpack with mix-and-match patches", rot: "-rotate-1" },
+                  { src: "/campaign/c3.jpg", alt: "Kid in a white DOODLE tee surrounded by their things", rot: "-rotate-1" },
+                  { src: "/campaign/c4.jpg", alt: "Kid in a purple DOODLE tee with patches", rot: "rotate-1" },
+                ].map((c, i) => (
+                  <div
+                    key={c.src}
+                    className={`relative aspect-video overflow-hidden rounded-xl stitch-ink shadow-[4px_5px_0_rgba(26,26,26,0.12)] ${c.rot}`}
+                  >
+                    <Image
+                      src={c.src}
+                      alt={c.alt}
+                      fill
+                      priority={i === 0}
+                      sizes="(max-width: 1024px) 46vw, 21vw"
+                      className="object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </section>
         </div>
 
