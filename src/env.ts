@@ -22,6 +22,9 @@ export const env = createEnv({
     NEXT_PUBLIC_META_PIXEL_ID: z.string().optional(),
     NEXT_PUBLIC_GOOGLE_ADS_ID: z.string().optional(),
     NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL: z.string().optional(),
+    // Medusa commerce backend (optional during pre-launch; required once /shop ships)
+    NEXT_PUBLIC_MEDUSA_BASE_URL: z.string().url().optional(),
+    NEXT_PUBLIC_MEDUSA_PUB_KEY: z.string().min(1).optional(),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
@@ -32,6 +35,8 @@ export const env = createEnv({
     NEXT_PUBLIC_GOOGLE_ADS_ID: process.env.NEXT_PUBLIC_GOOGLE_ADS_ID,
     NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL:
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL,
+    NEXT_PUBLIC_MEDUSA_BASE_URL: process.env.NEXT_PUBLIC_MEDUSA_BASE_URL,
+    NEXT_PUBLIC_MEDUSA_PUB_KEY: process.env.NEXT_PUBLIC_MEDUSA_PUB_KEY,
   },
   emptyStringAsUndefined: true,
 });

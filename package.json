@@ -13,6 +13,8 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@medusajs/js-sdk": "^2.15.2",
+    "@medusajs/types": "^2.15.2",
     "@neondatabase/serverless": "^1.1.0",
     "@phosphor-icons/react": "^2.1.10",
     "@react-email/components": "^1.0.12",
