@@ -29,7 +29,7 @@
  *      cropped square SVG when brand assets ship.
  */
 
-import { Nav } from "@/components/sections/Nav";
+import { NavWithCart } from "@/components/sections/NavWithCart";
 import { Hero } from "@/components/sections/Hero";
 import { TheRealThing } from "@/components/sections/TheRealThing";
 import { Promise as PromiseSection } from "@/components/sections/Promise";
@@ -47,7 +47,7 @@ import { Footer } from "@/components/sections/Footer";
 export default function Home() {
   return (
     <>
-      <Nav />
+      <NavWithCart />
       <main className="bg-background text-foreground">
         <Hero />
         <TheRealThing />

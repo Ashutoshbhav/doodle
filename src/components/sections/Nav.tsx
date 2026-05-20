@@ -4,16 +4,16 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
-import { PillButton } from "@/components/ui/PillButton";
+import { CartButton } from "@/components/shop/CartButton";
 
 const NAV_LINKS = [
-  { href: "#how", label: "How it works" },
-  { href: "#wall", label: "Patch library" },
-  { href: "#voices", label: "For families" },
-  { href: "#offline", label: "Find us" },
+  { href: "/shop", label: "Shop the drop" },
+  { href: "/#how", label: "How it works" },
+  { href: "/#wall", label: "Patch library" },
+  { href: "/#offline", label: "Find us" },
 ] as const;
 
-export function Nav() {
+export function Nav({ cartCount = 0 }: { cartCount?: number }) {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = React.useState(false);
 
@@ -66,27 +66,21 @@ export function Nav() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
+          <CartButton count={cartCount} />
           <Link
-            href="#dual-cta"
+            href="/shop"
             className="
-              hidden md:inline-flex items-center px-3 py-2 text-sm font-medium text-doodle-ink/65
-              hover:text-doodle-ink transition-colors
-              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-ink/15 rounded-full
+              inline-flex items-center justify-center
+              h-9 px-4 rounded-full gap-2
+              bg-doodle-orange text-doodle-stitch font-medium text-sm
+              border-2 border-dashed border-doodle-stitch
+              hover:scale-[1.02] active:scale-[0.97] transition-transform
+              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40
             "
           >
-            Become a stockist
+            Shop the drop
           </Link>
-          <PillButton
-            variant="primary"
-            size="sm"
-            onClick={() => {
-              const el = document.getElementById("hero");
-              el?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }}
-          >
-            Join the waitlist
-          </PillButton>
         </div>
       </nav>
     </motion.header>
