@@ -155,15 +155,21 @@ Neon Postgres (single DB, two schemas — zero collision)
 
 Migration of waitlist signups → Medusa customer accounts is deferred. At commerce launch, we send a one-time "claim your account, shop the drop" email via Resend with a Magic Link → Medusa customer creation. Opt-in not opt-out.
 
-### Pricing structure `[CONFIRM-ASH + CO-FOUNDERS]`
+### Pricing structure — LOCKED 2026-05-20
 
 | SKU | Price | Notes |
 |---|---|---|
-| Tee (any colour, any size) | ₹370 | Per brand spec — base price |
-| Patch (single) | **₹80** | `[CONFIRM]` — verify against patch COGS + margin target |
-| Starter Kit (tee + 3 patches) | **₹550** | ~10% saving vs a la carte |
-| Mini Doodle (tee + 1 patch) | **₹440** | Entry-tier framing |
-| Pattern Pack (5 patches only) | **₹320** | ~20% saving vs a la carte |
+| **Starter Kit** (tee + 3 patches) | **₹999** | Headline product — flat price, all colours/sizes |
+| **Pattern Pack** (5 patches only) | **₹250** | Replenishment / add-on; effective ₹50/patch |
+| **Tee (standalone)** | **₹999** | Same as kit price — strong kit anchor; buying parts = ₹1,239 vs kit ₹999 |
+| **Patch (single)** | **₹80** | Encourages 5-pack at ₹250 (₹50/patch) over single (₹80) |
+| Mini Doodle (tee + 1 patch) | `[DROPPED]` — not in Ash's confirmed lineup | Removed from v1 |
+
+**Free shipping threshold: above ₹999** (locked). Buying a Starter Kit or a standalone tee gets free shipping — neat price anchor.
+
+**Pricing math:** Kit ₹999 vs sum-of-parts (tee ₹999 + 3 patches × ₹80 = ₹1,239) = kit saves ₹240 (19%). Pattern Pack ₹250 vs 5 singles × ₹80 = ₹400 = pack saves ₹150 (38%). Both bundles meaningfully cheaper than à la carte — drives kit adoption.
+
+The brand-spec ₹370/tee figure in memory is COGS, not selling price. Selling-side framing puts both Kit and Tee at ₹999 as the headline price point.
 
 ### Catalog edge cases
 
@@ -329,7 +335,11 @@ Zero-custom-code admin includes: Products, Inventory, Orders (with full status t
 | `order.return_requested` | ReturnAcknowledged.tsx | "Got your return request for DOD-{id}" |
 | `payment.refunded` | RefundProcessed.tsx | "Refund of ₹{amount} is on its way" |
 
-Sender: `hello@doodle.in`. Domain DNS (SPF/DKIM/DMARC) set up Day 0.
+**Sender setup — LOCKED 2026-05-20:**
+- **From:** `hello@doodle.in` (or `hello@wearedoodle.in` if `doodle.in` taken). Domain-verified, SPF/DKIM/DMARC configured, high deliverability.
+- **Reply-To:** `doodlebycanvas@gmail.com` (Ash's existing Gmail inbox). Customers click Reply → lands in Gmail → Ash reads + replies there. No new inbox infra.
+
+This pattern keeps brand-aligned sender for outbound deliverability while leveraging existing Gmail for inbound support. Configured at the Resend template level.
 
 ### Deferred to v1.1
 
@@ -500,7 +510,7 @@ A `<CartButton />` (line count + cart icon) appears in the Nav on commerce pages
 |---|---|---|---|---|
 | P1 | Razorpay business account + KYC submit | Ash + co-founder w/ PAN | 3-7 days | Payment integration Day 8 |
 | P2 | Shiprocket account + KYC + Bangalore pickup pin | Ash + co-founder | 1-3 days | COD + fulfillment Day 10 |
-| P3 | `doodle.in` domain ownership verified | Ash | 10 min | `api.doodle.in`, Resend domain |
+| P3 | **Buy `doodle.in` via Vercel Domains** (at-cost, auto-DNS, ₹500-1500/yr) — if unavailable, pick fallback (`getdoodle.in` / `wearedoodle.in` / `doodlebycanvas.in`) | Ash | 15 min + 1h propagation | `api.doodle.in`, Resend domain, all transactional emails |
 | P4 | DNS records for Resend (SPF/DKIM/DMARC on `doodle.in`) | Ash | 30 min + 1h propagation | All transactional emails |
 | P5 | `api.doodle.in` CNAME → Railway | Ash | 15 min | All storefront → backend calls |
 | P6 | Cloudinary account + folder structure | Ash | 15 min | Product image upload Day 6 |
@@ -607,15 +617,19 @@ The launch is **live** when ALL of the following are true:
 
 ---
 
-## 7. Open questions — `[CONFIRM-ASH]`
+## 7. Open questions — ALL LOCKED 2026-05-20 (except one deferred)
 
-1. **Inventory arrival date** — when do 200 tees + ~500 patches physically land in Bangalore? Public launch is gated on this, not code.
-2. **Solo vs help on code** — Ash solo (Claude-paired) OR co-founder takes offline ops (KYC, pricing, images) OR outside contractor for backend Medusa work?
-3. **Patch + kit pricing** — ₹80 / ₹550 / ₹440 / ₹320 placeholders need lock from team
-4. **Bangalore pickup address** for Shiprocket (which co-founder's premises or printing partner's)
-5. **doodle.in domain status** — owned + can DNS today?
-6. **Free shipping threshold** — ₹500 proposed; confirm or strip
-7. **Sender domain** — `hello@doodle.in` proposed; alternative names if preferred
+### ✅ Locked
+1. **Inventory arrival:** ~2026-05-30 (Day 10) — code is the bottleneck, not stock
+2. **Engineering help:** Solo build (Ash + Claude). Risk R6 stands; v1.1 features pushed further if other priorities land.
+3. **Pricing (4 SKUs):** Starter Kit ₹999, Pattern Pack ₹250, Standalone Tee ₹999, Standalone Patch ₹80
+4. **Catalog scope:** Kits + standalone tees + standalone patches all sold
+5. **Domain:** Buy `doodle.in` via Vercel Domains; fallback `wearedoodle.in` if `doodle.in` taken
+6. **Free shipping:** above ₹999
+7. **Email setup:** From `hello@<domain>.in` (domain-verified for deliverability), Reply-To `doodlebycanvas@gmail.com` (Ash's existing inbox)
+
+### ⏳ Deferred (non-blocking)
+- **Bangalore pickup address** for Shiprocket — `[PENDING-ASH]`. Blocks Shiprocket KYC + production fulfillment only; can be entered Day 1-2 of build.
 
 ---
 
