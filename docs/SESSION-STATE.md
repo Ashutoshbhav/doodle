@@ -1,8 +1,45 @@
 # DOODLE — Session State
 
-_Last updated: 2026-05-03 (late session)_
+_Last updated: 2026-05-22 (commerce build sprint)_
 
 When Ash says **"DOODLE"** in a future session, read this file first, then `docs/BRIEF.md`, then resume.
+
+---
+
+## ⚡ COMMERCE BUILD — IN PROGRESS (started 2026-05-20)
+
+**Goal:** Turn the marketing site into full Shopify-equivalent commerce. Adopting **Medusa.js v2** as the headless engine (separate `Documents/doodle-backend/` repo, deploys to Railway) behind the existing Next.js storefront.
+
+**Read these first to resume:**
+- `docs/superpowers/specs/2026-05-20-doodle-commerce-design.md` — full architecture + all locked decisions
+- `docs/superpowers/plans/2026-05-20-doodle-commerce-v1.md` — day-by-day implementation plan
+- `docs/OPERATIONS.md` — Ash's self-serve playbook (post-launch)
+
+**Locked decisions:** Medusa v2 + Neon + Upstash Redis + Railway + Razorpay (Standard Checkout v1) + COD + Shiprocket + Resend + Cloudinary. Two repos (`doodle/` storefront on Vercel, `doodle-backend/` Medusa on Railway). Domain: buy `doodle.in` via Vercel Domains (fallback `wearedoodle.in`). Pricing: Starter Kit ₹999, Pattern Pack ₹250, standalone Tee ₹999, Patch ₹80. Free shipping >₹999. Email: From `hello@<domain>`, Reply-To `doodlebycanvas@gmail.com`. No GST yet. Solo build.
+
+**Built so far (storefront, all TS+ESLint clean, degrades gracefully without backend):**
+- `src/lib/medusa/{client,types,cart}.ts` — SDK + server-only cart helpers
+- `src/app/actions/checkout.ts` — addToCart/updateLine/removeLine/setContact/setShipping/placeCodOrder/initiateRazorpayPayment/completeRazorpayOrder
+- `/shop`, `/shop/[handle]`, `/cart`, `/checkout`, `/order/[id]/confirmed`
+- `components/shop/{ProductCard,VariantPicker,CartLine,CartButton,CheckoutForm}.tsx`
+- Nav updated (Shop link + cart badge, hides on /drop) + NavWithCart server wrapper
+- **`/drop` paid campaign + waitlist UNTOUCHED**
+
+**Built so far (doodle-backend, Medusa 2.13.6, NOT YET DEPLOYED):**
+- Forked from rpuls/medusajs-2.0-for-railway-boilerplate
+- Custom COD payment provider: `src/modules/payment-cod/` (fully implemented)
+- DOODLE email templates: order-placed, order-placed-cod, order-shipped (DOODLE voice, INR, brand colours)
+- `.env.template` documents every needed key
+
+**BLOCKED ON: Ash's keys** (see the 10-step checklist — domain, Razorpay TEST keys, Shiprocket, Upstash, Neon URL, Cloudinary, Railway, GitHub repo, JWT/COOKIE secrets, Resend domain DNS).
+
+**When keys land, wire-up sequence (~3-4h):** paste keys → deploy backend to Railway → migrate Neon + create admin → seed 4 products → fork @devx-commerce/razorpay into `packages/` + audit + register → e2e test (COD + Razorpay TEST) → mobile + Lighthouse.
+
+**Still NOT built (need backend live + keys):** Razorpay plugin fork+wire, Shiprocket plugin fork+serviceability check, `/account` auth routes, remaining 5 email templates (PaymentReceived/OrderDelivered/Welcome/ReturnAcknowledged/RefundProcessed), e2e test, MDX migration for self-serve marketing copy (Option B chosen).
+
+**Voice rewrites:** Promise.tsx done. HowItWorks/WhyDoodle/EarlyVoices/DualCTA/Footer still pending (interleave during commerce build per plan).
+
+---
 
 ## Identity (locked from the brand docs Ash provided)
 
