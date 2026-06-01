@@ -163,6 +163,14 @@
     line-height: 1.05;
     letter-spacing: -0.015em;
   }
+  /* DESIGN.md Rule 3 — ragged-edge control, applied globally so no heading
+     has to opt in. balance for short headings, pretty for running prose. */
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
 }
 
 /* ============================================================
