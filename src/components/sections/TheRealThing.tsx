@@ -33,13 +33,14 @@ export function TheRealThing() {
       id="real"
       className="relative isolate overflow-hidden border-b-2 border-dashed border-doodle-ink/15 py-24 md:py-32 bg-doodle-canvas"
     >
-      {/* Background wash */}
+      {/* Background wash — locked DOODLE hexes (orange #e8650a / blue #1a56c4),
+          kept at low alpha as ambient surface depth, not competing chrome. */}
       <div
         aria-hidden
         className="absolute inset-0 -z-10"
         style={{
           backgroundImage:
-            "radial-gradient(45% 35% at 18% 20%, rgba(232,122,61,0.12), transparent 70%), radial-gradient(40% 35% at 90% 75%, rgba(42,86,179,0.12), transparent 70%)",
+            "radial-gradient(45% 35% at 18% 20%, rgba(232,101,10,0.10), transparent 70%), radial-gradient(40% 35% at 90% 75%, rgba(26,86,196,0.08), transparent 70%)",
         }}
       />
 
@@ -96,14 +97,14 @@ export function TheRealThing() {
               }}
               className="relative"
             >
-              {/* Photo card */}
+              {/* Photo card (radius capped at 16px per DESIGN.md) */}
               <div
                 className="
-                  relative overflow-hidden rounded-[2rem] bg-doodle-stitch
+                  relative overflow-hidden rounded-[1rem] bg-doodle-stitch
                   stitch-thick !border-doodle-ink p-3 sm:p-4
                 "
               >
-                <div className="relative aspect-square w-full overflow-hidden rounded-[1.4rem] bg-doodle-canvas">
+                <div className="relative aspect-square w-full overflow-hidden rounded-[0.75rem] bg-doodle-canvas">
                   <Image
                     src={shot.src}
                     alt={shot.alt}

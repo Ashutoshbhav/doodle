@@ -8,6 +8,7 @@ import {
 import { PatchScrubber } from "@/components/ui/PatchScrubber";
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { RoughHighlight } from "@/components/ui/Rough";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ScrollReveal, ParallaxLayer, MagneticHover } from "@/components/motion";
 
 /* ============================================================
@@ -74,21 +75,22 @@ export function Hero() {
 
           <ScrollReveal direction="up" amount={0.1} className="relative z-10 h-full flex flex-col justify-center px-6 md:px-10 lg:px-16 xl:px-24 py-20 lg:py-24">
             {/* Eyebrow */}
-            <div className="font-mono text-[10px] uppercase tracking-[0.28em] text-doodle-stitch/75">
+            <Eyebrow variant="rule" tone="stitch">
               India&rsquo;s first modular kidswear
-            </div>
+            </Eyebrow>
 
             {/* MEGA H1
                 Two-register treatment per design-supervisor audit:
-                Lines 1-2 in Bricolage 900 (paragraph-shaped headline)
-                Line 3 in Bagel Fat One at 16vw (type-as-object stamp).
+                Lines 1-2 in Bricolage 900 (paragraph-shaped headline, capped at
+                the DESIGN.md ≤6rem hero ceiling) — the oversized register is
+                carried only by the reserved Bagel "Create." stamp below.
                 Anchor: Agence Foudre (Beni 230px / 0.7 line-height).
                 Reserved Bagel use — do not propagate elsewhere. */}
             <h1
               className="mt-5 font-display text-doodle-stitch leading-[0.84] tracking-[-0.04em]"
               style={{
                 fontWeight: 900,
-                fontSize: "clamp(3.4rem, 9vw, 8rem)",
+                fontSize: "clamp(3.2rem, 8vw, 6rem)",
                 fontStretch: "115%",
               }}
             >
@@ -175,18 +177,18 @@ export function Hero() {
             </div>
 
             <MagneticHover strength={0.06} className="relative">
-              {/* Stacked colour blocks behind the frame */}
+              {/* Stacked colour blocks behind the frame (capped at 16px radius) */}
               <div
                 aria-hidden
-                className="absolute inset-x-2 inset-y-1 rounded-[2.4rem] bg-doodle-yellow"
+                className="absolute inset-x-2 inset-y-1 rounded-[1rem] bg-doodle-yellow"
               />
               <div
                 aria-hidden
-                className="absolute inset-x-6 inset-y-5 rounded-[2.2rem] bg-doodle-pink/85 -rotate-1"
+                className="absolute inset-x-6 inset-y-5 rounded-[1rem] bg-doodle-pink/85 -rotate-1"
               />
 
               {/* Frame */}
-              <div className="relative rounded-[2rem] bg-doodle-stitch p-4 sm:p-5 stitch-thick !border-doodle-ink shadow-[14px_16px_0_rgba(26,26,26,0.18)] mx-1 my-2">
+              <div className="relative rounded-[1rem] bg-doodle-stitch p-4 sm:p-5 stitch-thick !border-doodle-ink shadow-[14px_16px_0_rgba(26,26,26,0.18)] mx-1 my-2">
                 <PatchScrubber />
               </div>
 
@@ -206,12 +208,12 @@ export function Hero() {
       <div className="relative bg-doodle-canvas border-t-2 border-dashed border-doodle-ink/15">
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-7">
           <div className="flex items-center justify-between mb-3">
-            <div className="font-mono text-[10px] uppercase tracking-[0.28em] text-doodle-ink/55">
+            <Eyebrow variant="rule" accent="orange">
               Patch lanes
-            </div>
+            </Eyebrow>
             <a
               href="#wall"
-              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.28em] text-doodle-ink hover:text-doodle-orange transition-colors"
+              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-doodle-ink hover:text-doodle-orange transition-colors"
             >
               See all 200+
               <ArrowUpRight weight="bold" size={11} />

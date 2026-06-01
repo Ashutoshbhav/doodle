@@ -23,6 +23,9 @@ import type { ReactNode } from "react";
 
 type Variant = "rule" | "marker" | "mono" | "none";
 type Accent = "orange" | "blue" | "yellow" | "ink";
+/** `tone` switches text/rule colour for the surface underneath:
+ *  `ink` for cream/light surfaces, `stitch` for colour-zone / dark surfaces. */
+type Tone = "ink" | "stitch";
 
 const ACCENT_TEXT: Record<Accent, string> = {
   orange: "text-doodle-orange",
@@ -42,19 +45,26 @@ export function Eyebrow({
   children,
   variant = "rule",
   accent = "ink",
+  tone = "ink",
   className = "",
 }: {
   children: ReactNode;
   variant?: Variant;
   accent?: Accent;
+  tone?: Tone;
   className?: string;
 }) {
   if (variant === "none") return null;
 
+  const labelColor =
+    tone === "stitch" ? "text-doodle-stitch/80" : "text-doodle-ink/65";
+
   if (variant === "marker") {
+    // On colour zones the handwritten accent stays white; on cream it takes the accent hue.
+    const markerColor = tone === "stitch" ? "text-doodle-stitch" : ACCENT_TEXT[accent];
     return (
       <span
-        className={`inline-block font-marker text-xl leading-none ${ACCENT_TEXT[accent]} ${className}`}
+        className={`inline-block font-marker text-xl leading-none ${markerColor} ${className}`}
       >
         {children}
       </span>
@@ -64,7 +74,9 @@ export function Eyebrow({
   if (variant === "mono") {
     return (
       <span
-        className={`inline-block font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55 ${className}`}
+        className={`inline-block font-mono text-[11px] uppercase tracking-[0.14em] ${
+          tone === "stitch" ? "text-doodle-stitch/70" : "text-doodle-ink/55"
+        } ${className}`}
       >
         {children}
       </span>
@@ -72,13 +84,13 @@ export function Eyebrow({
   }
 
   // rule (default): short colour tick + restrained small-caps label
+  const ruleColor = tone === "stitch" ? "bg-doodle-stitch/70" : ACCENT_RULE[accent];
   return (
     <span className={`inline-flex items-center gap-2.5 ${className}`}>
+      <span aria-hidden className={`h-[3px] w-7 rounded-full ${ruleColor}`} />
       <span
-        aria-hidden
-        className={`h-[3px] w-7 rounded-full ${ACCENT_RULE[accent]}`}
-      />
-      <span className="font-sans text-xs font-semibold uppercase tracking-[0.1em] text-doodle-ink/65">
+        className={`font-sans text-xs font-semibold uppercase tracking-[0.1em] ${labelColor}`}
+      >
         {children}
       </span>
     </span>
