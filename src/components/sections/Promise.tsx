@@ -1,7 +1,7 @@
 import {
   PuzzlePiece,
   Recycle,
-  Plant,
+  ArrowsClockwise,
   ArrowUpRight,
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal, MagneticHover, ParallaxLayer } from "@/components/motion";
@@ -10,20 +10,20 @@ const PILLARS = [
   {
     color: "orange",
     Icon: PuzzlePiece,
-    title: "Modular by design",
-    body: "Patches click, swap, and remix on a base garment. Kids style their own look every morning.",
+    title: "Patches change. Tee stays.",
+    body: "Pink one Monday. Blue one Friday. Stars one week, lightning the next. The shirt is the constant. The character is the variable.",
   },
   {
     color: "blue",
     Icon: Recycle,
-    title: "Less waste, more wear",
-    body: "Refresh the patches, not the wardrobe. One tee carries five looks instead of landing in landfill.",
+    title: "One tee instead of five.",
+    body: "Three Avengers tees, two Pokémon tees, half a wardrobe that already doesn't count anymore. We replaced all of that with one shirt and a small pile of patches.",
   },
   {
     color: "purple",
-    Icon: Plant,
-    title: "Grows with the kid",
-    body: "Sleeve and hem extensions slot in as kids stretch — outgrowing a fit doesn’t mean outgrowing the piece.",
+    Icon: ArrowsClockwise,
+    title: "Outgrows phases, not the shirt.",
+    body: "Pokémon phase: March. Iron Man phase: June. Dinosaurs by August. Same tee through all of it — the obsession changes, the tee doesn't have to.",
   },
 ] as const;
 
@@ -78,9 +78,7 @@ export function Promise() {
               </span>
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
-              {/* [PLACEHOLDER] supporting copy — Ash will rewrite */}
-              Three rules that shape every patch, every stitch, every base
-              garment we ship.
+              Three things we kept watching happen. Three things DOODLE answers.
             </p>
           </div>
         </ScrollReveal>

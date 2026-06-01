@@ -97,11 +97,19 @@ All four are **high-quality photographic flat-lays** — same Indian boy (~6–7
 - ✅ `next build` passes — `/drop` server-rendered on demand (`ƒ`), TypeScript clean
 - ✅ Neon provisioned (Singapore `ap-southeast-1`) · migration `0000_yellow_paibok` applied · **capture verified end-to-end** (insert → read back → clean; table at 0)
 - ✅ `vercel.json` pins functions to Singapore (`sin1`) — co-located with Neon
-- ⏳ Vercel deploy (account-bound login — Ash) → then env vars + go-live verification gate
+- ✅ **DEPLOYED LIVE**: `https://doodle-ten-rose.vercel.app/drop` · function region confirmed `sin1` · `DATABASE_URL` + `NEXT_PUBLIC_SITE_URL` + `NEXT_PUBLIC_META_PIXEL_ID` (1568392851516789) set in Vercel prod
+- ✅ Git reconciled — commit `18758b4` pushed to `main` (git == live; no deploy-regression footgun)
+- ✅ Devil's-advocate pass (15/20 → fixes applied): pixel fires once & only on a confirmed-new persisted signup; duplicates/DB-failures fire nothing. Verified live (new→Lead+row; dupe→no Lead, no row).
+- ⏳ Google Ads conversion IDs (`NEXT_PUBLIC_GOOGLE_ADS_ID`/`_CONVERSION_LABEL`) — set when/if Google leg runs (Neon still attributes google via utm_source meanwhile)
+
+### Residual risks (disclosed, proportionate to a 3-day campaign — Ash's informed call)
+- No durable fallback store if Neon free-tier has an outage mid-campaign (capture proven working now; Sentry logs errors but isn't a lead store). Mitigation: spot-check Neon count during the run.
+- No committed automated test suite (project has none); verified empirically (build, tsc, live end-to-end incl. new-vs-duplicate).
+- Pixel dedup is per-page-load (`useRef`) + per-new-row; no Meta `eventID` server dedup — immaterial because the deck's per-creative numbers come from the Neon `source` column (authoritative, unique-constrained), not the Pixel.
 
 ### Hard blockers
 1. ✅ **RESOLVED — Capture.** Neon live (Singapore), `waitlist` table migrated, insert→readback→delete verified, table at 0. Local `.env.local` holds `DATABASE_URL` (pooled). Still must set the same env var on Vercel before go-live.
-2. ⏳ **No public URL.** Site is local-only (single local commit). Deploy to Vercel next (account-bound login — Ash; I drive the rest with cached auth).
+2. ✅ **RESOLVED — Public URL.** Live at `https://doodle-ten-rose.vercel.app/drop`, function in `sin1`, capture proven end-to-end in production, git == live.
 
 ## 9. Source asset index (`~/Downloads/doodle/`)
 

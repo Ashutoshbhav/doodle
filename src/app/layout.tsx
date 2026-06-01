@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import {
-  Geist,
+  Figtree,
   Geist_Mono,
   Bricolage_Grotesque,
   Caveat,
@@ -11,12 +11,20 @@ import { SmoothScroll } from "@/components/motion";
 import { env } from "@/env";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Body + commerce voice. Warm humanist-geometric sans — friendly without
+// being childish, high legibility at small commerce sizes, deliberate
+// contrast against Bricolage's quirk. Chosen 2026-05-29 over Plus Jakarta
+// Sans (impeccable reflex-reject) per /sauce design pass.
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
   display: "swap",
 });
 
+// Mono is the current label/eyebrow voice across the site. Kept wired to
+// avoid regressing every label to system mono. NOTE (2026-05-29): the
+// "font-mono uppercase tracking" eyebrow-on-every-section pattern is on
+// impeccable's ban list — to be reworked during the per-section pass.
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
@@ -95,7 +103,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f4f1ec",
+  themeColor: "#f5f0e8",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
@@ -109,7 +117,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} ${caveat.variable} ${bagel.variable} h-full antialiased`}
+      className={`${figtree.variable} ${geistMono.variable} ${bricolage.variable} ${caveat.variable} ${bagel.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
         <Providers>

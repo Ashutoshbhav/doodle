@@ -69,13 +69,20 @@
   --color-surface-parchment: #f0eadc;    /* canvas + mustard whisper */
 
   /* Fonts (wired in layout.tsx via next/font/google) */
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-display: var(--font-bricolage), ui-serif, Georgia, serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-display);
   --font-bubble: var(--font-bagel), Impact, sans-serif; /* 90s bubble */
   --font-marker: var(--font-caveat), "Comic Sans MS", cursive; /* handwritten */
-  --font-chunk: var(--font-bowlby), Impact, sans-serif; /* chunky display */
+
+  /* Motion easing curves — Emil Kowalski's stronger custom variants.
+     Built-in CSS easings are too weak; these give UI motion intentional
+     punch. Use --ease-out for enter/exit, --ease-in-out for on-screen
+     morphs, --ease-drawer for sheets/drawers. Never ease-in on UI. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* Radius scale — DOODLE leans large + organic */
   --radius-sm: calc(var(--radius) * 0.6);
@@ -94,38 +101,42 @@
    ============================================================ */
 
 :root {
-  --background: #f4f1ec; /* doodle-canvas */
-  --foreground: #2a2a2e; /* doodle-ink */
+  /* Role tokens bound to the LOCKED deck hexes (slide 4 + Brand
+     Guidelines.xlsx). Reconciled 2026-05-29: these had drifted lighter
+     (orange #e87a3d, ink #2a2a2e, yellow #f2c84a "bright") and rendered the
+     whole site off-spec. Every value below now matches a --color-doodle-* token. */
+  --background: #f5f0e8; /* doodle-canvas */
+  --foreground: #1a1a1a; /* doodle-ink */
   --card: #fbf9f4;
-  --card-foreground: #2a2a2e;
+  --card-foreground: #1a1a1a;
   --popover: #ffffff;
-  --popover-foreground: #2a2a2e;
-  --primary: #e87a3d; /* doodle-orange (CTA) */
+  --popover-foreground: #1a1a1a;
+  --primary: #e8650a; /* doodle-orange (CTA) */
   --primary-foreground: #ffffff;
-  --secondary: #f2c84a; /* doodle-yellow (marker) */
-  --secondary-foreground: #2a2a2e;
+  --secondary: #d4a800; /* doodle-yellow — mustard, NOT bright */
+  --secondary-foreground: #1a1a1a;
   --muted: #ede7d8;
-  --muted-foreground: #6e695e;
-  --accent: #2a56b3; /* doodle-blue (tile fills) */
+  --muted-foreground: #57534a; /* darkened for ≥4.5:1 body contrast on cream */
+  --accent: #1a56c4; /* doodle-blue (tile fills) */
   --accent-foreground: #ffffff;
-  --destructive: #d24a3d; /* doodle-red doubles as destructive */
+  --destructive: #c8312a; /* doodle-red doubles as destructive */
   --border: #e1dccf;
   --input: #e1dccf;
-  --ring: #e87a3d;
-  --chart-1: #d24a3d;
-  --chart-2: #e87a3d;
-  --chart-3: #2a56b3;
-  --chart-4: #8b7ac6;
-  --chart-5: #f2c84a;
+  --ring: #e8650a;
+  --chart-1: #c8312a; /* red */
+  --chart-2: #e8650a; /* orange */
+  --chart-3: #1a56c4; /* blue */
+  --chart-4: #8b80e0; /* purple */
+  --chart-5: #d4a800; /* mustard */
   --radius: 1rem; /* DOODLE leans organic — bigger than shadcn default */
   --sidebar: #fbf9f4;
-  --sidebar-foreground: #2a2a2e;
-  --sidebar-primary: #e87a3d;
+  --sidebar-foreground: #1a1a1a;
+  --sidebar-primary: #e8650a;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #ede7d8;
-  --sidebar-accent-foreground: #2a2a2e;
+  --sidebar-accent-foreground: #1a1a1a;
   --sidebar-border: #e1dccf;
-  --sidebar-ring: #e87a3d;
+  --sidebar-ring: #e8650a;
 }
 
 /* Dark mode intentionally omitted for v1 (warm-cream brand identity).
@@ -222,8 +233,8 @@
   .peel-host:hover .peel,
   .peel:hover {
     transform: rotate(-1.2deg) translateY(-3px) skewX(-1.5deg);
-    box-shadow: 6px 8px 0 rgba(42, 42, 46, 0.12),
-                14px 18px 24px -8px rgba(42, 42, 46, 0.25);
+    box-shadow: 6px 8px 0 rgba(26, 26, 26, 0.12),
+                14px 18px 24px -8px rgba(26, 26, 26, 0.25);
   }
 
   /* Paper-grain noise overlay — apply to backgrounds for tactile texture */
