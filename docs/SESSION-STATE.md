@@ -1,8 +1,36 @@
 # DOODLE — Session State
 
-_Last updated: 2026-05-22 (commerce build sprint)_
+_Last updated: 2026-06-01 (whole-site design conformance pass)_
 
 When Ash says **"DOODLE"** in a future session, read this file first, then `docs/BRIEF.md`, then resume.
+
+---
+
+## 🎨 DESIGN CONFORMANCE PASS — DONE 2026-06-01 (HEAD ca5c25a)
+
+Whole-site `/sauce` pass brought all 21 surfaces into line with the locked
+`DESIGN.md` (which only previously lived in the doc + Promise.tsx). Method:
+design-supervisor audit → 3 shared primitives → wave-by-wave application →
+tsc + `next build` verified (all 8 routes generate clean).
+
+**What shipped (commits 9cf21e0 → ca5c25a):**
+- **Wave 1** — shared primitives `src/components/ui/{Eyebrow,Band,StitchCard}.tsx`
+  + global `text-wrap: balance/pretty`. StitchCard hard-caps card radius at 16px.
+- **Wave 2** — Hero (H1 8rem→6rem ceiling, frame radii 32-38px→16px, eyebrows→primitive)
+  + TheRealThing (drifted wash hexes→locked, card radii→16px).
+- **Waves 3+5** — 11 marketing sections + 9 commerce files: deleted drifted hex
+  maps (HowItWorks `TILE`, CharacterStrip `FILL_HEX`) → `bg-doodle-*` vars;
+  ALL card radii ≤16px; section eyebrows → `<Eyebrow>` varied cadence;
+  added `active:scale-0.97` press feedback on pills/accordion. Razorpay #E8650A kept.
+
+**Eyebrow-overuse + accent-soup anti-patterns now marked RESOLVED in DESIGN.md.**
+
+**Design work still OPEN (deferred, not blocked-on-me):**
+- Wave 4 imagery — CharacterStrip / EarlyVoices / Founders still use placeholder
+  smiley-face SVGs + marquee on placeholders. BLOCKED on Ash's real kid photos /
+  illustrations. Mechanical radii/hex/eyebrow already fixed; only imagery remains.
+- Pre-existing lint debt (NOT from this pass): `global-error.tsx` `<a>`→`<Link>`;
+  `Rough.tsx` setState-in-effect; `ConversionScripts.tsx` `<img>`→`<Image>`.
 
 ---
 

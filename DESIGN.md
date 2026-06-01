@@ -100,6 +100,24 @@ not generic UI.
 - Radius leans organic (`--radius: 1rem`); cards 12-16px, pills for tags/buttons.
   Never 24px+ on a card (codex tell).
 
+## Shared primitives (in src/components/ui/ — use these, don't re-roll)
+
+Built 2026-06-01 to enforce the system from ONE place across all sections:
+
+- **`<Eyebrow variant accent tone>`** — the single source for section lead-in
+  labels. Replaced ~15 duplicated `font-mono uppercase tracking-[0.22em]`
+  eyebrows. Variants: `rule` (tick + small-caps, default) · `marker` (Caveat,
+  sparingly) · `mono` (toned legacy, tracking 0.14em, for index/commerce voice)
+  · `none`. `tone="stitch"` for colour/dark surfaces, `ink` for cream.
+- **`<Band surface rhythm divider>`** — section wrapper owning surface tone,
+  vertical rhythm, dashed divider. Makes banding (Rule 7) intentional.
+- **`<StitchCard tone radius stitch peel>`** — the one card primitive.
+  Radius HARD-CAPPED at 16px (`md`=12.8 / `lg`=16). Kills the codex radius tell.
+
+⚠ Tailwind v4 radius trap: `rounded-xl`=22px and `rounded-2xl`=29px in THIS
+theme (scale is amplified) — both break the 16px card cap. Use `rounded-lg`
+(16px) / `rounded-md` (13px) / explicit `rounded-[1rem]` on cards.
+
 ## Signature components / utilities (in globals.css)
 
 - `.stitch` / `.stitch-thick` / `.stitch-ink` — dashed stitching, the patch
@@ -113,11 +131,13 @@ not generic UI.
 
 ## Anti-patterns (DOODLE-specific, on top of impeccable's absolute bans)
 
-1. **Eyebrow overuse.** `font-mono uppercase tracking-[0.22em]` labels sit above
-   nearly every section — this is impeccable's banned "saturated AI scaffold."
-   Rework to a deliberate, varied cadence; do not add more. (Open task.)
-2. **Accent soup.** Orange currently does CTA + emphasis + nav + tile-fill at
-   once. Enforce one-accent-per-viewport; demote the rest to patches.
+1. **Eyebrow overuse.** ✅ RESOLVED 2026-06-01 — all section lead-in eyebrows
+   routed through `<Eyebrow>` with varied cadence. (Inline chips / floating
+   product tags / data tickers legitimately keep a mono voice — they are NOT
+   section eyebrows; don't over-correct them.)
+2. **Accent soup.** ✅ Largely resolved 2026-06-01 — one-accent-per-viewport
+   enforced across sections; drifted hex maps (HowItWorks/CharacterStrip)
+   deleted → `bg-doodle-*` vars. Keep enforcing on any new fold.
 3. No rainbow gradients, no balloon/Comic-Sans fonts, no clip-art mascots.
 4. No fabricated stats / testimonials / press logos — mark `[PLACEHOLDER]`.
 5. No licensed-character reproduction on the public site (originals only).
