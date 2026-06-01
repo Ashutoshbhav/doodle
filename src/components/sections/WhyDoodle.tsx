@@ -10,6 +10,7 @@ import {
   HandHeart,
 } from "@phosphor-icons/react/dist/ssr";
 import { ParallaxLayer } from "@/components/motion";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 const ITEMS = [
   {
@@ -59,9 +60,9 @@ export function WhyDoodle() {
       <div className="relative mx-auto max-w-7xl px-6 md:px-10 grid gap-12 lg:grid-cols-12 lg:gap-14">
         {/* Left scene */}
         <div className="lg:col-span-5">
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-stitch/85">
+          <Eyebrow variant="rule" tone="stitch">
             Why DOODLE
-          </div>
+          </Eyebrow>
           <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-stitch">
             Built different.{" "}
             <span className="italic block opacity-90">
@@ -86,7 +87,7 @@ export function WhyDoodle() {
               <Recycle weight="duotone" size={42} className="text-doodle-stitch" />
             </ParallaxLayer>
             {/* Pink rectangle — closest, fastest */}
-            <ParallaxLayer speed={0.45} className="absolute left-12 bottom-4 h-32 w-44 rounded-[1.75rem] bg-doodle-pink border-[3px] border-dashed border-doodle-stitch grid place-items-center">
+            <ParallaxLayer speed={0.45} className="absolute left-12 bottom-4 h-32 w-44 rounded-[1rem] bg-doodle-pink border-[3px] border-dashed border-doodle-stitch grid place-items-center">
               <Plant weight="duotone" size={48} className="text-doodle-stitch" />
             </ParallaxLayer>
             {/* Squiggle */}
@@ -110,7 +111,7 @@ export function WhyDoodle() {
 
         {/* Right accordion */}
         <div className="lg:col-span-7">
-          <ul className="rounded-[2rem] bg-doodle-canvas p-3 sm:p-4 stitch-thick !border-doodle-stitch divide-y-2 divide-dashed divide-doodle-ink/15">
+          <ul className="rounded-[1rem] bg-doodle-canvas p-3 sm:p-4 stitch-thick !border-doodle-stitch divide-y-2 divide-dashed divide-doodle-ink/15">
             {ITEMS.map((item, i) => {
               const isOpen = open === i;
               return (
@@ -123,6 +124,7 @@ export function WhyDoodle() {
                     className="
                       flex w-full items-center gap-4 py-5 text-left
                       group focus-visible:outline-none
+                      transition-transform duration-100 active:scale-[0.97]
                     "
                   >
                     <span

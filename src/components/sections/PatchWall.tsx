@@ -31,6 +31,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import type { Icon } from "@phosphor-icons/react";
 import { RoughHighlight } from "@/components/ui/Rough";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 type Patch = {
   Icon: Icon;
@@ -84,9 +85,9 @@ export function PatchWall() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-8 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
+            <Eyebrow variant="rule" accent="orange">
               The patch library
-            </div>
+            </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               <span className="italic text-doodle-orange">200+</span> patches.{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
@@ -150,7 +151,7 @@ function PatchTile({ patch, index }: { patch: Patch; index: number }) {
         delay: (index % 12) * 0.03,
       }}
       className={`
-        relative aspect-square rounded-[1.25rem] ${PATCH_BG[patch.color]}
+        relative aspect-square rounded-[1rem] ${PATCH_BG[patch.color]}
         border-[3px] border-dashed border-doodle-stitch
         grid place-items-center group cursor-pointer
         focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-ink/30

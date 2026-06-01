@@ -8,6 +8,7 @@ import {
   ArrowUpRight,
 } from "@phosphor-icons/react/dist/ssr";
 import { MagneticHover } from "@/components/motion";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 const POPUPS = [
   {
@@ -63,9 +64,9 @@ export function FindUsOffline() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
+            <Eyebrow variant="rule" accent="orange">
               In person, before online
-            </div>
+            </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               Touch the patches.{" "}
               <span className="italic text-doodle-orange">Then</span>{" "}
@@ -129,7 +130,7 @@ function PopupCard({
         delay: index * 0.1,
       }}
       className={`
-        relative ${s.bg} rounded-[2rem] p-7 sm:p-8 stitch-thick
+        relative ${s.bg} rounded-[1rem] p-7 sm:p-8 stitch-thick
         flex flex-col gap-5 min-h-[280px]
       `}
     >

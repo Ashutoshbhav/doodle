@@ -2,6 +2,7 @@ import Link from "next/link"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { CartLine } from "@/components/shop/CartLine"
+import { Eyebrow } from "@/components/ui/Eyebrow"
 import { getCart } from "@/lib/medusa/cart"
 import { formatINR } from "@/lib/medusa/types"
 
@@ -21,12 +22,13 @@ export default async function CartPage() {
       <NavWithCart />
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
         <section className="mx-auto max-w-3xl px-6 md:px-10 py-16 md:py-24">
-          <h1 className="font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
+          <Eyebrow variant="mono" accent="orange">Your order</Eyebrow>
+          <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
             Your basket
           </h1>
 
           {items.length === 0 ? (
-            <div className="mt-10 rounded-[1.5rem] bg-doodle-canvas p-10 border-2 border-dashed border-doodle-ink/20 text-center">
+            <div className="mt-10 rounded-lg bg-doodle-canvas p-10 border-2 border-dashed border-doodle-ink/20 text-center">
               <p className="text-doodle-ink/75 text-lg leading-relaxed">
                 Nothing in the basket yet. Pick a tee, pick some patches —{" "}
                 <Link href="/shop" className="underline underline-offset-4 hover:text-doodle-ink">
@@ -36,13 +38,13 @@ export default async function CartPage() {
             </div>
           ) : (
             <>
-              <div className="mt-10 rounded-[1.5rem] bg-doodle-canvas px-6 py-2 border-2 border-dashed border-doodle-ink/20">
+              <div className="mt-10 rounded-lg bg-doodle-canvas px-6 py-2 border-2 border-dashed border-doodle-ink/20">
                 {items.map((line) => (
                   <CartLine key={line.id} line={line} />
                 ))}
               </div>
 
-              <div className="mt-8 rounded-[1.5rem] bg-doodle-canvas p-6 border-2 border-dashed border-doodle-ink/20">
+              <div className="mt-8 rounded-lg bg-doodle-canvas p-6 border-2 border-dashed border-doodle-ink/20">
                 <div className="flex justify-between text-doodle-ink/75 text-sm">
                   <span>Subtotal</span>
                   <span className="font-mono">

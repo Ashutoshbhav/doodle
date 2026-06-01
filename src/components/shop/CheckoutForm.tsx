@@ -240,7 +240,7 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
           <fieldset className="space-y-3">
             <label
               className={[
-                "flex items-start gap-3 p-4 rounded-xl border-2 border-dashed cursor-pointer transition-colors",
+                "flex items-start gap-3 p-4 rounded-lg border-2 border-dashed cursor-pointer transition-colors",
                 payment === "razorpay"
                   ? "border-doodle-ink bg-doodle-canvas"
                   : "border-doodle-ink/25 hover:border-doodle-ink/50",
@@ -261,7 +261,7 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
             </label>
             <label
               className={[
-                "flex items-start gap-3 p-4 rounded-xl border-2 border-dashed cursor-pointer transition-colors",
+                "flex items-start gap-3 p-4 rounded-lg border-2 border-dashed cursor-pointer transition-colors",
                 payment === "cod"
                   ? "border-doodle-ink bg-doodle-canvas"
                   : "border-doodle-ink/25 hover:border-doodle-ink/50",
@@ -289,7 +289,7 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
         </Section>
 
         {err && (
-          <div className="rounded-xl bg-doodle-red/10 border-2 border-dashed border-doodle-red px-4 py-3 text-sm text-doodle-red">
+          <div className="rounded-lg bg-doodle-red/10 border-2 border-dashed border-doodle-red px-4 py-3 text-sm text-doodle-red">
             {err}
           </div>
         )}
@@ -314,14 +314,14 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-[1.5rem] bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-5 sm:p-7">
+    <div className="rounded-lg bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-5 sm:p-7">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-2xl text-doodle-ink">{title}</h2>
         {done && (
           <button
             type="button"
             onClick={onEdit}
-            className="text-xs font-mono uppercase tracking-[0.18em] text-doodle-ink/60 hover:text-doodle-ink"
+            className="text-xs font-mono uppercase tracking-[0.14em] text-doodle-ink/60 hover:text-doodle-ink"
           >
             Edit
           </button>
@@ -351,7 +351,7 @@ function Input({
 }) {
   return (
     <label className="block">
-      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-doodle-ink/55">
+      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55">
         {label}
       </span>
       <input
@@ -383,7 +383,7 @@ function Select({
 }) {
   return (
     <label className="block">
-      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-doodle-ink/55">
+      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55">
         {label}
       </span>
       <select

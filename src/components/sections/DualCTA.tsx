@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { MagneticHover } from "@/components/motion";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export function DualCTA() {
   return (
@@ -38,7 +39,7 @@ function ConsumerCard() {
       animate={inView ? { opacity: 1, y: 0 } : undefined}
       transition={{ type: "spring", stiffness: 220, damping: 24 }}
       className="
-        relative isolate overflow-hidden rounded-[2.25rem] bg-doodle-blue
+        relative isolate overflow-hidden rounded-[1rem] bg-doodle-blue
         p-8 sm:p-10 lg:p-12 stitch-thick
         flex flex-col gap-7 min-h-[460px]
       "
@@ -46,9 +47,9 @@ function ConsumerCard() {
       <DecorScene tone="blue" />
 
       <div className="relative z-10">
-        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.22em] text-doodle-stitch">
+        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
           <Sparkle weight="fill" size={10} />
-          Be first
+          <Eyebrow variant="mono" tone="stitch">Be first</Eyebrow>
         </span>
       </div>
 
@@ -85,7 +86,7 @@ function StockistCard() {
       animate={inView ? { opacity: 1, y: 0 } : undefined}
       transition={{ type: "spring", stiffness: 220, damping: 24, delay: 0.08 }}
       className="
-        relative isolate overflow-hidden rounded-[2.25rem] bg-doodle-purple
+        relative isolate overflow-hidden rounded-[1rem] bg-doodle-purple
         p-8 sm:p-10 lg:p-12 stitch-thick
         flex flex-col gap-7 min-h-[460px]
       "
@@ -93,9 +94,9 @@ function StockistCard() {
       <DecorScene tone="purple" />
 
       <div className="relative z-10 flex items-center gap-3">
-        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-[10px] font-mono uppercase tracking-[0.22em] text-doodle-stitch">
+        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
           <Storefront weight="fill" size={10} />
-          For stockists
+          <Eyebrow variant="mono" tone="stitch">For stockists</Eyebrow>
         </span>
         <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-doodle-stitch/65">
           B2B inquiry

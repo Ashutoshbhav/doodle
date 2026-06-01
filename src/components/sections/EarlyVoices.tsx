@@ -11,6 +11,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 const VOICES = [
   {
@@ -57,9 +58,9 @@ export function EarlyVoices() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
+            <Eyebrow variant="rule" accent="orange">
               Early voices
-            </div>
+            </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               From the first{" "}
               <span className="italic text-doodle-orange">200</span>{" "}
@@ -117,7 +118,7 @@ function VoiceCard({
         delay: index * 0.1,
       }}
       className="
-        relative rounded-[2rem] bg-doodle-stitch p-7 sm:p-8
+        relative rounded-[1rem] bg-doodle-stitch p-7 sm:p-8
         stitch-ink flex flex-col gap-5 min-h-[320px]
       "
     >

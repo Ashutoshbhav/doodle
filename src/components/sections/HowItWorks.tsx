@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 const STEPS = [
   {
@@ -36,9 +37,9 @@ const STEPS = [
 ] as const;
 
 const TILE = {
-  blue: { ring: "border-doodle-blue", chip: "bg-doodle-blue", hex: "#2a56b3" },
-  yellow: { ring: "border-doodle-yellow", chip: "bg-doodle-yellow", hex: "#f2c84a" },
-  pink: { ring: "border-doodle-pink", chip: "bg-doodle-pink", hex: "#d4738a" },
+  blue: { ring: "border-doodle-blue", chip: "bg-doodle-blue", icon: "text-doodle-blue" },
+  yellow: { ring: "border-doodle-yellow", chip: "bg-doodle-yellow", icon: "text-doodle-yellow" },
+  pink: { ring: "border-doodle-pink", chip: "bg-doodle-pink", icon: "text-doodle-pink" },
 } as const;
 
 export function HowItWorks() {
@@ -50,9 +51,9 @@ export function HowItWorks() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-7">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
+            <Eyebrow variant="rule" accent="blue">
               How DOODLE works
-            </div>
+            </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               Three moves between{" "}
               <span className="italic text-doodle-orange">boring</span>{" "}
@@ -118,7 +119,7 @@ function Step({
             bg-doodle-canvas border-[3px] border-dashed ${t.ring}
           `}
         >
-          <step.Icon weight="duotone" size={64} style={{ color: t.hex }} />
+          <step.Icon weight="duotone" size={64} className={t.icon} />
 
           <span
             className={`
@@ -132,9 +133,9 @@ function Step({
         </div>
       </MagneticHover>
 
-      <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-doodle-ink/55">
+      <Eyebrow variant="mono" className="mt-6">
         {step.label}
-      </div>
+      </Eyebrow>
       <h3 className="mt-2 font-display text-2xl text-doodle-ink leading-tight tracking-[-0.01em]">
         {step.title}
       </h3>

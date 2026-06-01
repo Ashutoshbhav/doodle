@@ -8,6 +8,7 @@
    ============================================================ */
 
 import { ScrollReveal } from "@/components/motion";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 type Stat = {
   value: string;
@@ -42,9 +43,9 @@ export function PatchMath() {
         {/* Eyebrow — sets up the equation framing */}
         <ScrollReveal direction="up" amount={0.1}>
           <div className="flex items-center justify-between mb-10 md:mb-14">
-            <div className="font-mono text-[10px] uppercase tracking-[0.28em] text-doodle-ink/55">
+            <Eyebrow variant="mono">
               Patch math
-            </div>
+            </Eyebrow>
             <div
               className="text-xl md:text-2xl text-doodle-ink/70 hidden sm:block"
               style={{ fontFamily: "var(--font-caveat)" }}
@@ -107,7 +108,7 @@ export function PatchMath() {
                           rx="46"
                           ry="40"
                           fill="none"
-                          stroke="#D4607A"
+                          stroke="var(--color-doodle-pink)"
                           strokeWidth="1.2"
                           strokeDasharray="0.4 1.6"
                           strokeLinecap="round"
@@ -120,7 +121,7 @@ export function PatchMath() {
                           rx="44"
                           ry="38"
                           fill="none"
-                          stroke="#D4607A"
+                          stroke="var(--color-doodle-pink)"
                           strokeWidth="0.9"
                           strokeDasharray="0.3 1.8"
                           strokeLinecap="round"

@@ -5,6 +5,7 @@ import {
   ArrowUpRight,
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal, MagneticHover, ParallaxLayer } from "@/components/motion";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 const PILLARS = [
   {
@@ -60,9 +61,9 @@ export function Promise() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <ScrollReveal direction="up">
           <div className="max-w-3xl">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
+            <Eyebrow variant="rule" accent="orange">
               The DOODLE promise
-            </div>
+            </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               Built for{" "}
               <span className="italic text-doodle-orange">play.</span>{" "}
@@ -91,7 +92,7 @@ export function Promise() {
                 <MagneticHover strength={0.12}>
                   <article
                     className={`
-                      relative isolate overflow-hidden rounded-[1.75rem] p-7 sm:p-8
+                      relative isolate overflow-hidden rounded-[1rem] p-7 sm:p-8
                       ${s.bg} stitch-thick
                       flex flex-col gap-6 min-h-[280px]
                     `}
@@ -107,7 +108,7 @@ export function Promise() {
                 <DecorativeScribble color={color} />
 
                 <div
-                  className={`grid place-items-center h-14 w-14 rounded-2xl ${s.iconBg} ${s.iconText} relative z-10`}
+                  className={`grid place-items-center h-14 w-14 rounded-lg ${s.iconBg} ${s.iconText} relative z-10`}
                 >
                   <Icon weight="duotone" size={30} />
                 </div>

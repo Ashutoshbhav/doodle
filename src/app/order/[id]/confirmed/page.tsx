@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
+import { Eyebrow } from "@/components/ui/Eyebrow"
 import { formatINR } from "@/lib/medusa/types"
 import type { Order } from "@/lib/medusa/types"
 
@@ -48,9 +49,7 @@ export default async function OrderConfirmedPage({
       <NavWithCart />
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
         <section className="mx-auto max-w-3xl px-6 md:px-10 py-16 md:py-24">
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
-            Order placed
-          </div>
+          <Eyebrow variant="mono" accent="orange">Order placed</Eyebrow>
           <h1 className="mt-3 font-display text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
             Got it{customerFirst ? `, ${customerFirst}` : ""}.
           </h1>
@@ -69,14 +68,14 @@ export default async function OrderConfirmedPage({
             )}
           </p>
 
-          <div className="mt-10 rounded-[1.5rem] bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-6 sm:p-8">
+          <div className="mt-10 rounded-lg bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-6 sm:p-8">
             <h2 className="font-display text-xl text-doodle-ink">What you ordered</h2>
             <ul className="mt-4 space-y-3">
               {order.items?.map((item) => (
                 <li key={item.id} className="flex justify-between gap-3 text-sm">
                   <div>
                     <div className="text-doodle-ink">{item.title}</div>
-                    <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-doodle-ink/55">
+                    <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/55">
                       {item.variant?.title} · qty {item.quantity}
                     </div>
                   </div>
@@ -107,7 +106,7 @@ export default async function OrderConfirmedPage({
           </div>
 
           {order.shipping_address && (
-            <div className="mt-6 rounded-[1.5rem] bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-6">
+            <div className="mt-6 rounded-lg bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-6">
               <h2 className="font-display text-xl text-doodle-ink">Shipping to</h2>
               <p className="mt-3 text-sm text-doodle-ink/80 leading-relaxed">
                 {order.shipping_address.first_name} {order.shipping_address.last_name}
@@ -129,7 +128,7 @@ export default async function OrderConfirmedPage({
           )}
 
           <div className="mt-10 grid sm:grid-cols-2 gap-4">
-            <div className="rounded-[1.5rem] bg-doodle-yellow/30 border-2 border-dashed border-doodle-ink/20 p-5">
+            <div className="rounded-lg bg-doodle-yellow/30 border-2 border-dashed border-doodle-ink/20 p-5">
               <div className="font-display text-lg text-doodle-ink">
                 Save your address
               </div>
@@ -146,7 +145,7 @@ export default async function OrderConfirmedPage({
                 Create an account →
               </Link>
             </div>
-            <div className="rounded-[1.5rem] bg-doodle-pink/20 border-2 border-dashed border-doodle-ink/20 p-5">
+            <div className="rounded-lg bg-doodle-pink/20 border-2 border-dashed border-doodle-ink/20 p-5">
               <div className="font-display text-lg text-doodle-ink">
                 Tell a friend
               </div>
@@ -165,7 +164,7 @@ export default async function OrderConfirmedPage({
             </div>
           </div>
 
-          <p className="mt-10 text-center text-xs font-mono uppercase tracking-[0.18em] text-doodle-ink/45">
+          <p className="mt-10 text-center text-xs font-mono uppercase tracking-[0.14em] text-doodle-ink/45">
             A confirmation email is on its way to {order.email}
           </p>
         </section>

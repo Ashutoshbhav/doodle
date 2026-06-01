@@ -25,7 +25,7 @@ export function CartLine({ line }: { line: CartLineT }) {
 
   return (
     <div className="flex gap-4 py-5 border-b border-dashed border-doodle-ink/15 last:border-0">
-      <div className="relative w-20 h-24 shrink-0 rounded-xl overflow-hidden bg-doodle-stitch">
+      <div className="relative w-20 h-24 shrink-0 rounded-lg overflow-hidden bg-doodle-stitch">
         {thumbnail && (
           <Image
             src={thumbnail}
@@ -40,7 +40,7 @@ export function CartLine({ line }: { line: CartLineT }) {
         <div className="font-display text-lg text-doodle-ink leading-tight">
           {line.title}
         </div>
-        <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-doodle-ink/55 mt-1">
+        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55 mt-1">
           {line.variant?.title}
         </div>
         <div className="mt-3 flex items-center gap-3">
@@ -75,7 +75,7 @@ export function CartLine({ line }: { line: CartLineT }) {
               })
             }
             disabled={pending}
-            className="text-xs font-mono uppercase tracking-[0.18em] text-doodle-ink/55 hover:text-doodle-ink disabled:opacity-50"
+            className="text-xs font-mono uppercase tracking-[0.14em] text-doodle-ink/55 hover:text-doodle-ink disabled:opacity-50"
           >
             Remove
           </button>

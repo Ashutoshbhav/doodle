@@ -17,9 +17,9 @@ export function ProductCard({ product }: { product: Product }) {
     <Link
       href={`/shop/${product.handle}`}
       className="
-        group block rounded-[1.5rem] bg-doodle-canvas overflow-hidden
+        group block rounded-lg bg-doodle-canvas overflow-hidden
         border-2 border-dashed border-doodle-ink/20
-        hover:border-doodle-ink/45 hover:scale-[1.015] transition-all
+        hover:border-doodle-ink/45 hover:scale-[1.015] active:scale-[0.97] transition-all
       "
     >
       <div className="relative aspect-[4/5] bg-doodle-stitch overflow-hidden">
@@ -33,7 +33,7 @@ export function ProductCard({ product }: { product: Product }) {
           />
         ) : (
           <div className="grid place-items-center h-full">
-            <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-doodle-ink/40">
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/40">
               No image
             </span>
           </div>

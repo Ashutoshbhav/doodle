@@ -2,6 +2,7 @@ import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { ProductCard } from "@/components/shop/ProductCard"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
+import { Eyebrow } from "@/components/ui/Eyebrow"
 import type { Product } from "@/lib/medusa/types"
 
 export const metadata = {
@@ -34,9 +35,7 @@ export default async function ShopPage() {
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
         <section className="mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-24">
           <div className="max-w-3xl">
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
-              First drop
-            </div>
+            <Eyebrow variant="mono" accent="orange">First drop</Eyebrow>
             <h1 className="mt-4 font-display text-[clamp(2.5rem,6vw,4rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               Build the kit.
             </h1>
@@ -46,7 +45,7 @@ export default async function ShopPage() {
           </div>
 
           {products.length === 0 ? (
-            <div className="mt-14 rounded-[1.5rem] bg-doodle-canvas p-10 border-2 border-dashed border-doodle-ink/20 text-center">
+            <div className="mt-14 rounded-lg bg-doodle-canvas p-10 border-2 border-dashed border-doodle-ink/20 text-center">
               <p className="font-display text-2xl text-doodle-ink">
                 Almost there.
               </p>

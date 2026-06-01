@@ -5,6 +5,7 @@ import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { VariantPicker } from "@/components/shop/VariantPicker"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
+import { Eyebrow } from "@/components/ui/Eyebrow"
 import type { Product } from "@/lib/medusa/types"
 
 export const dynamic = "force-dynamic"
@@ -53,7 +54,7 @@ export default async function PDPPage({
       <NavWithCart />
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
         <section className="mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-24 grid gap-12 lg:grid-cols-2">
-          <div className="relative aspect-[4/5] rounded-[1.75rem] overflow-hidden border-2 border-dashed border-doodle-ink/20 bg-doodle-stitch">
+          <div className="relative aspect-[4/5] rounded-lg overflow-hidden border-2 border-dashed border-doodle-ink/20 bg-doodle-stitch">
             {hero ? (
               <Image
                 src={hero}
@@ -65,7 +66,7 @@ export default async function PDPPage({
               />
             ) : (
               <div className="grid place-items-center h-full">
-                <span className="font-mono text-xs uppercase tracking-[0.22em] text-doodle-ink/40">
+                <span className="font-mono text-xs uppercase tracking-[0.14em] text-doodle-ink/40">
                   Photo coming soon
                 </span>
               </div>
@@ -73,9 +74,7 @@ export default async function PDPPage({
           </div>
 
           <div>
-            <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
-              First drop
-            </div>
+            <Eyebrow variant="mono" accent="orange">First drop</Eyebrow>
             <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               {product.title}
             </h1>
@@ -94,7 +93,7 @@ export default async function PDPPage({
               <VariantPicker product={product} />
             </div>
 
-            <div className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-doodle-ink/40">
+            <div className="mt-10 font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/40">
               Free shipping on orders above ₹999
             </div>
           </div>

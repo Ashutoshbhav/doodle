@@ -81,7 +81,7 @@ export function VariantPicker({ product }: { product: Product }) {
     <div className="space-y-7">
       {options.map((opt) => (
         <div key={opt.id}>
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
+          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55">
             {opt.title}
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -98,7 +98,7 @@ export function VariantPicker({ product }: { product: Product }) {
                     }))
                   }
                   className={[
-                    "px-4 py-2 rounded-full border-2 border-dashed text-sm transition-colors",
+                    "px-4 py-2 rounded-full border-2 border-dashed text-sm transition-[colors,transform] active:scale-[0.97]",
                     active
                       ? "bg-doodle-ink text-doodle-canvas border-doodle-ink"
                       : "bg-doodle-canvas text-doodle-ink border-doodle-ink/30 hover:border-doodle-ink",

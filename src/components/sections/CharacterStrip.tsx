@@ -12,6 +12,7 @@ import {
   useReducedMotion,
 } from "motion/react";
 import { Smiley, SmileyXEyes, SmileyWink, SmileyMelting, SmileyNervous } from "@phosphor-icons/react/dist/ssr";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 // Modular wrap: keeps a value cycling between [min, max).
 // Used to make the marquee loop seamlessly past -50% back to 0%.
@@ -90,13 +91,15 @@ const BG = {
   pink: "bg-doodle-pink",
 } as const;
 
-const FILL_HEX = {
-  orange: "#e87a3d",
-  blue: "#2a56b3",
-  yellow: "#f2c84a",
-  purple: "#8b7ac6",
-  red: "#d24a3d",
-  pink: "#d4738a",
+// Maps to the locked CSS custom props so SVG fills read the same tokens as
+// `bg-doodle-*` (no drifted literal hexes).
+const FILL_VAR = {
+  orange: "var(--color-doodle-orange)",
+  blue: "var(--color-doodle-blue)",
+  yellow: "var(--color-doodle-yellow)",
+  purple: "var(--color-doodle-purple)",
+  red: "var(--color-doodle-red)",
+  pink: "var(--color-doodle-pink)",
 } as const;
 
 export function CharacterStrip() {
@@ -109,9 +112,9 @@ export function CharacterStrip() {
       className="relative border-b-2 border-dashed border-doodle-ink/15 py-20 md:py-24 overflow-hidden"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 mb-10">
-        <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink/55">
+        <Eyebrow variant="rule" accent="orange">
           The DOODLE crew
-        </div>
+        </Eyebrow>
         <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink max-w-3xl">
           Five looks.{" "}
           <span className="italic text-doodle-orange">Same five</span>{" "}
@@ -191,7 +194,7 @@ function CharacterCard({ c }: { c: Character }) {
   return (
     <li
       className={`
-        relative shrink-0 w-[260px] md:w-[300px] rounded-[2rem]
+        relative shrink-0 w-[260px] md:w-[300px] rounded-[1rem]
         ${BG[c.bg]} border-[3px] border-dashed border-doodle-stitch
         p-6 flex flex-col items-center text-center
       `}
@@ -214,7 +217,7 @@ function CharacterCard({ c }: { c: Character }) {
       >
         <path
           d="M 50 32 L 80 18 Q 100 32 120 18 L 150 32 L 168 56 L 144 72 L 144 158 Q 100 168 56 158 L 56 72 L 32 56 Z"
-          fill={FILL_HEX[c.shirt]}
+          fill={FILL_VAR[c.shirt]}
           stroke="white"
           strokeWidth="3"
           strokeLinejoin="round"
@@ -228,14 +231,14 @@ function CharacterCard({ c }: { c: Character }) {
           transform="scale(0.94) translate(6.4, 6)"
         />
         {/* Two patches on tee */}
-        <circle cx="100" cy="84" r="22" fill={FILL_HEX[c.patches[0]]} stroke="white" strokeWidth="2.5" strokeDasharray="3 4" />
+        <circle cx="100" cy="84" r="22" fill={FILL_VAR[c.patches[0]]} stroke="white" strokeWidth="2.5" strokeDasharray="3 4" />
         <rect
           x="120"
           y="118"
           width="32"
           height="32"
           rx="9"
-          fill={FILL_HEX[c.patches[1]]}
+          fill={FILL_VAR[c.patches[1]]}
           stroke="white"
           strokeWidth="2.5"
           strokeDasharray="3 4"

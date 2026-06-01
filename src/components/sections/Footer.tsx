@@ -7,6 +7,7 @@ import {
   EnvelopeSimple,
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal } from "@/components/motion";
+import { Eyebrow } from "@/components/ui/Eyebrow";
 
 const COLUMNS = [
   {
@@ -100,9 +101,9 @@ export function Footer() {
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-doodle-canvas/55">
+                <Eyebrow variant="mono" tone="stitch">
                   {col.title}
-                </div>
+                </Eyebrow>
                 <ul className="mt-4 space-y-2">
                   {col.links.map((l) => (
                     <li key={l.label}>
