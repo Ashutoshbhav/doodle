@@ -13,6 +13,7 @@ import {
 } from "motion/react";
 import { Smiley, SmileyXEyes, SmileyWink, SmileyMelting, SmileyNervous } from "@phosphor-icons/react/dist/ssr";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { characterStrip as content } from "@/content/home";
 
 // Modular wrap: keeps a value cycling between [min, max).
 // Used to make the marquee loop seamlessly past -50% back to 0%.
@@ -34,53 +35,26 @@ type Character = {
 };
 
 // [PLACEHOLDER] character set — Ash will replace with the real illustrated kids
-const CHARS: Character[] = [
-  {
-    name: "Aarav",
-    age: 5,
-    bg: "yellow",
-    shirt: "orange",
-    patches: ["blue", "purple"],
-    Face: Smiley,
-    mood: "Sunshine mode",
-  },
-  {
-    name: "Mira",
-    age: 7,
-    bg: "blue",
-    shirt: "yellow",
-    patches: ["pink", "red"],
-    Face: SmileyWink,
-    mood: "Mischief allowed",
-  },
-  {
-    name: "Kabir",
-    age: 4,
-    bg: "pink",
-    shirt: "purple",
-    patches: ["yellow", "blue"],
-    Face: SmileyMelting,
-    mood: "Melting marker",
-  },
-  {
-    name: "Zara",
-    age: 6,
-    bg: "purple",
-    shirt: "pink",
-    patches: ["orange", "yellow"],
-    Face: SmileyXEyes,
-    mood: "Stars in eyes",
-  },
-  {
-    name: "Ishaan",
-    age: 8,
-    bg: "orange",
-    shirt: "blue",
-    patches: ["red", "yellow"],
-    Face: SmileyNervous,
-    mood: "First-day feels",
-  },
+// Visual data (colors, face icons) lives here; name/age/mood come from content.
+const CHAR_VISUALS: {
+  bg: CharColor;
+  shirt: CharColor;
+  patches: [CharColor, CharColor];
+  Face: typeof Smiley;
+}[] = [
+  { bg: "yellow", shirt: "orange", patches: ["blue", "purple"], Face: Smiley },
+  { bg: "blue", shirt: "yellow", patches: ["pink", "red"], Face: SmileyWink },
+  { bg: "pink", shirt: "purple", patches: ["yellow", "blue"], Face: SmileyMelting },
+  { bg: "purple", shirt: "pink", patches: ["orange", "yellow"], Face: SmileyXEyes },
+  { bg: "orange", shirt: "blue", patches: ["red", "yellow"], Face: SmileyNervous },
 ];
+
+const CHARS: Character[] = content.characters.map((c, i) => ({
+  name: c.name,
+  age: c.age,
+  mood: c.mood,
+  ...CHAR_VISUALS[i],
+}));
 
 const BG = {
   orange: "bg-doodle-orange",
@@ -113,17 +87,16 @@ export function CharacterStrip() {
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 mb-10">
         <Eyebrow variant="rule" accent="orange">
-          The DOODLE crew
+          {content.eyebrow}
         </Eyebrow>
         <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink max-w-3xl">
-          Five looks.{" "}
-          <span className="italic text-doodle-orange">Same five</span>{" "}
-          base pieces.
+          {content.headlineLead}{" "}
+          <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+          {content.headlineEnd}
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
           {/* [PLACEHOLDER] supporting copy */}
-          Each kid below is wearing the same DOODLE base tee. The patches
-          do the rest of the talking.
+          {content.body}
         </p>
       </div>
 

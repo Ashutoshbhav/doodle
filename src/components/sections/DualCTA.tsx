@@ -11,6 +11,7 @@ import {
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { MagneticHover } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { dualCTA as content } from "@/content/home";
 
 export function DualCTA() {
   return (
@@ -49,21 +50,20 @@ function ConsumerCard() {
       <div className="relative z-10">
         <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
           <Sparkle weight="fill" size={10} />
-          <Eyebrow variant="mono" tone="stitch">Be first</Eyebrow>
+          <Eyebrow variant="mono" tone="stitch">{content.consumer.badge}</Eyebrow>
         </span>
       </div>
 
       <div className="relative z-10">
         <h2 className="font-display text-[clamp(1.85rem,3.5vw,2.85rem)] leading-[1.0] tracking-[-0.02em] text-doodle-stitch">
-          First drop alerts.{" "}
+          {content.consumer.headlineLead}{" "}
           <span className="italic block opacity-90">
-            One email, when it&rsquo;s ready.
+            {content.consumer.headlineEmphasis}
           </span>
         </h2>
         <p className="mt-4 text-sm sm:text-base text-doodle-stitch/85 max-w-md">
           {/* [PLACEHOLDER] supporting copy */}
-          We&rsquo;ll write once: when the first 200 base tees ship and the
-          first patch library is live. No drip campaign. No noise.
+          {content.consumer.body}
         </p>
       </div>
 
@@ -96,25 +96,23 @@ function StockistCard() {
       <div className="relative z-10 flex items-center gap-3">
         <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
           <Storefront weight="fill" size={10} />
-          <Eyebrow variant="mono" tone="stitch">For stockists</Eyebrow>
+          <Eyebrow variant="mono" tone="stitch">{content.stockist.badge}</Eyebrow>
         </span>
         <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-doodle-stitch/65">
-          B2B inquiry
+          {content.stockist.badgeNote}
         </span>
       </div>
 
       <div className="relative z-10">
         <h2 className="font-display text-[clamp(1.85rem,3.5vw,2.85rem)] leading-[1.0] tracking-[-0.02em] text-doodle-stitch">
-          Stock DOODLE in your store.{" "}
+          {content.stockist.headlineLead}{" "}
           <span className="italic block opacity-90">
-            We&rsquo;ll bring the patches.
+            {content.stockist.headlineEmphasis}
           </span>
         </h2>
         <p className="mt-4 text-sm sm:text-base text-doodle-stitch/85 max-w-md">
           {/* [PLACEHOLDER] supporting copy */}
-          Looking for boutique kids&rsquo; stores, design schools and
-          play-cafes across India. Wholesale terms, sample kits, and
-          consignment options available.
+          {content.stockist.body}
         </p>
       </div>
 
@@ -130,11 +128,11 @@ function StockistCard() {
           "
         >
           <PaperPlaneTilt weight="duotone" size={18} />
-          <span>Send a stockist note</span>
+          <span>{content.stockist.ctaLabel}</span>
           <ArrowRight weight="bold" size={14} />
         </a>
         <span className="text-xs font-mono uppercase tracking-[0.2em] text-doodle-stitch/65">
-          [hello@example.in &mdash; replace]
+          {content.stockist.emailNote}
         </span>
       </div>
     </motion.div>

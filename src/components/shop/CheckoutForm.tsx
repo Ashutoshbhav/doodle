@@ -156,12 +156,11 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
         contact: phone,
       },
       theme: { color: "#E8650A" },
-      handler: async (response) => {
-        const r = await completeRazorpayOrder({
-          razorpay_payment_id: response.razorpay_payment_id,
-          razorpay_order_id: response.razorpay_order_id,
-          razorpay_signature: response.razorpay_signature,
-        })
+      handler: async () => {
+        // Payment authenticity is verified server-side by the Razorpay webhook
+        // (HMAC), so the client signature fields aren't trusted here — we just
+        // complete the cart and let the webhook confirm/capture.
+        const r = await completeRazorpayOrder()
         if (!r.ok) {
           setErr(r.error)
           setBusy(false)

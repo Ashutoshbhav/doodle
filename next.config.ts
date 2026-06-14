@@ -11,9 +11,9 @@ const csp = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://checkout.razorpay.com https://*.posthog.com",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://res.cloudinary.com https://www.facebook.com https://*.posthog.com https://*.razorpay.com",
+  "img-src 'self' data: blob: https://res.cloudinary.com https://api.doodlebycanvas.in https://*.doodlebycanvas.in https://*.up.railway.app https://www.facebook.com https://*.posthog.com https://*.razorpay.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://api.doodle.in https://*.doodle.in https://*.posthog.com https://www.facebook.com https://*.razorpay.com https://api.razorpay.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://vitals.vercel-insights.com",
+  "connect-src 'self' https://api.doodlebycanvas.in https://*.doodlebycanvas.in https://*.up.railway.app https://*.posthog.com https://www.facebook.com https://*.razorpay.com https://api.razorpay.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://vitals.vercel-insights.com",
   "frame-src 'self' https://*.razorpay.com https://api.razorpay.com https://checkout.razorpay.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
@@ -38,6 +38,19 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  images: {
+    formats: ["image/avif", "image/webp"],
+    // Product images come from the Medusa backend (local /static or MinIO) and
+    // optionally Cloudinary. Wildcards cover prod (api.doodlebycanvas.in),
+    // Railway during cutover, and local dev (Medusa on :9000).
+    remotePatterns: [
+      { protocol: "https", hostname: "api.doodlebycanvas.in" },
+      { protocol: "https", hostname: "**.doodlebycanvas.in" },
+      { protocol: "https", hostname: "**.up.railway.app" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "http", hostname: "localhost", port: "9000" },
+    ],
+  },
   async headers() {
     return [
       {

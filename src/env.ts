@@ -11,6 +11,9 @@ export const env = createEnv({
     SENTRY_AUTH_TOKEN: z.string().optional(),
     SENTRY_ORG: z.string().optional(),
     SENTRY_PROJECT: z.string().optional(),
+    // Upstash Redis — powers rate limiting. Optional: limiting no-ops until set.
+    UPSTASH_REDIS_REST_URL: z.string().url().optional(),
+    UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
@@ -25,6 +28,9 @@ export const env = createEnv({
     // Medusa commerce backend (optional during pre-launch; required once /shop ships)
     NEXT_PUBLIC_MEDUSA_BASE_URL: z.string().url().optional(),
     NEXT_PUBLIC_MEDUSA_PUB_KEY: z.string().min(1).optional(),
+    // Razorpay PUBLIC key id (safe to expose; secret + webhook secret stay on the
+    // backend). Used to open Razorpay Checkout. Optional until payments go live.
+    NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1).optional(),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
@@ -37,6 +43,7 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL,
     NEXT_PUBLIC_MEDUSA_BASE_URL: process.env.NEXT_PUBLIC_MEDUSA_BASE_URL,
     NEXT_PUBLIC_MEDUSA_PUB_KEY: process.env.NEXT_PUBLIC_MEDUSA_PUB_KEY,
+    NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
   },
   emptyStringAsUndefined: true,
 });

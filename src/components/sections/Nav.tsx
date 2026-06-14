@@ -67,6 +67,30 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
         </ul>
 
         <div className="flex items-center gap-2 md:gap-3">
+          <Link
+            href="/account"
+            aria-label="Your account"
+            className="
+              inline-flex h-9 w-9 items-center justify-center rounded-full
+              text-doodle-ink/70 transition-colors hover:text-doodle-ink
+              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30
+            "
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </Link>
           <CartButton count={cartCount} />
           <Link
             href="/shop"

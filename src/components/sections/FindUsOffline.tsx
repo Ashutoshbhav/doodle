@@ -9,33 +9,9 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { MagneticHover } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { findUsOffline as content } from "@/content/home";
 
-const POPUPS = [
-  {
-    city: "[Bengaluru]",
-    venue: "[Indiranagar pop-up · 100ft Road]",
-    date: "[Sat 10 Jan 2026]",
-    window: "11:00 — 19:00",
-    color: "orange",
-    badge: "First drop",
-  },
-  {
-    city: "[Mumbai]",
-    venue: "[Bandra weekend market · Carter Road]",
-    date: "[Sat–Sun 24-25 Jan 2026]",
-    window: "10:00 — 20:00",
-    color: "blue",
-    badge: "Two days",
-  },
-  {
-    city: "[New Delhi]",
-    venue: "[Hauz Khas village · Boutique Block 3]",
-    date: "[Sat 7 Feb 2026]",
-    window: "12:00 — 20:00",
-    color: "pink",
-    badge: "RSVP only",
-  },
-] as const;
+const POPUPS = content.popups;
 
 const SURFACE = {
   orange: {
@@ -65,18 +41,16 @@ export function FindUsOffline() {
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
             <Eyebrow variant="rule" accent="orange">
-              In person, before online
+              {content.eyebrow}
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              Touch the patches.{" "}
-              <span className="italic text-doodle-orange">Then</span>{" "}
-              decide.
+              {content.headlineLead}{" "}
+              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              {content.headlineEnd}
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
               {/* [PLACEHOLDER] supporting copy */}
-              We&rsquo;re going offline first because patches are tactile.
-              Three pop-ups across Bengaluru, Mumbai and Delhi before the
-              online drop.
+              {content.body}
             </p>
           </div>
 
@@ -85,7 +59,7 @@ export function FindUsOffline() {
               href="#dual-cta"
               className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-4 py-2 text-xs font-mono uppercase tracking-[0.2em] text-doodle-ink stitch-ink hover:bg-doodle-yellow transition-colors"
             >
-              Get pop-up alerts
+              {content.alertsCta}
               <ArrowUpRight weight="bold" size={12} />
             </a>
           </div>

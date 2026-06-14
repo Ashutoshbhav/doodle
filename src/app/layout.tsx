@@ -7,6 +7,7 @@ import {
   Bagel_Fat_One,
 } from "next/font/google";
 import { Providers } from "@/components/Providers";
+import { ConsentBanner } from "@/components/ui/ConsentBanner";
 import { SmoothScroll } from "@/components/motion";
 import { env } from "@/env";
 import "./globals.css";
@@ -122,6 +123,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
         <Providers>
           <SmoothScroll>{children}</SmoothScroll>
+          <ConsentBanner />
         </Providers>
       </body>
     </html>

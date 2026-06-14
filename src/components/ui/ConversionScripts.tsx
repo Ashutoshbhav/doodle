@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { env } from "@/env";
+import { useConsentGranted } from "@/lib/consent";
 
 /**
  * Ad-platform base tags for the /drop campaign LP (Live Campaign Lab).
@@ -13,8 +14,14 @@ import { env } from "@/env";
  * and records the PageView.
  */
 export function ConversionScripts() {
+  const consentGranted = useConsentGranted();
   const pixelId = env.NEXT_PUBLIC_META_PIXEL_ID;
   const gadsId = env.NEXT_PUBLIC_GOOGLE_ADS_ID;
+
+  // DPDP: marketing/analytics SDKs load only after explicit consent. Trade-off:
+  // Meta's auto "connection check" won't see an inline-on-load pixel anymore —
+  // verify the pixel manually in Events Manager after accepting the banner.
+  if (!consentGranted) return null;
 
   return (
     <>

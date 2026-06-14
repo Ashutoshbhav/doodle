@@ -9,6 +9,7 @@
 
 import { ScrollReveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { patchMath as content } from "@/content/home";
 
 type Stat = {
   value: string;
@@ -17,13 +18,7 @@ type Stat = {
   tone?: "ink" | "blue" | "red" | "purple" | "pink";
 };
 
-const STATS: Stat[] = [
-  { value: "200+", label: "patches" },
-  { value: "2", label: "base colours", tone: "blue" },
-  { value: "1", label: "tee", tone: "red" },
-  { value: "5", label: "looks", tone: "purple" },
-  { value: "∞", label: "outfits", tone: "pink" },
-];
+const STATS: readonly Stat[] = content.stats;
 
 const TONE_CLASS: Record<NonNullable<Stat["tone"]>, string> = {
   ink: "text-doodle-ink",
@@ -44,13 +39,13 @@ export function PatchMath() {
         <ScrollReveal direction="up" amount={0.1}>
           <div className="flex items-center justify-between mb-10 md:mb-14">
             <Eyebrow variant="mono">
-              Patch math
+              {content.eyebrow}
             </Eyebrow>
             <div
               className="text-xl md:text-2xl text-doodle-ink/70 hidden sm:block"
               style={{ fontFamily: "var(--font-caveat)" }}
             >
-              the maths of the modular wardrobe
+              {content.kicker}
             </div>
           </div>
         </ScrollReveal>
@@ -149,7 +144,7 @@ export function PatchMath() {
               className="text-2xl md:text-3xl text-doodle-ink/75 max-w-md text-right"
               style={{ fontFamily: "var(--font-caveat)" }}
             >
-              one tee. five looks. a hundred Monday mornings.
+              {content.punchline}
             </div>
           </div>
         </ScrollReveal>

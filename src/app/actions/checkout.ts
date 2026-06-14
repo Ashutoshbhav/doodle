@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache"
 import { getCart, getOrCreateCart, getIndiaRegionId } from "@/lib/medusa/cart"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
+import { env } from "@/env"
+import { rateLimit } from "@/lib/ratelimit"
 
 type Result<T = void> =
   | { ok: true; data: T }
@@ -144,6 +146,11 @@ export async function setShippingAddress(input: {
 
 export async function placeCodOrder(): Promise<Result<{ orderId: string }>> {
   if (!isCommerceConfigured) return notConfigured() as Result<{ orderId: string }>
+  if (!(await rateLimit("checkout"))) {
+    return fail("Too many attempts. Please wait a moment and try again.") as Result<{
+      orderId: string
+    }>
+  }
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.") as Result<{ orderId: string }>
@@ -186,23 +193,25 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
       provider_id: "razorpay",
     })
 
-    // Plugin convention (devx-commerce/razorpay): provider stuffs rzp_order_id + key_id into session.data
+    // Contract for medusa-plugin-razorpay-v2: the provider returns the Razorpay
+    // order object at session.data.razorpayOrder. The PUBLIC key id is a client
+    // env var (the secret never leaves the backend).
     const sessions = (session.payment_collection?.payment_sessions ?? []) as Array<{
       provider_id?: string
-      data?: Record<string, unknown>
+      data?: { razorpayOrder?: { id?: string } } & Record<string, unknown>
     }>
     const rzpSession = sessions.find((s) => s.provider_id === "razorpay")
-    const data = (rzpSession?.data ?? {}) as Record<string, unknown>
+    const rzpOrderId = rzpSession?.data?.razorpayOrder?.id ?? ""
+    const keyId = env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? ""
 
-    const rzpOrderId =
-      (data.rzp_order_id as string | undefined) ??
-      (data.id as string | undefined) ??
-      ""
-    const keyId = (data.key_id as string | undefined) ?? ""
-
-    if (!rzpOrderId || !keyId) {
+    if (!rzpOrderId) {
       return fail(
-        "Razorpay isn't wired yet — paste TEST keys into the backend + restart it."
+        "Razorpay isn't wired yet — set the backend keys + restart it."
+      ) as Result<RazorpayInit>
+    }
+    if (!keyId) {
+      return fail(
+        "Razorpay public key is missing — set NEXT_PUBLIC_RAZORPAY_KEY_ID."
       ) as Result<RazorpayInit>
     }
 
@@ -211,7 +220,11 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
       data: {
         providerId: "razorpay",
         rzpOrderId,
-        amount: cart.total ?? 0,
+        // Razorpay expects the amount in the SMALLEST unit (paise). Medusa v2
+        // cart.total is in major units (₹999 → 999), so convert. When order_id
+        // is supplied, Razorpay treats the order's amount as authoritative —
+        // VERIFY this matches on the first TEST transaction.
+        amount: Math.round((cart.total ?? 0) * 100),
         currency: cart.currency_code ?? "inr",
         keyId,
       },
@@ -221,26 +234,19 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
   }
 }
 
-export async function completeRazorpayOrder(input: {
-  razorpay_payment_id: string
-  razorpay_order_id: string
-  razorpay_signature: string
-}): Promise<Result<{ orderId: string }>> {
+export async function completeRazorpayOrder(): Promise<Result<{ orderId: string }>> {
   if (!isCommerceConfigured)
     return notConfigured() as Result<{ orderId: string }>
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.") as Result<{ orderId: string }>
 
-    // The Razorpay plugin exposes a custom storefront endpoint to verify the
-    // HMAC-SHA256 signature server-side before capturing payment. The SDK's
-    // generic client.fetch is used because there's no first-class SDK helper.
-    // Wires up properly once packages/medusa-plugin-razorpay is forked + registered.
-    await medusa.client.fetch("/store/razorpay/verify", {
-      method: "POST",
-      body: { cart_id: cart.id, ...input },
-    })
-
+    // medusa-plugin-razorpay-v2 verifies payment authenticity server-side via
+    // the Razorpay WEBHOOK (HMAC over the raw body, validated with the webhook
+    // secret) at {backend}/razorpay/hooks — NOT a storefront endpoint. So the
+    // client signature fields aren't trusted here; we simply complete the cart,
+    // and the webhook confirms/captures the payment. This matches the plugin's
+    // reference storefront button (handler → placeOrder()).
     const result = await medusa.store.cart.complete(cart.id)
     if (result.type === "order") {
       revalidatePath("/cart")

@@ -14,38 +14,30 @@ import type { Icon } from "@phosphor-icons/react";
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { founders as content } from "@/content/home";
 
 type FounderColor = "orange" | "blue" | "purple";
 
-const FOUNDERS = [
-  {
-    name: "[Founder One]",
-    role: "Co-founder · Product",
-    handle: "@one",
-    bg: "orange" as FounderColor,
-    Face: Smiley,
-    bio: "Built the patch attachment system. Has a 6-year-old who is the harshest tester on Earth.",
-    favPatch: { Icon: Lightning, label: "Volt" },
-  },
-  {
-    name: "[Founder Two]",
-    role: "Co-founder · Brand",
-    handle: "@two",
-    bg: "blue" as FounderColor,
-    Face: SmileyWink,
-    bio: "Drew every doodle in the first patch library. Believes every t-shirt should hold a story.",
-    favPatch: { Icon: Heart, label: "First crush" },
-  },
-  {
-    name: "[Founder Three]",
-    role: "Co-founder · Operations",
-    handle: "@three",
-    bg: "purple" as FounderColor,
-    Face: SmileyMelting,
-    bio: "Runs the Bengaluru workshop. Cares about cotton sourcing more than is reasonable.",
-    favPatch: { Icon: Star, label: "North star" },
-  },
-] as const;
+// Visual data (bg color, face + favourite-patch icons) is structural;
+// name/role/bio/favPatch.label come from content.people
+const FOUNDER_VISUALS: {
+  bg: FounderColor;
+  Face: typeof Smiley;
+  FavIcon: Icon;
+}[] = [
+  { bg: "orange", Face: Smiley, FavIcon: Lightning },
+  { bg: "blue", Face: SmileyWink, FavIcon: Heart },
+  { bg: "purple", Face: SmileyMelting, FavIcon: Star },
+];
+
+const FOUNDERS = content.people.map((p, i) => ({
+  name: p.name,
+  role: p.role,
+  bg: FOUNDER_VISUALS[i].bg,
+  Face: FOUNDER_VISUALS[i].Face,
+  bio: p.bio,
+  favPatch: { Icon: FOUNDER_VISUALS[i].FavIcon, label: p.favPatchLabel },
+}));
 
 const SURFACE = {
   orange: { bg: "bg-doodle-orange", chip: "text-doodle-stitch/85" },
@@ -63,22 +55,21 @@ export function Founders() {
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-7">
             <Eyebrow variant="rule" accent="orange">
-              The makers
+              {content.eyebrow}
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              Three people,{" "}
-              <span className="italic text-doodle-orange">one</span>{" "}
-              workshop, a{" "}
+              {content.headlineLead}{" "}
+              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              {content.headlineMid}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
-                stubborn
+                {content.headlineHighlight}
               </RoughHighlight>{" "}
-              idea.
+              {content.headlineEnd}
             </h2>
           </div>
           <p className="md:col-span-5 text-base text-doodle-ink/70 leading-relaxed">
             {/* [PLACEHOLDER] supporting copy */}
-            Cut, sewn, sketched and shipped from a single Bengaluru
-            studio. We answer every email ourselves.
+            {content.body}
           </p>
         </div>
 
@@ -170,7 +161,7 @@ function FounderCard({
         `}
       >
         <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-doodle-stitch/85">
-          Pet patch
+          {content.petPatchLabel}
         </span>
         <span className="font-display text-sm text-doodle-stitch">
           {f.favPatch.label}

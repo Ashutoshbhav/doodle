@@ -8,43 +8,23 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { footer as content } from "@/content/home";
 
-const COLUMNS = [
-  {
-    title: "Explore",
-    links: [
-      { href: "#how", label: "How it works" },
-      { href: "#wall", label: "Patch library" },
-      { href: "#characters", label: "Looks gallery" },
-      { href: "#why", label: "Why DOODLE" },
-    ],
-  },
-  {
-    title: "Help",
-    links: [
-      { href: "#", label: "Sizing guide" },
-      { href: "#", label: "Care & washing" },
-      { href: "#", label: "FAQs" },
-      { href: "#", label: "Returns" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { href: "#founders", label: "Founders" },
-      { href: "#voices", label: "Press kit" },
-      { href: "#dual-cta", label: "Stockists" },
-      { href: "#", label: "Contact" },
-    ],
-  },
-] as const;
+const COLUMNS = content.columns;
 
-const SOCIALS = [
-  { href: "#", label: "Instagram", Icon: InstagramLogo },
-  { href: "#", label: "TikTok", Icon: TiktokLogo },
-  { href: "#", label: "YouTube", Icon: YoutubeLogo },
-  { href: "mailto:hello@example.in", label: "Email", Icon: EnvelopeSimple },
-] as const;
+// Maps icon names from content to their components (icons are not copy)
+const SOCIAL_ICONS = {
+  InstagramLogo,
+  TiktokLogo,
+  YoutubeLogo,
+  EnvelopeSimple,
+} as const;
+
+const SOCIALS = content.socials.map((s) => ({
+  href: s.href,
+  label: s.label,
+  Icon: SOCIAL_ICONS[s.iconName],
+}));
 
 export function Footer() {
   return (
@@ -73,8 +53,7 @@ export function Footer() {
             </Link>
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-doodle-canvas/75">
               {/* [PLACEHOLDER] tagline — Ash will rewrite */}
-              Modular kids&rsquo; clothing with patches that swap, mix and
-              remix. Designed in India. Made for the way kids actually play.
+              {content.tagline}
             </p>
 
             <div className="mt-7 flex items-center gap-3">
@@ -124,9 +103,9 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-16 pt-6 border-t border-dashed border-doodle-canvas/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-canvas/55">
-            <span className="text-doodle-canvas/85 font-semibold">DOODLE</span>
-            <span className="px-1.5 opacity-50">by</span>
-            <span className="text-doodle-canvas/85 font-semibold">CANVAS</span>
+            <span className="text-doodle-canvas/85 font-semibold">{content.brandName}</span>
+            <span className="px-1.5 opacity-50">{content.brandBy}</span>
+            <span className="text-doodle-canvas/85 font-semibold">{content.brandParent}</span>
             <span className="ml-3 opacity-50">
               &copy; {new Date().getFullYear()}
             </span>
@@ -137,14 +116,17 @@ export function Footer() {
               <span className="inline-block h-2 w-3 rounded-sm bg-doodle-orange" aria-hidden />
               <span className="inline-block h-2 w-3 rounded-sm bg-doodle-canvas" aria-hidden />
               <span className="inline-block h-2 w-3 rounded-sm bg-doodle-blue" aria-hidden />
-              Made in India
+              {content.madeInIndia}
             </span>
-            <Link href="#" className="hover:text-doodle-orange transition-colors">
-              Privacy
-            </Link>
-            <Link href="#" className="hover:text-doodle-orange transition-colors">
-              Terms
-            </Link>
+            {content.legalLinks.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="hover:text-doodle-orange transition-colors"
+              >
+                {l.label}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

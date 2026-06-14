@@ -119,6 +119,15 @@ export function WaitlistForm({
               />
             </div>
             <input type="hidden" name="name" value="" />
+            {/* Honeypot — hidden from humans; bots that fill every field get dropped. */}
+            <input
+              type="text"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute left-[-9999px] top-0 h-0 w-0 opacity-0"
+            />
             {source ? (
               <input type="hidden" name="source" value={source} />
             ) : null}

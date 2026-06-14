@@ -11,33 +11,16 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ParallaxLayer } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { whyDoodle as content } from "@/content/home";
 
-const ITEMS = [
-  {
-    Icon: Ruler,
-    title: "Inclusive sizing for every kid",
-    body:
-      "Bases come in 2T to 12, with side-stretch panels that add real cm — not just a different label on the same body.",
-  },
-  {
-    Icon: Recycle,
-    title: "Modular means less landfill",
-    body:
-      "Every patch is replaceable, every base is mendable, every component is its own SKU. We built the whole thing so a worn-out elbow doesn't become a worn-out outfit.",
-  },
-  {
-    Icon: Plant,
-    title: "Grows with the kid",
-    body:
-      "Sleeve-extender patches and hem-drop sections add 4–6 cm of usable life to the same base tee. One DOODLE piece outlives three fast-fashion ones.",
-  },
-  {
-    Icon: HandHeart,
-    title: "Made in India, with the people who make it",
-    body:
-      "Cut, sewn and finished in a Bengaluru workshop that pays living wages and shares its production calendar publicly.",
-  },
-] as const;
+// Icons are structural (not copy); title/body come from content.items
+const ITEM_ICONS = [Ruler, Recycle, Plant, HandHeart] as const;
+
+const ITEMS = content.items.map((item, i) => ({
+  Icon: ITEM_ICONS[i],
+  title: item.title,
+  body: item.body,
+}));
 
 export function WhyDoodle() {
   const [open, setOpen] = React.useState<number | null>(0);
@@ -61,18 +44,17 @@ export function WhyDoodle() {
         {/* Left scene */}
         <div className="lg:col-span-5">
           <Eyebrow variant="rule" tone="stitch">
-            Why DOODLE
+            {content.eyebrow}
           </Eyebrow>
           <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-stitch">
-            Built different.{" "}
+            {content.headlineLead}{" "}
             <span className="italic block opacity-90">
-              On purpose.
+              {content.headlineEmphasis}
             </span>
           </h2>
           <p className="mt-5 max-w-md text-base leading-relaxed text-doodle-stitch/85">
             {/* [PLACEHOLDER] supporting copy */}
-            Four answers to the question every parent asks before they
-            buy something new for their kid.
+            {content.body}
           </p>
 
           {/* Decorative scene — placeholder illustrated composition. Each layer

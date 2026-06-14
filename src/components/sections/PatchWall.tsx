@@ -32,6 +32,7 @@ import {
 import type { Icon } from "@phosphor-icons/react";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { patchWall as content } from "@/content/home";
 
 type Patch = {
   Icon: Icon;
@@ -39,33 +40,40 @@ type Patch = {
   name: string;
 };
 
+// Icon-name → component map (icons are structural, not copy).
+const PATCH_ICONS: Record<string, Icon> = {
+  Rocket,
+  Heart,
+  Lightning,
+  Star,
+  Sun,
+  Moon,
+  Cloud,
+  Smiley,
+  FlowerLotus,
+  MusicNote,
+  Pizza,
+  IceCream,
+  Cat,
+  Dog,
+  Rainbow,
+  Flame,
+  Crown,
+  Eye,
+  Cake,
+  Waves,
+  Mountains,
+  Compass,
+  Sparkle,
+  Confetti,
+};
+
 // 24 placeholder patches — Ash will replace with real SVGs in /public/patches/
-const PATCHES: Patch[] = [
-  { Icon: Rocket, color: "orange", name: "Launchpad" },
-  { Icon: Heart, color: "pink", name: "First crush" },
-  { Icon: Lightning, color: "yellow", name: "Volt" },
-  { Icon: Star, color: "blue", name: "North star" },
-  { Icon: Sun, color: "orange", name: "Sundial" },
-  { Icon: Moon, color: "purple", name: "Moonbeam" },
-  { Icon: Cloud, color: "blue", name: "Daydream" },
-  { Icon: Smiley, color: "yellow", name: "Mood" },
-  { Icon: FlowerLotus, color: "pink", name: "Bloom" },
-  { Icon: MusicNote, color: "purple", name: "Loop" },
-  { Icon: Pizza, color: "red", name: "Slice" },
-  { Icon: IceCream, color: "pink", name: "Scoop" },
-  { Icon: Cat, color: "yellow", name: "Whiskers" },
-  { Icon: Dog, color: "orange", name: "Fetch" },
-  { Icon: Rainbow, color: "blue", name: "Arc" },
-  { Icon: Flame, color: "red", name: "Ember" },
-  { Icon: Crown, color: "purple", name: "Tiara" },
-  { Icon: Eye, color: "blue", name: "Watcher" },
-  { Icon: Cake, color: "pink", name: "Sweet 6" },
-  { Icon: Waves, color: "blue", name: "Tide" },
-  { Icon: Mountains, color: "purple", name: "Peak" },
-  { Icon: Compass, color: "orange", name: "Wayfinder" },
-  { Icon: Sparkle, color: "yellow", name: "Glint" },
-  { Icon: Confetti, color: "red", name: "Party trick" },
-];
+const PATCHES: Patch[] = content.patches.map((p) => ({
+  Icon: PATCH_ICONS[p.iconName],
+  color: p.color,
+  name: p.name,
+}));
 
 const PATCH_BG = {
   orange: "bg-doodle-orange",
@@ -86,19 +94,18 @@ export function PatchWall() {
         <div className="grid gap-8 md:grid-cols-12 md:items-end">
           <div className="md:col-span-8">
             <Eyebrow variant="rule" accent="orange">
-              The patch library
+              {content.eyebrow}
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              <span className="italic text-doodle-orange">200+</span> patches.{" "}
+              <span className="italic text-doodle-orange">{content.headlineCount}</span> {content.headlineMid}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
-                Endless
+                {content.headlineHighlight}
               </RoughHighlight>{" "}
-              looks.
+              {content.headlineEnd}
             </h2>
             {/* [PLACEHOLDER] supporting copy */}
             <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
-              Letters, planets, mood blobs, monograms — the catalogue grows
-              every drop. Mix four on a tee and never repeat an outfit.
+              {content.body}
             </p>
           </div>
 
@@ -107,7 +114,7 @@ export function PatchWall() {
               href="#dual-cta"
               className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-ink hover:text-doodle-orange transition-colors"
             >
-              See all 200+
+              {content.seeAll}
               <ArrowUpRight weight="bold" size={14} />
             </a>
           </div>

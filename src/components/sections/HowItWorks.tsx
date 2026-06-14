@@ -11,30 +11,18 @@ import {
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { howItWorks as content } from "@/content/home";
 
-const STEPS = [
-  {
-    Icon: TShirt,
-    color: "blue",
-    label: "Step 01",
-    title: "Pick your base",
-    body: "Start with a tee, hoodie or backpack. Patch slots are pre-stitched and ready to receive.",
-  },
-  {
-    Icon: Stack,
-    color: "yellow",
-    label: "Step 02",
-    title: "Choose your patches",
-    body: "Browse the patch library, mix prints with shapes with letters. Build today’s mood.",
-  },
-  {
-    Icon: Sparkle,
-    color: "pink",
-    label: "Step 03",
-    title: "Wear, swap, repeat",
-    body: "Snap patches on with the press-fix backing. Outfits change while the wardrobe stays the same.",
-  },
-] as const;
+// Icons are structural (not copy); label/title/body come from content.steps
+const STEP_ICONS = [TShirt, Stack, Sparkle] as const;
+
+const STEPS = content.steps.map((s, i) => ({
+  Icon: STEP_ICONS[i],
+  color: s.color,
+  label: s.label,
+  title: s.title,
+  body: s.body,
+}));
 
 const TILE = {
   blue: { ring: "border-doodle-blue", chip: "bg-doodle-blue", icon: "text-doodle-blue" },
@@ -52,21 +40,20 @@ export function HowItWorks() {
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-7">
             <Eyebrow variant="rule" accent="blue">
-              How DOODLE works
+              {content.eyebrow}
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              Three moves between{" "}
-              <span className="italic text-doodle-orange">boring</span>{" "}
-              and{" "}
+              {content.headlineLead}{" "}
+              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              {content.headlineAnd}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
-                favourite outfit.
+                {content.headlineHighlight}
               </RoughHighlight>
             </h2>
           </div>
           <p className="md:col-span-5 text-base text-doodle-ink/70 leading-relaxed">
             {/* [PLACEHOLDER] supporting copy */}
-            No app, no subscription, no learning curve. Patches are tactile.
-            Press, peel, swap.
+            {content.body}
           </p>
         </div>
 

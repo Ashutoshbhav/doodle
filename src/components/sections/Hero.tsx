@@ -10,6 +10,7 @@ import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ScrollReveal, ParallaxLayer, MagneticHover } from "@/components/motion";
+import { hero as content } from "@/content/home";
 
 /* ============================================================
    HERO v3 — split-color campaign layout
@@ -18,14 +19,7 @@ import { ScrollReveal, ParallaxLayer, MagneticHover } from "@/components/motion"
    Bleeds edge-to-edge. Intentionally unmistakable from prior cream-canvas hero.
    ============================================================ */
 
-const PATCH_LANES = [
-  { label: "Originals", color: "bg-doodle-pink text-doodle-stitch" },
-  { label: "Animals", color: "bg-doodle-blue text-doodle-stitch" },
-  { label: "Letters", color: "bg-doodle-yellow text-doodle-ink" },
-  { label: "Superhero", color: "bg-doodle-red text-doodle-stitch" },
-  { label: "Anime", color: "bg-doodle-purple text-doodle-stitch" },
-  { label: "Sweet Treats", color: "bg-doodle-orange text-doodle-stitch" },
-];
+const PATCH_LANES = content.patchLanes;
 
 export function Hero() {
   return (
@@ -41,22 +35,22 @@ export function Hero() {
           <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.28em]">
             <span className="inline-flex items-center gap-1.5">
               <FireSimple weight="fill" size={11} className="text-doodle-yellow" />
-              First drop
+              {content.banner.firstDrop}
             </span>
             <span className="opacity-30 hidden sm:inline">/</span>
-            <span className="hidden sm:inline">200 tees</span>
+            <span className="hidden sm:inline">{content.banner.tees}</span>
             <span className="opacity-30 hidden sm:inline">/</span>
-            <span className="hidden md:inline">Bangalore</span>
+            <span className="hidden md:inline">{content.banner.city}</span>
             <span className="opacity-30 hidden md:inline">/</span>
-            <span className="hidden md:inline">May 2026</span>
+            <span className="hidden md:inline">{content.banner.month}</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="hidden sm:inline text-[10px] font-mono uppercase tracking-[0.28em] text-doodle-stitch/55">
-              Doodle by Canvas
+              {content.banner.byline}
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-doodle-stitch/35 text-doodle-stitch px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-[0.22em]">
               <span className="h-1.5 w-1.5 rounded-full bg-doodle-yellow animate-pulse" />
-              Live waitlist
+              {content.banner.liveWaitlist}
             </span>
           </div>
         </div>
@@ -76,7 +70,7 @@ export function Hero() {
           <ScrollReveal direction="up" amount={0.1} className="relative z-10 h-full flex flex-col justify-center px-6 md:px-10 lg:px-16 xl:px-24 py-20 lg:py-24">
             {/* Eyebrow */}
             <Eyebrow variant="rule" tone="stitch">
-              India&rsquo;s first modular kidswear
+              {content.eyebrow}
             </Eyebrow>
 
             {/* MEGA H1
@@ -94,8 +88,8 @@ export function Hero() {
                 fontStretch: "115%",
               }}
             >
-              <span className="block uppercase">Don&rsquo;t Just</span>
-              <span className="block uppercase">Dress.</span>
+              <span className="block uppercase">{content.headlineLine1}</span>
+              <span className="block uppercase">{content.headlineLine2}</span>
             </h1>
             <div className="mt-1 lg:mt-2 relative inline-block">
               {/* Hand-drawn yellow marker swipe via rough-notation.
@@ -109,24 +103,22 @@ export function Hero() {
                     letterSpacing: "-0.02em",
                   }}
                 >
-                  Create.
+                  {content.headlineStamp}
                 </span>
               </RoughHighlight>
             </div>
 
             {/* Sub */}
             <p className="mt-8 max-w-xl text-2xl md:text-[1.65rem] leading-[1.15] text-doodle-stitch font-display tracking-[-0.01em]">
-              Kids don&rsquo;t outgrow clothes.{" "}
+              {content.subLead}{" "}
               <span className="italic text-doodle-stitch/75">
-                They outgrow characters.
+                {content.subEmphasis}
               </span>
             </p>
 
             {/* Body */}
             <p className="mt-5 max-w-lg text-base md:text-lg leading-relaxed text-doodle-stitch/85">
-              A t-shirt with velcro panels and a growing universe of
-              patches your child swaps whenever they feel like it. One
-              tee. Infinite personalities.
+              {content.body}
             </p>
 
             {/* CTA */}
@@ -139,12 +131,12 @@ export function Hero() {
               <span className="inline-flex items-center gap-2">
                 <span className="inline-block h-2.5 w-2.5 rounded-full bg-doodle-tee-pink border border-doodle-stitch/30" />
                 <span className="inline-block h-2.5 w-2.5 rounded-full bg-doodle-tee-blue border border-doodle-stitch/30" />
-                <span>2 base colours</span>
+                <span>{content.microproof.baseColours}</span>
               </span>
               <span className="opacity-40">/</span>
-              <span>Sizes 3&ndash;6 yrs</span>
+              <span>{content.microproof.sizes}</span>
               <span className="opacity-40">/</span>
-              <span>From &#8377;370</span>
+              <span>{content.microproof.price}</span>
             </div>
           </ScrollReveal>
         </div>
@@ -168,11 +160,11 @@ export function Hero() {
                 className="text-2xl text-doodle-ink"
                 style={{ fontFamily: "var(--font-caveat)" }}
               >
-                try it &darr;
+                {content.tryIt}
               </span>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-doodle-ink text-doodle-stitch px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.22em]">
                 <Lightning weight="fill" size={10} className="text-doodle-yellow" />
-                Live demo
+                {content.liveDemo}
               </span>
             </div>
 
@@ -195,7 +187,7 @@ export function Hero() {
               {/* Floating product chip */}
               <span className="absolute -top-3 -right-3 inline-flex items-center gap-1.5 rounded-full bg-doodle-ink text-doodle-stitch px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.22em] border-2 border-dashed border-doodle-stitch rotate-[6deg] shadow-[3px_3px_0_rgba(212,168,0,0.6)]">
                 <Sparkle weight="fill" size={11} className="text-doodle-yellow" />
-                Real product
+                {content.realProduct}
               </span>
             </MagneticHover>
           </div>
@@ -209,13 +201,13 @@ export function Hero() {
         <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-7">
           <div className="flex items-center justify-between mb-3">
             <Eyebrow variant="rule" accent="orange">
-              Patch lanes
+              {content.patchLanesEyebrow}
             </Eyebrow>
             <a
               href="#wall"
               className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-doodle-ink hover:text-doodle-orange transition-colors"
             >
-              See all 200+
+              {content.seeAll}
               <ArrowUpRight weight="bold" size={11} />
             </a>
           </div>
@@ -239,7 +231,7 @@ export function Hero() {
       {/* Down indicator */}
       <div className="bg-doodle-canvas pb-6 flex items-center justify-center gap-2 text-doodle-ink/55">
         <span className="font-mono text-[10px] uppercase tracking-[0.22em]">
-          keep scrolling
+          {content.keepScrolling}
         </span>
         <ArrowDown weight="bold" size={14} className="animate-bounce" />
       </div>

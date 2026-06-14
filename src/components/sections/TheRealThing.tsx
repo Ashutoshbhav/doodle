@@ -6,20 +6,22 @@ import { motion, useInView } from "motion/react";
 import { ArrowsLeftRight, Sparkle } from "@phosphor-icons/react/dist/ssr";
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
+import { theRealThing as content } from "@/content/home";
 
+// Structural data (image paths + tilt) — labels/chips come from content.shots
 const SHOTS = [
   {
     src: "/product/tee-white.jpeg",
     alt: "DOODLE base tee in cream, with eight silicone patches arranged across the chest",
-    label: "Cream base",
-    chip: "Look 01",
+    label: content.shots[0].label,
+    chip: content.shots[0].chip,
     tilt: -1.2,
   },
   {
     src: "/product/tee-blue.jpeg",
     alt: "Same DOODLE base tee in sky blue, with the same eight patches in the same chest row",
-    label: "Sky base",
-    chip: "Look 02",
+    label: content.shots[1].label,
+    chip: content.shots[1].chip,
     tilt: 1.4,
   },
 ] as const;
@@ -50,26 +52,24 @@ export function TheRealThing() {
           <div className="md:col-span-8">
             <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-3 py-1.5 text-[11px] font-mono uppercase tracking-[0.22em] text-doodle-ink stitch-ink">
               <Sparkle weight="fill" size={10} className="text-doodle-orange" />
-              Yes — it&rsquo;s a real thing
+              {content.eyebrow}
             </span>
             <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              Same eight patches.{" "}
-              <span className="italic text-doodle-orange">Different</span>{" "}
+              {content.headlineLead}{" "}
+              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
-                base.
+                {content.headlineHighlight}
               </RoughHighlight>
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
-              The base is the canvas. Patches do the talking. Press, peel,
-              rearrange — same eight pieces, two completely different
-              outfits in seconds.
+              {content.body}
             </p>
           </div>
 
           <div className="md:col-span-4 md:text-right">
             <span className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.22em] text-doodle-ink/60">
               <ArrowsLeftRight weight="bold" size={14} />
-              Swap visualised
+              {content.swapVisualised}
             </span>
           </div>
         </div>
@@ -138,7 +138,7 @@ export function TheRealThing() {
                 `}
               >
                 <Sparkle weight="fill" size={10} />
-                Real product
+                {content.realProduct}
               </span>
             </motion.figure>
             </MagneticHover>
@@ -147,9 +147,7 @@ export function TheRealThing() {
 
         {/* Caption strip */}
         <p className="mt-10 text-center text-sm text-doodle-ink/65 max-w-xl mx-auto">
-          Photos: prototype DOODLE base tees with the first patch set —
-          arrangement, attachment system and silicone finish exactly as
-          they ship.
+          {content.caption}
         </p>
       </div>
     </section>

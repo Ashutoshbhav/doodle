@@ -6,27 +6,17 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal, MagneticHover, ParallaxLayer } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { promise as content } from "@/content/home";
 
-const PILLARS = [
-  {
-    color: "orange",
-    Icon: PuzzlePiece,
-    title: "Patches change. Tee stays.",
-    body: "Pink one Monday. Blue one Friday. Stars one week, lightning the next. The shirt is the constant. The character is the variable.",
-  },
-  {
-    color: "blue",
-    Icon: Recycle,
-    title: "One tee instead of five.",
-    body: "Three Avengers tees, two Pokémon tees, half a wardrobe that already doesn't count anymore. We replaced all of that with one shirt and a small pile of patches.",
-  },
-  {
-    color: "purple",
-    Icon: ArrowsClockwise,
-    title: "Outgrows phases, not the shirt.",
-    body: "Pokémon phase: March. Iron Man phase: June. Dinosaurs by August. Same tee through all of it — the obsession changes, the tee doesn't have to.",
-  },
-] as const;
+// Icons are structural (not copy); title/body come from content.pillars
+const PILLAR_ICONS = [PuzzlePiece, Recycle, ArrowsClockwise] as const;
+
+const PILLARS = content.pillars.map((p, i) => ({
+  color: p.color,
+  Icon: PILLAR_ICONS[i],
+  title: p.title,
+  body: p.body,
+}));
 
 const SURFACE = {
   orange: {
@@ -62,14 +52,14 @@ export function Promise() {
         <ScrollReveal direction="up">
           <div className="max-w-3xl">
             <Eyebrow variant="rule" accent="orange">
-              The DOODLE promise
+              {content.eyebrow}
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              Built for{" "}
-              <span className="italic text-doodle-orange">play.</span>{" "}
-              Built to{" "}
+              {content.headlineLead}{" "}
+              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              {content.headlineMid}{" "}
               <span className="relative inline-block">
-                <span className="relative z-10">last.</span>
+                <span className="relative z-10">{content.headlineUnderline}</span>
                 <ParallaxLayer speed={-0.15} className="absolute inset-x-0 bottom-1 h-3 -z-0">
                   <span
                     aria-hidden
@@ -79,7 +69,7 @@ export function Promise() {
               </span>
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
-              Three things we kept watching happen. Three things DOODLE answers.
+              {content.body}
             </p>
           </div>
         </ScrollReveal>
@@ -125,7 +115,7 @@ export function Promise() {
                       <div
                         className={`mt-5 inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.18em] ${s.chip}`}
                       >
-                        More on this
+                        {content.moreOnThis}
                         <ArrowUpRight weight="bold" size={12} />
                       </div>
                     </div>
