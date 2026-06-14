@@ -1,8 +1,45 @@
 # DOODLE — Session State
 
-_Last updated: 2026-06-01 (whole-site design conformance pass)_
+_Last updated: 2026-06-14 (LIVE LAUNCH + commerce-readiness pass)_
 
 When Ash says **"DOODLE"** in a future session, read this file first, then `docs/BRIEF.md`, then resume.
+
+---
+
+## 🚀 LIVE 2026-06-14 — doodlebycanvas.in is serving (Server: Vercel, HTTPS)
+
+**The marketing site is LIVE at https://doodlebycanvas.in** (apex + www, SSL issued).
+Domain bought on GoDaddy; after the GoDaddy "Websites+Marketing" builder kept
+injecting a hidden AAAA (IPv6→builder) record that hijacked the domain, the fix
+was **switching GoDaddy nameservers to Vercel** (`ns1/ns2.vercel-dns.com`). That
+removed GoDaddy from DNS entirely. Vercel project = `doodle` (prj_sM8kISoMxqvGxY7d7tYrWJZqtTxu).
+
+**What's LIVE (free: Vercel + Neon):** homepage, waitlist, `/drop`, 5 legal pages
+(privacy/terms/refunds/shipping/contact), cookie consent + withdrawal, SEO
+(sitemap+JSON-LD+canonical), security headers, Sentry PII-hardened, rate-limit+honeypot.
+Storefront commits this session: `f9fbd83` (launch-readiness) + `34514ac` (SEO/consent/checkout).
+
+**Shop/checkout/account render but are INERT** — no backend deployed, no products.
+
+### 💸 COMMERCE DEFERRED (Ash's call, zero-budget) — resume = deploy backend (~$5/mo)
+Always-on commerce backend isn't free in 2026 (Railway ~$5/mo; Render-free sleeps
+→ drops payment webhooks). Ash chose **defer commerce, keep free site live**.
+When ready to sell (accepts ~$5/mo), the unlock is **deploy `doodle-backend` (Medusa v2)**:
+1. Host: Railway (built for it) — needs Railway acct + push doodle-backend to GitHub (NOT on GitHub yet; committed locally, HEAD has emails+subscribers+razorpay).
+2. Env: Neon DB URL (Ash HAS Neon), JWT/COOKIE secrets, CORS=doodlebycanvas.in, (Redis optional — worker_mode shared works without).
+3. Razorpay: already wired (`medusa-plugin-razorpay-v2`, env-gated) — add TEST keys + webhook `{backend}/razorpay/hooks`. See docs/RAZORPAY-WIREUP.md.
+4. Shiprocket: DECIDED = `medusa-shiprocket-fulfillment-plugin` (v2). NOT installed yet. ⚠️ Shiprocket has NO sandbox — first test = real shipment + wallet money.
+5. Point `api.doodlebycanvas.in` → Railway; migrate DB + create admin + seed products.
+
+### Commerce-flow tasks DEFERRED (backend-dependent, untestable until deployed)
+- IDOR fix on `/order/[id]/confirmed` (CONFIRMED real: store GET /orders/:id is unauth in Medusa; latent until backend live) — needs per-order token.
+- Email idempotency dedupe (subscribers fire duplicate emails on webhook retries).
+- Country-of-origin + GST/shipping breakdown on PDP/cart/checkout (E-Comm Rules); checkout has NO shipping-method step (shipping shows "Calculated", ₹0).
+- Overselling guard + cart qty clamp (Medusa inventory config + UI).
+- Full deep-audit findings: docs/ (4-dimension audit done 2026-06-14).
+
+### ⚠️ Legal pages: 6 placeholders in `src/content/legal.ts` need Ash + lawyer
+entity name, business address, Grievance Officer name+phone, effective date. Draft banner live until reviewed.
 
 ---
 
