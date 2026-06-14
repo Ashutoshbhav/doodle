@@ -8,6 +8,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { CookieSettings } from "@/components/ui/CookieSettings";
 import { footer as content } from "@/content/home";
 
 const COLUMNS = content.columns;
@@ -127,6 +128,7 @@ export function Footer() {
                 {l.label}
               </Link>
             ))}
+            <CookieSettings />
           </div>
         </div>
       </div>

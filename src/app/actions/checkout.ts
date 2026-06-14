@@ -21,11 +21,20 @@ function notConfigured(): Result {
   return fail("Commerce is not yet live. Check back soon.")
 }
 
+// Server-side validation — never trust the client form (actions are public POST
+// endpoints). Mirrors the India formats the checkout expects.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const PHONE_RE = /^[6-9]\d{9}$/
+const PIN_RE = /^\d{6}$/
+const cap = (s: string | undefined, n: number): string => (s ?? "").trim().slice(0, n)
+const validQty = (q: number): boolean => Number.isInteger(q) && q > 0 && q <= 99
+
 export async function addToCart(input: {
   variantId: string
   quantity: number
 }): Promise<Result> {
   if (!isCommerceConfigured) return notConfigured()
+  if (!input.variantId || !validQty(input.quantity)) return fail("Invalid item or quantity.")
   try {
     const regionId = await getIndiaRegionId()
     const cart = await getOrCreateCart(regionId)
@@ -46,6 +55,7 @@ export async function updateLine(input: {
   quantity: number
 }): Promise<Result> {
   if (!isCommerceConfigured) return notConfigured()
+  if (!input.lineId || !validQty(input.quantity)) return fail("Invalid quantity.")
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared. Add items again.")
@@ -81,15 +91,21 @@ export async function setCustomerContact(input: {
   last_name: string
 }): Promise<Result> {
   if (!isCommerceConfigured) return notConfigured()
+  const email = cap(input.email, 254).toLowerCase()
+  const phone = cap(input.phone, 10)
+  const firstName = cap(input.first_name, 80)
+  if (!EMAIL_RE.test(email)) return fail("Enter a valid email address.")
+  if (!PHONE_RE.test(phone)) return fail("Enter a valid 10-digit Indian mobile number.")
+  if (!firstName) return fail("First name is required.")
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared. Add items again.")
     await medusa.store.cart.update(cart.id, {
-      email: input.email,
+      email,
       shipping_address: {
-        first_name: input.first_name,
-        last_name: input.last_name,
-        phone: input.phone,
+        first_name: firstName,
+        last_name: cap(input.last_name, 80),
+        phone,
       },
     })
     revalidatePath("/checkout")
@@ -110,32 +126,34 @@ export async function setShippingAddress(input: {
   postal_code: string
 }): Promise<Result> {
   if (!isCommerceConfigured) return notConfigured()
+  const phone = cap(input.phone, 10)
+  const postal = cap(input.postal_code, 6)
+  const firstName = cap(input.first_name, 80)
+  const address1 = cap(input.address_1, 200)
+  const city = cap(input.city, 80)
+  const province = cap(input.province, 80)
+  if (!firstName || !address1 || !city || !province) {
+    return fail("Name, address, city and state are required.")
+  }
+  if (!PHONE_RE.test(phone)) return fail("Enter a valid 10-digit Indian mobile number.")
+  if (!PIN_RE.test(postal)) return fail("Pincode must be 6 digits.")
+  const addr = {
+    first_name: firstName,
+    last_name: cap(input.last_name, 80),
+    phone,
+    address_1: address1,
+    address_2: cap(input.address_2, 200) || undefined,
+    city,
+    province,
+    postal_code: postal,
+    country_code: "in",
+  }
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.")
     await medusa.store.cart.update(cart.id, {
-      shipping_address: {
-        first_name: input.first_name,
-        last_name: input.last_name,
-        phone: input.phone,
-        address_1: input.address_1,
-        address_2: input.address_2,
-        city: input.city,
-        province: input.province,
-        postal_code: input.postal_code,
-        country_code: "in",
-      },
-      billing_address: {
-        first_name: input.first_name,
-        last_name: input.last_name,
-        phone: input.phone,
-        address_1: input.address_1,
-        address_2: input.address_2,
-        city: input.city,
-        province: input.province,
-        postal_code: input.postal_code,
-        country_code: "in",
-      },
+      shipping_address: addr,
+      billing_address: addr,
     })
     revalidatePath("/checkout")
     return ok(undefined)
@@ -185,6 +203,9 @@ type RazorpayInit = {
 
 export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
   if (!isCommerceConfigured) return notConfigured() as Result<RazorpayInit>
+  if (!(await rateLimit("checkout"))) {
+    return fail("Too many attempts. Please wait a moment and try again.") as Result<RazorpayInit>
+  }
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.") as Result<RazorpayInit>
@@ -237,6 +258,11 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
 export async function completeRazorpayOrder(): Promise<Result<{ orderId: string }>> {
   if (!isCommerceConfigured)
     return notConfigured() as Result<{ orderId: string }>
+  if (!(await rateLimit("checkout"))) {
+    return fail("Too many attempts. Please wait a moment and try again.") as Result<{
+      orderId: string
+    }>
+  }
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.") as Result<{ orderId: string }>

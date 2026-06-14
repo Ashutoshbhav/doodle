@@ -59,8 +59,21 @@ const bagel = Bagel_Fat_One({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://doodlebycanvas.in";
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "DOODLE by CANVAS",
+  url: SITE_URL,
+  logo: `${SITE_URL}/brand/wordmark-logo.jpeg`,
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "DOODLE — modular kids' clothing with interchangeable patches",
     template: "%s · DOODLE",
@@ -121,6 +134,12 @@ export default function RootLayout({
       className={`${figtree.variable} ${geistMono.variable} ${bricolage.variable} ${caveat.variable} ${bagel.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
+        />
         <Providers>
           <SmoothScroll>{children}</SmoothScroll>
           <ConsentBanner />

@@ -10,6 +10,9 @@ import type { Product } from "@/lib/medusa/types"
 
 export const dynamic = "force-dynamic"
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://doodlebycanvas.in"
+
 async function fetchProduct(handle: string): Promise<Product | null> {
   if (!isCommerceConfigured) return null
   try {
@@ -32,9 +35,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { handle } = await params
   const product = await fetchProduct(handle)
+  const ogImage = product?.images?.[0]?.url ?? product?.thumbnail ?? undefined
   return {
     title: product ? `${product.title} — DOODLE` : "DOODLE",
     description: product?.description?.slice(0, 160) ?? undefined,
+    alternates: {
+      canonical: `/shop/${handle}`,
+    },
+    openGraph: ogImage ? { images: [ogImage] } : undefined,
   }
 }
 
@@ -49,8 +57,85 @@ export default async function PDPPage({
 
   const hero = product.images?.[0]?.url ?? product.thumbnail ?? null
 
+  const productUrl = `${SITE_URL}/shop/${handle}`
+  const images = (product.images ?? [])
+    .map((img) => img.url)
+    .filter((url): url is string => Boolean(url))
+
+  // Price: same currency/amount the page displays — first variant carrying a
+  // calculated_price. Omit offers entirely if unavailable rather than emit bad data.
+  const offerVariant = product.variants?.find(
+    (v) => v.calculated_price?.calculated_amount != null
+  )
+  const offerAmount = offerVariant?.calculated_price?.calculated_amount
+
+  // In-stock derivation mirrors VariantPicker: in stock unless every variant
+  // explicitly reports zero/negative inventory.
+  const variants = product.variants ?? []
+  const inStock =
+    variants.length === 0 ||
+    variants.some(
+      (v) => v.inventory_quantity == null || (v.inventory_quantity ?? 0) > 0
+    )
+
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    ...(images.length > 0 ? { image: images } : {}),
+    ...(product.description ? { description: product.description } : {}),
+    brand: { "@type": "Brand", name: "DOODLE" },
+    url: productUrl,
+    ...(offerAmount != null
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: offerAmount,
+            priceCurrency: "INR",
+            availability: inStock
+              ? "https://schema.org/InStock"
+              : "https://schema.org/OutOfStock",
+            url: productUrl,
+          },
+        }
+      : {}),
+  }
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Shop",
+        item: `${SITE_URL}/shop`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.title,
+        item: productUrl,
+      },
+    ],
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <NavWithCart />
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
         <section className="mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-24 grid gap-12 lg:grid-cols-2">

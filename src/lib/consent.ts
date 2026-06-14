@@ -28,6 +28,17 @@ export function writeConsent(value: ConsentValue): void {
   window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: value }))
 }
 
+/**
+ * Withdraw/reset consent (DPDP right to withdraw). Deletes the cookie so the
+ * banner reappears and the visitor can choose again. Trackers that listen on
+ * CONSENT_EVENT (PostHog in Providers) tear down when this fires.
+ */
+export function clearConsent(): void {
+  if (typeof document === "undefined") return
+  document.cookie = `${CONSENT_COOKIE}=; path=/; max-age=0; samesite=lax`
+  window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: null }))
+}
+
 function subscribe(callback: () => void): () => void {
   if (typeof window === "undefined") return () => {}
   window.addEventListener(CONSENT_EVENT, callback)

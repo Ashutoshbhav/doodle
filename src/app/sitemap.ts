@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { medusa, isCommerceConfigured } from "@/lib/medusa/client";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://doodlebycanvas.in";
 
-// Static, build-safe list — no network calls (do not fetch products).
+// Static route list — always emitted, no network dependency.
 const ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
   { path: "/shop", priority: 0.9, changeFrequency: "weekly" as const },
@@ -14,12 +15,42 @@ const ROUTES = [
   { path: "/contact", priority: 0.5, changeFrequency: "yearly" as const },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
-  return ROUTES.map((route) => ({
+type SitemapProduct = { handle?: string | null; updated_at?: string | null };
+
+// Build-safe product fetch — same field/query style as the shop pages, with a
+// try/catch → [] fallback so a backend outage never breaks the build.
+async function fetchProductEntries(): Promise<SitemapProduct[]> {
+  if (!isCommerceConfigured) return [];
+  try {
+    const { products } = await medusa.store.product.list({
+      limit: 1000,
+      fields: "handle,updated_at",
+    });
+    return products as unknown as SitemapProduct[];
+  } catch {
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date();
+
+  const staticEntries: MetadataRoute.Sitemap = ROUTES.map((route) => ({
     url: `${BASE_URL}${route.path}`,
-    lastModified,
+    lastModified: now,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
+
+  const products = await fetchProductEntries();
+  const productEntries: MetadataRoute.Sitemap = products
+    .filter((p): p is SitemapProduct & { handle: string } => Boolean(p.handle))
+    .map((p) => ({
+      url: `${BASE_URL}/shop/${p.handle}`,
+      lastModified: p.updated_at ? new Date(p.updated_at) : now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    }));
+
+  return [...staticEntries, ...productEntries];
 }

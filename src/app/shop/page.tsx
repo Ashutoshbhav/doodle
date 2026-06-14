@@ -9,6 +9,9 @@ export const metadata = {
   title: "Shop the drop — DOODLE",
   description:
     "Modular kids' clothing. Pick a tee, pick patches. Or start with a kit.",
+  alternates: {
+    canonical: "/shop",
+  },
 }
 
 export const dynamic = "force-dynamic"

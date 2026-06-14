@@ -11,9 +11,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (!env.NEXT_PUBLIC_POSTHOG_KEY) return;
-    // DPDP: don't initialise analytics until the visitor opts in.
-    if (!consentGranted) return;
-    if (posthog.__loaded) return;
+    // DPDP: don't capture until opt-in; and STOP capturing on withdrawal.
+    if (!consentGranted) {
+      if (posthog.__loaded) {
+        posthog.opt_out_capturing();
+        posthog.reset();
+      }
+      return;
+    }
+    if (posthog.__loaded) {
+      posthog.opt_in_capturing();
+      return;
+    }
     posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY, {
       api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
       capture_pageview: "history_change",
