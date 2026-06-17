@@ -8,6 +8,22 @@ import { addToCart } from "@/app/actions/checkout"
 
 type Selection = Record<string, string>
 
+const LOW_STOCK_THRESHOLD = 5
+
+// Derive stock state for a variant from the Medusa store fields.
+// If `manage_inventory` is false/absent, the variant is always considered in
+// stock. Backorder-enabled variants are orderable even at 0 inventory.
+function stockState(variant: Variant | undefined): {
+  inStock: boolean
+  remaining: number | null // null = effectively unlimited (unmanaged/backorder)
+} {
+  if (!variant) return { inStock: true, remaining: null }
+  if (variant.manage_inventory !== true) return { inStock: true, remaining: null }
+  if (variant.allow_backorder === true) return { inStock: true, remaining: null }
+  const qty = variant.inventory_quantity ?? 0
+  return { inStock: qty > 0, remaining: qty }
+}
+
 export function VariantPicker({ product }: { product: Product }) {
   const options = product.options ?? []
   const [selection, setSelection] = React.useState<Selection>(() =>
@@ -27,10 +43,12 @@ export function VariantPicker({ product }: { product: Product }) {
   }, [product.variants, selection])
 
   const price = selected?.calculated_price?.calculated_amount
-  const inStock =
-    selected == null ||
-    selected.inventory_quantity == null ||
-    (selected.inventory_quantity ?? 0) > 0
+  const { inStock, remaining } = stockState(selected)
+  const lowStock =
+    selected != null &&
+    inStock &&
+    remaining != null &&
+    remaining <= LOW_STOCK_THRESHOLD
 
   async function onAdd() {
     if (!selected) return
@@ -47,6 +65,11 @@ export function VariantPicker({ product }: { product: Product }) {
   if (options.length === 0) {
     // Single-variant product (e.g. Pattern Pack)
     const onlyVariant = product.variants?.[0]
+    const only = stockState(onlyVariant)
+    const onlyLow =
+      only.inStock &&
+      only.remaining != null &&
+      only.remaining <= LOW_STOCK_THRESHOLD
     return (
       <div className="space-y-5">
         <div className="font-display text-3xl text-doodle-ink">
@@ -54,10 +77,20 @@ export function VariantPicker({ product }: { product: Product }) {
             ? formatINR(onlyVariant.calculated_price.calculated_amount)
             : "—"}
         </div>
+        {!only.inStock && (
+          <p className="text-sm text-doodle-ink/60">
+            Sold out. Want us to text you when it&apos;s back?
+          </p>
+        )}
+        {onlyLow && (
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-orange">
+            Only {only.remaining} left
+          </p>
+        )}
         <PillButton
           variant="primary"
           size="lg"
-          disabled={!onlyVariant || busy}
+          disabled={!onlyVariant || !only.inStock || busy}
           onClick={async () => {
             if (!onlyVariant) return
             setBusy(true)
@@ -70,7 +103,7 @@ export function VariantPicker({ product }: { product: Product }) {
             setMsg(r.ok ? "Added to cart." : r.error ?? "Error")
           }}
         >
-          {busy ? "Adding…" : "Add to cart"}
+          {busy ? "Adding…" : !only.inStock ? "Sold out" : "Add to cart"}
         </PillButton>
         {msg && <p className="text-sm text-doodle-ink/70">{msg}</p>}
       </div>
@@ -121,6 +154,11 @@ export function VariantPicker({ product }: { product: Product }) {
             Sold out. Want us to text you when it&apos;s back?
           </p>
         )}
+        {lowStock && (
+          <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-orange">
+            Only {remaining} left
+          </p>
+        )}
       </div>
 
       <PillButton
@@ -129,7 +167,7 @@ export function VariantPicker({ product }: { product: Product }) {
         onClick={onAdd}
         disabled={!selected || !inStock || busy}
       >
-        {busy ? "Adding…" : "Add to cart"}
+        {busy ? "Adding…" : selected && !inStock ? "Sold out" : "Add to cart"}
       </PillButton>
 
       {msg && <p className="text-sm text-doodle-ink/70">{msg}</p>}

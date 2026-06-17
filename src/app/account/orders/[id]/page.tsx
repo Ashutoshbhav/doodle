@@ -38,7 +38,7 @@ export default async function AccountOrderPage({
   const displayId = order.display_id ?? order.id.slice(-6).toUpperCase()
   const addr = order.shipping_address
   const isCod = order.payment_collections?.some((pc) =>
-    pc.payments?.some((p) => p.provider_id === "cod")
+    pc.payments?.some((p) => p.provider_id === "pp_cod_cod")
   )
 
   return (

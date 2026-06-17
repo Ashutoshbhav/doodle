@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
+import { getCustomerOrder, wasOrderPlacedHere } from "@/lib/medusa/auth"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { Eyebrow } from "@/components/ui/Eyebrow"
@@ -33,7 +34,13 @@ export default async function OrderConfirmedPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const order = await fetchOrder(id)
+  // IDOR guard: only the browser that placed this order (httpOnly capability
+  // cookie) or the authenticated owner may view it. A guessed/leaked ID with
+  // neither → 404. Without this, store.order.retrieve(id) leaks name, address,
+  // phone, email and line items to anyone with the ID.
+  const order = (await wasOrderPlacedHere(id))
+    ? await fetchOrder(id)
+    : await getCustomerOrder(id)
   if (!order) notFound()
 
   const customerFirst = order.shipping_address?.first_name ?? ""
@@ -41,7 +48,7 @@ export default async function OrderConfirmedPage({
   const orderNumber = `DOD-${displayId}`
 
   const isCod = order.payment_collections?.some((pc) =>
-    pc.payments?.some((p) => p.provider_id === "cod")
+    pc.payments?.some((p) => p.provider_id === "pp_cod_cod")
   )
 
   return (

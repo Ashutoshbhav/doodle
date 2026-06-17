@@ -6,10 +6,24 @@ import type { CartLine as CartLineT } from "@/lib/medusa/types"
 import { formatINR } from "@/lib/medusa/types"
 import { updateLine, removeLine } from "@/app/actions/checkout"
 
+// Server actions cap qty at 1–99; this is the UX clamp layer on top, also
+// bounding by available stock so the shopper can't increment past what's left.
+const HARD_MAX = 99
+
 export function CartLine({ line }: { line: CartLineT }) {
   const [pending, startTransition] = useTransition()
   const thumbnail =
     line.thumbnail ?? line.variant?.product?.thumbnail ?? null
+
+  // Available stock: only constrains when Medusa manages inventory and the
+  // variant isn't backorderable. Otherwise it's effectively unlimited.
+  const variant = line.variant
+  const stockCap =
+    variant?.manage_inventory === true && variant?.allow_backorder !== true
+      ? variant.inventory_quantity ?? 0
+      : HARD_MAX
+  const maxQty = Math.min(HARD_MAX, stockCap)
+  const atMax = line.quantity >= maxQty
 
   function setQty(q: number) {
     if (q < 1) {
@@ -18,6 +32,7 @@ export function CartLine({ line }: { line: CartLineT }) {
       })
       return
     }
+    if (q > maxQty) return
     startTransition(() => {
       void updateLine({ lineId: line.id, quantity: q })
     })
@@ -60,13 +75,18 @@ export function CartLine({ line }: { line: CartLineT }) {
             <button
               type="button"
               onClick={() => setQty(line.quantity + 1)}
-              disabled={pending}
+              disabled={pending || atMax}
               aria-label="Increase quantity"
               className="px-3 py-1 text-doodle-ink disabled:opacity-50"
             >
               +
             </button>
           </div>
+          {atMax && maxQty < HARD_MAX && (
+            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/45">
+              Max in stock
+            </span>
+          )}
           <button
             type="button"
             onClick={() =>

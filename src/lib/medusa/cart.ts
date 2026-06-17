@@ -15,7 +15,7 @@ export async function getCart(): Promise<Cart | null> {
   try {
     const { cart } = await medusa.store.cart.retrieve(id, {
       fields:
-        "+items.*,+items.variant.*,+items.product.*,+shipping_address.*,+billing_address.*,+region.*",
+        "+items.*,+items.variant.*,+items.variant.inventory_quantity,+items.product.*,+shipping_address.*,+billing_address.*,+region.*",
     })
     return cart as Cart
   } catch {

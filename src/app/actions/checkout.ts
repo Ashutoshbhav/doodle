@@ -5,6 +5,7 @@ import { getCart, getOrCreateCart, getIndiaRegionId } from "@/lib/medusa/cart"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { env } from "@/env"
 import { rateLimit } from "@/lib/ratelimit"
+import { rememberPlacedOrder } from "@/lib/medusa/auth"
 
 type Result<T = void> =
   | { ok: true; data: T }
@@ -174,11 +175,12 @@ export async function placeCodOrder(): Promise<Result<{ orderId: string }>> {
     if (!cart) return fail("Your cart was cleared.") as Result<{ orderId: string }>
 
     await medusa.store.payment.initiatePaymentSession(cart, {
-      provider_id: "cod",
+      provider_id: "pp_cod_cod",
     })
 
     const result = await medusa.store.cart.complete(cart.id)
     if (result.type === "order") {
+      await rememberPlacedOrder(result.order.id)
       revalidatePath("/cart")
       revalidatePath("/", "layout")
       return { ok: true, data: { orderId: result.order.id } }
@@ -211,7 +213,7 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
     if (!cart) return fail("Your cart was cleared.") as Result<RazorpayInit>
 
     const session = await medusa.store.payment.initiatePaymentSession(cart, {
-      provider_id: "razorpay",
+      provider_id: "pp_razorpay_razorpay",
     })
 
     // Contract for medusa-plugin-razorpay-v2: the provider returns the Razorpay
@@ -221,7 +223,7 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
       provider_id?: string
       data?: { razorpayOrder?: { id?: string } } & Record<string, unknown>
     }>
-    const rzpSession = sessions.find((s) => s.provider_id === "razorpay")
+    const rzpSession = sessions.find((s) => s.provider_id === "pp_razorpay_razorpay")
     const rzpOrderId = rzpSession?.data?.razorpayOrder?.id ?? ""
     const keyId = env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? ""
 
@@ -275,6 +277,7 @@ export async function completeRazorpayOrder(): Promise<Result<{ orderId: string 
     // reference storefront button (handler → placeOrder()).
     const result = await medusa.store.cart.complete(cart.id)
     if (result.type === "order") {
+      await rememberPlacedOrder(result.order.id)
       revalidatePath("/cart")
       revalidatePath("/", "layout")
       return { ok: true, data: { orderId: result.order.id } }

@@ -7,6 +7,35 @@ import type { Customer, Order } from "./types"
 const AUTH_COOKIE = "doodle_auth_token"
 const AUTH_TTL_DAYS = 7
 
+// Capability cookie: order IDs placed from THIS browser. Lets a guest (no
+// account) view their own confirmation page without exposing the order to
+// anyone who guesses the ID. httpOnly → not readable/forgeable by client JS.
+const PLACED_COOKIE = "doodle_orders"
+const PLACED_TTL_DAYS = 7
+
+/** Record an order just placed in this browser (guest order-confirmation gate). */
+export async function rememberPlacedOrder(orderId: string): Promise<void> {
+  const jar = await cookies()
+  const existing = jar.get(PLACED_COOKIE)?.value
+  const ids = existing ? existing.split(",").filter(Boolean) : []
+  if (!ids.includes(orderId)) ids.unshift(orderId)
+  jar.set(PLACED_COOKIE, ids.slice(0, 20).join(","), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24 * PLACED_TTL_DAYS,
+    path: "/",
+  })
+}
+
+/** True if this browser placed the given order (matches the capability cookie). */
+export async function wasOrderPlacedHere(orderId: string): Promise<boolean> {
+  const jar = await cookies()
+  const existing = jar.get(PLACED_COOKIE)?.value
+  if (!existing) return false
+  return existing.split(",").includes(orderId)
+}
+
 /** Read the stored customer JWT, if any. */
 export async function getAuthToken(): Promise<string | null> {
   const jar = await cookies()

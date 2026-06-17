@@ -53,12 +53,27 @@ export default async function CartPage() {
                 </div>
                 <div className="flex justify-between text-doodle-ink/75 text-sm mt-2">
                   <span>Shipping</span>
-                  <span className="font-mono">Calculated at checkout</span>
+                  <span className="font-mono">
+                    {(cart?.shipping_total ?? 0) > 0
+                      ? formatINR(cart?.shipping_total ?? 0)
+                      : "Free"}
+                  </span>
+                </div>
+                <div className="flex justify-between text-doodle-ink/75 text-sm mt-2">
+                  <span>Taxes / GST</span>
+                  <span className="font-mono">
+                    {(cart?.tax_total ?? 0) > 0
+                      ? formatINR(cart?.tax_total ?? 0)
+                      : "Included"}
+                  </span>
                 </div>
                 <div className="flex justify-between text-doodle-ink font-display text-2xl mt-4 pt-4 border-t border-dashed border-doodle-ink/15">
                   <span>Total</span>
                   <span>{formatINR(cart?.total ?? 0)}</span>
                 </div>
+                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/45">
+                  Prices inclusive of GST where applicable.
+                </p>
 
                 <div className="mt-7 text-center">
                   <Link

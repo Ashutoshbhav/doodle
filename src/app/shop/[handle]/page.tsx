@@ -20,7 +20,7 @@ async function fetchProduct(handle: string): Promise<Product | null> {
       handle,
       limit: 1,
       fields:
-        "*variants.calculated_price,*variants.options,*variants.inventory_quantity,*options.values,*images,thumbnail,handle,title,description,subtitle",
+        "*variants.calculated_price,*variants.options,*variants.inventory_quantity,*variants.manage_inventory,*variants.allow_backorder,*options.values,*images,thumbnail,handle,title,description,subtitle,origin_country,metadata",
     })
     return (products[0] as unknown as Product) ?? null
   } catch {
@@ -56,6 +56,15 @@ export default async function PDPPage({
   if (!product) notFound()
 
   const hero = product.images?.[0]?.url ?? product.thumbnail ?? null
+
+  // Country of origin — India Consumer Protection (E-Commerce) Rules 2020.
+  // Source: Medusa product `origin_country`, else `metadata.country_of_origin`,
+  // else default to India (DOODLE is made in India).
+  const metaOrigin = product.metadata?.country_of_origin
+  const countryOfOrigin =
+    product.origin_country?.trim() ||
+    (typeof metaOrigin === "string" ? metaOrigin.trim() : "") ||
+    "India"
 
   const productUrl = `${SITE_URL}/shop/${handle}`
   const images = (product.images ?? [])
@@ -178,8 +187,9 @@ export default async function PDPPage({
               <VariantPicker product={product} />
             </div>
 
-            <div className="mt-10 font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/40">
-              Free shipping on orders above ₹999
+            <div className="mt-10 space-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/40">
+              <div>Country of Origin: {countryOfOrigin}</div>
+              <div>Free shipping on orders above ₹999</div>
             </div>
           </div>
         </section>

@@ -61,7 +61,17 @@ export default async function CheckoutPage() {
                 <div className="flex justify-between text-doodle-ink/75">
                   <span>Shipping</span>
                   <span className="font-mono">
-                    {(cart.subtotal ?? 0) >= 99900 ? "Free" : "Calculated"}
+                    {(cart.shipping_total ?? 0) > 0
+                      ? formatINR(cart.shipping_total ?? 0)
+                      : "Free"}
+                  </span>
+                </div>
+                <div className="flex justify-between text-doodle-ink/75">
+                  <span>Taxes / GST</span>
+                  <span className="font-mono">
+                    {(cart.tax_total ?? 0) > 0
+                      ? formatINR(cart.tax_total ?? 0)
+                      : "Included"}
                   </span>
                 </div>
                 <div className="flex justify-between text-doodle-ink font-display text-xl pt-3 border-t border-dashed border-doodle-ink/15">
@@ -70,7 +80,7 @@ export default async function CheckoutPage() {
                 </div>
               </div>
               <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/45 text-center">
-                Free shipping above ₹999
+                Prices inclusive of GST where applicable. Free shipping above ₹999.
               </p>
             </div>
           </aside>
