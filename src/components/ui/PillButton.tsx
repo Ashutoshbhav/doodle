@@ -14,13 +14,17 @@ type Props = {
   children: React.ReactNode;
 } & Omit<HTMLMotionProps<"button">, "children">;
 
+// Dialog-discipline: no dashed borders. Primary = filled orange + soft
+// shadow. Secondary = clean canvas + thin SOLID ink hairline (~15%) + soft
+// shadow. Ghost = transparent, subtle hover bg, no border. Hover deepens
+// shadow (the lift) while motion handles the y-translate.
 const SURFACES: Record<Variant, string> = {
   primary:
-    "bg-doodle-orange text-doodle-stitch border-2 border-dashed border-doodle-stitch hover:bg-doodle-orange/95",
+    "bg-doodle-orange text-doodle-stitch shadow-card hover:bg-doodle-orange/95 hover:shadow-card-hover",
   secondary:
-    "bg-doodle-canvas text-doodle-ink border-2 border-dashed border-doodle-ink hover:bg-doodle-stitch",
+    "bg-doodle-canvas text-doodle-ink border border-doodle-ink/15 shadow-subtle hover:border-doodle-ink/25 hover:shadow-card",
   ghost:
-    "bg-transparent text-doodle-ink border-2 border-dashed border-transparent hover:border-doodle-ink/50",
+    "bg-transparent text-doodle-ink hover:bg-doodle-ink/[0.06]",
 };
 
 const SIZES: Record<Size, string> = {
@@ -50,7 +54,7 @@ export function PillButton({
       transition={{ type: "spring", stiffness: 320, damping: 22 }}
       className={`
         inline-flex items-center justify-center rounded-full font-sans font-medium
-        cursor-pointer select-none transition-colors
+        cursor-pointer select-none transition-[box-shadow,background-color,border-color] duration-200
         focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40
         ${SURFACES[variant]} ${SIZES[size]} ${className}
       `}

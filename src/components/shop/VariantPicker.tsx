@@ -4,6 +4,7 @@ import * as React from "react"
 import type { Product, Variant } from "@/lib/medusa/types"
 import { formatINR } from "@/lib/medusa/types"
 import { PillButton } from "@/components/ui/PillButton"
+import { Tag } from "@/components/ui/Tag"
 import { addToCart } from "@/app/actions/checkout"
 
 type Selection = Record<string, string>
@@ -78,15 +79,14 @@ export function VariantPicker({ product }: { product: Product }) {
             : "—"}
         </div>
         {!only.inStock && (
-          <p className="text-sm text-doodle-ink/60">
-            Sold out. Want us to text you when it&apos;s back?
-          </p>
+          <div className="space-y-2">
+            <Tag tone="danger">Sold out</Tag>
+            <p className="text-sm text-doodle-ink/60">
+              Want us to text you when it&apos;s back?
+            </p>
+          </div>
         )}
-        {onlyLow && (
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-orange">
-            Only {only.remaining} left
-          </p>
-        )}
+        {onlyLow && <Tag tone="accent">Only {only.remaining} left</Tag>}
         <PillButton
           variant="primary"
           size="lg"
@@ -114,7 +114,7 @@ export function VariantPicker({ product }: { product: Product }) {
     <div className="space-y-7">
       {options.map((opt) => (
         <div key={opt.id}>
-          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55">
+          <div className="font-sans text-[13px] font-medium text-doodle-ink/70">
             {opt.title}
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -131,10 +131,10 @@ export function VariantPicker({ product }: { product: Product }) {
                     }))
                   }
                   className={[
-                    "px-4 py-2 rounded-full border-2 border-dashed text-sm transition-[colors,transform] active:scale-[0.97]",
+                    "px-4 py-2 rounded-full border text-sm font-medium transition-[background-color,border-color,box-shadow,transform] duration-200 active:scale-[0.97]",
                     active
-                      ? "bg-doodle-ink text-doodle-canvas border-doodle-ink"
-                      : "bg-doodle-canvas text-doodle-ink border-doodle-ink/30 hover:border-doodle-ink",
+                      ? "bg-doodle-orange text-doodle-stitch border-doodle-orange shadow-subtle"
+                      : "bg-doodle-canvas text-doodle-ink border-doodle-ink/15 hover:border-doodle-ink/35",
                   ].join(" ")}
                 >
                   {val.value}
@@ -150,14 +150,17 @@ export function VariantPicker({ product }: { product: Product }) {
           {price != null ? formatINR(price) : "—"}
         </div>
         {selected && !inStock && (
-          <p className="mt-2 text-sm text-doodle-ink/60">
-            Sold out. Want us to text you when it&apos;s back?
-          </p>
+          <div className="mt-2 space-y-2">
+            <Tag tone="danger">Sold out</Tag>
+            <p className="text-sm text-doodle-ink/60">
+              Want us to text you when it&apos;s back?
+            </p>
+          </div>
         )}
         {lowStock && (
-          <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-orange">
-            Only {remaining} left
-          </p>
+          <div className="mt-2">
+            <Tag tone="accent">Only {remaining} left</Tag>
+          </div>
         )}
       </div>
 

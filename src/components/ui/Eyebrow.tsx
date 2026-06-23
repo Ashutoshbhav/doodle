@@ -8,13 +8,17 @@ import type { ReactNode } from "react";
  * deliberate, *varied* cadence: pick a variant per section instead of stamping
  * the same mono eyebrow on every fold. Tune the whole site's cadence here.
  *
+ * PREMIUM-FOR-KIDS pass (2026-06): the DEFAULT label voice is CLEAN SANS
+ * (the `rule` variant uses font-sans small-caps). Mono is NOT a default — it is
+ * an explicit opt-in only, reserved for sparse commerce/index contexts.
+ *
  * Variants:
- * - `rule`   (default) — a short stitch rule + restrained small-caps label.
- *                        Quiet, structural. Use as the default lead-in.
+ * - `rule`   (default) — short colour tick + restrained CLEAN-SANS small-caps
+ *                        label. Quiet, structural. Use as the default lead-in.
  * - `marker` — Caveat handwritten micro-label ("try it ↓"). Use SPARINGLY,
  *                        for playful/interactive moments only.
- * - `mono`   — toned legacy mono (tracking dialed 0.22em → 0.14em). Reserve for
- *                        commerce / index-style contexts where a label voice fits.
+ * - `mono`   — toned legacy mono (tracking dialed 0.22em → 0.14em). EXPLICIT
+ *                        opt-in ONLY; reserve for commerce / index-style contexts.
  * - `none`   — render nothing (lets a section opt out of an eyebrow entirely).
  *
  * `accent` controls the one tick/rule colour. Per the one-accent-per-viewport

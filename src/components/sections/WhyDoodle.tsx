@@ -13,6 +13,17 @@ import { ParallaxLayer } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { whyDoodle as content } from "@/content/home";
 
+/* ============================================================
+   WHY DOODLE v2 — "premium, but for kids" (Dialog discipline)
+
+   - Orange full-bleed kept as INTENTIONAL surface banding.
+   - All dashed borders purged; mono placeholder line removed.
+   - Decorative scene rebuilt from clean soft-shadow brand-colour
+     blocks (no dashed outlines) — reads as composed depth.
+   - Accordion sits on one soft card; triggers use soft tiles, not
+     dashed circles; 16px radius cap respected.
+   ============================================================ */
+
 // Icons are structural (not copy); title/body come from content.items
 const ITEM_ICONS = [Ruler, Recycle, Plant, HandHeart] as const;
 
@@ -28,9 +39,9 @@ export function WhyDoodle() {
   return (
     <section
       id="why"
-      className="relative border-b-2 border-dashed border-doodle-stitch/0 py-24 md:py-32 bg-doodle-orange overflow-hidden"
+      className="relative py-24 md:py-32 bg-doodle-orange overflow-hidden"
     >
-      {/* Subtle radial wash + scribble */}
+      {/* Subtle radial wash for depth */}
       <div
         aria-hidden
         className="absolute inset-0 opacity-30"
@@ -46,54 +57,48 @@ export function WhyDoodle() {
           <Eyebrow variant="rule" tone="stitch">
             {content.eyebrow}
           </Eyebrow>
-          <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-stitch">
+          <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] leading-[1.05] tracking-[-0.02em] text-doodle-stitch">
             {content.headlineLead}{" "}
             <span className="italic block opacity-90">
               {content.headlineEmphasis}
             </span>
           </h2>
           <p className="mt-5 max-w-md text-base leading-relaxed text-doodle-stitch/85">
-            {/* [PLACEHOLDER] supporting copy */}
             {content.body}
           </p>
 
-          {/* Decorative scene — placeholder illustrated composition. Each layer
-              parallaxes at a different speed for depth as you scroll. */}
+          {/* Decorative scene — clean soft-shadow brand-colour blocks (no dashed).
+              Each layer parallaxes at a different speed for depth on scroll. */}
           <div className="relative mt-10 h-72 w-full max-w-md">
-            {/* Big yellow blob — slowest, deepest */}
-            <ParallaxLayer speed={0.15} className="absolute left-4 top-6 h-44 w-44 rounded-[42%] bg-doodle-yellow border-[3px] border-dashed border-doodle-stitch" >
+            {/* Big yellow block — slowest, deepest */}
+            <ParallaxLayer
+              speed={0.15}
+              className="absolute left-4 top-6 h-44 w-44 rounded-[1rem] bg-doodle-yellow shadow-card"
+            >
               <span className="sr-only">decorative</span>
             </ParallaxLayer>
-            {/* Blue circle — middle layer */}
-            <ParallaxLayer speed={0.3} className="absolute right-2 top-2 h-28 w-28 rounded-full bg-doodle-blue border-[3px] border-dashed border-doodle-stitch grid place-items-center">
+            {/* Blue tile — middle layer */}
+            <ParallaxLayer
+              speed={0.3}
+              className="absolute right-2 top-2 grid h-28 w-28 place-items-center rounded-[1rem] bg-doodle-blue shadow-card"
+            >
               <Recycle weight="duotone" size={42} className="text-doodle-stitch" />
             </ParallaxLayer>
-            {/* Pink rectangle — closest, fastest */}
-            <ParallaxLayer speed={0.45} className="absolute left-12 bottom-4 h-32 w-44 rounded-[1rem] bg-doodle-pink border-[3px] border-dashed border-doodle-stitch grid place-items-center">
+            {/* Pink tile — closest, fastest */}
+            <ParallaxLayer
+              speed={0.45}
+              className="absolute left-12 bottom-4 grid h-32 w-44 place-items-center rounded-[1rem] bg-doodle-pink shadow-card-hover"
+            >
               <Plant weight="duotone" size={48} className="text-doodle-stitch" />
             </ParallaxLayer>
-            {/* Squiggle */}
-            <svg
-              aria-hidden
-              className="absolute right-0 bottom-12 w-32 h-12"
-              viewBox="0 0 120 40"
-            >
-              <path
-                d="M 5 25 Q 20 5, 35 25 T 65 25 T 95 25 T 120 25"
-                fill="none"
-                stroke="white"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-            </svg>
             {/* Sparkle dot */}
-            <div className="absolute right-32 top-20 h-4 w-4 rounded-full bg-doodle-stitch" />
+            <div className="absolute right-32 top-20 h-3.5 w-3.5 rounded-full bg-doodle-stitch shadow-subtle" />
           </div>
         </div>
 
-        {/* Right accordion */}
+        {/* Right accordion — one soft card on cream, hairline dividers */}
         <div className="lg:col-span-7">
-          <ul className="rounded-[1rem] bg-doodle-canvas p-3 sm:p-4 stitch-thick !border-doodle-stitch divide-y-2 divide-dashed divide-doodle-ink/15">
+          <ul className="rounded-[1rem] bg-doodle-canvas p-3 shadow-card-hover divide-y divide-doodle-ink/10 sm:p-4">
             {ITEMS.map((item, i) => {
               const isOpen = open === i;
               return (
@@ -112,8 +117,12 @@ export function WhyDoodle() {
                     <span
                       className={`
                         grid place-items-center h-11 w-11 rounded-full shrink-0
-                        ${isOpen ? "bg-doodle-orange text-doodle-stitch" : "bg-doodle-canvas text-doodle-ink border-2 border-dashed border-doodle-ink/40"}
                         transition-colors
+                        ${
+                          isOpen
+                            ? "bg-doodle-orange text-doodle-stitch shadow-subtle"
+                            : "bg-doodle-ink/[0.06] text-doodle-ink"
+                        }
                       `}
                     >
                       <item.Icon weight="duotone" size={22} />
@@ -126,7 +135,7 @@ export function WhyDoodle() {
                     <motion.span
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ type: "spring", stiffness: 320, damping: 22 }}
-                      className="grid place-items-center h-9 w-9 rounded-full border-2 border-dashed border-doodle-ink/40 text-doodle-ink shrink-0"
+                      className="grid place-items-center h-9 w-9 rounded-full bg-doodle-ink/[0.06] text-doodle-ink shrink-0"
                     >
                       <Plus weight="bold" size={16} />
                     </motion.span>
@@ -156,10 +165,6 @@ export function WhyDoodle() {
               );
             })}
           </ul>
-
-          <p className="mt-4 px-2 text-xs font-mono uppercase tracking-[0.18em] text-doodle-stitch/60">
-            [placeholder copy &mdash; rewrite in your voice]
-          </p>
         </div>
       </div>
     </section>

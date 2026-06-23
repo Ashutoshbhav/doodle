@@ -5,6 +5,7 @@ import { useActionState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { CheckCircle, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
 import { joinWaitlist, type WaitlistResult } from "@/app/actions/waitlist";
+import { PillButton } from "@/components/ui/PillButton";
 import { env } from "@/env";
 
 type Props = {
@@ -19,19 +20,17 @@ type Props = {
   conversionTrack?: boolean;
 };
 
-const ACCENT_BG: Record<NonNullable<Props["accent"]>, string> = {
-  orange: "bg-doodle-orange",
-  blue: "bg-doodle-blue",
-  purple: "bg-doodle-purple",
-};
-
 export function WaitlistForm({
-  accent = "orange",
+  // `accent` is retained for backward-compatible API; the submit now uses the
+  // shared PillButton (primary = the one orange), so the accent no longer
+  // recolours the button. Kept so existing callers don't break.
+  accent: _accent = "orange",
   surface = "canvas",
   className = "",
   source,
   conversionTrack = false,
 }: Props) {
+  void _accent;
   const [state, formAction, isPending] = useActionState<WaitlistResult | null, FormData>(
     joinWaitlist,
     null,
@@ -73,7 +72,7 @@ export function WaitlistForm({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ type: "spring", stiffness: 240, damping: 22 }}
-            className="flex items-start gap-3 rounded-2xl bg-doodle-stitch px-5 py-4 stitch-ink"
+            className="flex items-start gap-3 rounded-[1rem] bg-doodle-stitch px-5 py-4 shadow-card"
           >
             <CheckCircle weight="duotone" size={28} className="text-doodle-orange shrink-0 mt-0.5" />
             <div>
@@ -90,7 +89,7 @@ export function WaitlistForm({
             key="form"
             action={formAction}
             initial={false}
-            className="relative flex items-center gap-2 rounded-full p-1.5 stitch bg-doodle-canvas/40 backdrop-blur-sm"
+            className="relative flex items-center gap-2 rounded-full border border-doodle-ink/15 bg-doodle-canvas/40 p-1.5 shadow-subtle backdrop-blur-sm"
           >
             <label htmlFor="waitlist-email" className="sr-only">
               Email address
@@ -131,22 +130,14 @@ export function WaitlistForm({
             {source ? (
               <input type="hidden" name="source" value={source} />
             ) : null}
-            <motion.button
+            <PillButton
               type="submit"
+              size="sm"
+              showArrow={false}
               disabled={isPending}
-              whileHover={!isPending ? { y: -2 } : undefined}
-              whileTap={!isPending ? { scale: 0.97 } : undefined}
-              transition={{ type: "spring", stiffness: 320, damping: 22 }}
-              className={`
-                inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full
-                font-sans font-medium text-sm text-doodle-stitch
-                ${ACCENT_BG[accent]} border-2 border-dashed border-doodle-stitch
-                disabled:opacity-70 cursor-pointer
-                focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40
-              `}
             >
               {isPending ? "Saving…" : "Join waitlist"}
-            </motion.button>
+            </PillButton>
           </motion.form>
         )}
       </AnimatePresence>

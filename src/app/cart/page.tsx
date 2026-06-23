@@ -3,6 +3,7 @@ import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { CartLine } from "@/components/shop/CartLine"
 import { Eyebrow } from "@/components/ui/Eyebrow"
+import { PillButton } from "@/components/ui/PillButton"
 import { getCart } from "@/lib/medusa/cart"
 import { formatINR } from "@/lib/medusa/types"
 
@@ -22,72 +23,66 @@ export default async function CartPage() {
       <NavWithCart />
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
         <section className="mx-auto max-w-3xl px-6 md:px-10 py-16 md:py-24">
-          <Eyebrow variant="mono" accent="orange">Your order</Eyebrow>
-          <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
+          <Eyebrow variant="rule" accent="orange">Your order</Eyebrow>
+          <h1 className="mt-5 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
             Your basket
           </h1>
 
           {items.length === 0 ? (
-            <div className="mt-10 rounded-lg bg-doodle-canvas p-10 border-2 border-dashed border-doodle-ink/20 text-center">
-              <p className="text-doodle-ink/75 text-lg leading-relaxed">
-                Nothing in the basket yet. Pick a tee, pick some patches —{" "}
-                <Link href="/shop" className="underline underline-offset-4 hover:text-doodle-ink">
-                  they&apos;re all over there →
-                </Link>
+            <div className="mt-10 grid place-items-center rounded-[1rem] bg-doodle-canvas px-6 py-16 text-center shadow-card">
+              <p className="max-w-sm text-lg leading-relaxed text-doodle-ink/75">
+                Nothing in the basket yet. Pick a tee, pick some patches.
               </p>
+              <div className="mt-7">
+                <Link href="/shop">
+                  <PillButton variant="primary">Browse the drop</PillButton>
+                </Link>
+              </div>
             </div>
           ) : (
             <>
-              <div className="mt-10 rounded-lg bg-doodle-canvas px-6 py-2 border-2 border-dashed border-doodle-ink/20">
+              <div className="mt-10 rounded-[1rem] bg-doodle-canvas px-6 py-2 shadow-card">
                 {items.map((line) => (
                   <CartLine key={line.id} line={line} />
                 ))}
               </div>
 
-              <div className="mt-8 rounded-lg bg-doodle-canvas p-6 border-2 border-dashed border-doodle-ink/20">
-                <div className="flex justify-between text-doodle-ink/75 text-sm">
+              <div className="mt-8 rounded-[1rem] bg-doodle-canvas p-6 shadow-card">
+                <div className="flex justify-between text-sm text-doodle-ink/70">
                   <span>Subtotal</span>
-                  <span className="font-mono">
+                  <span className="font-medium text-doodle-ink">
                     {formatINR(cart?.subtotal ?? 0)}
                   </span>
                 </div>
-                <div className="flex justify-between text-doodle-ink/75 text-sm mt-2">
+                <div className="mt-2 flex justify-between text-sm text-doodle-ink/70">
                   <span>Shipping</span>
-                  <span className="font-mono">
+                  <span className="font-medium text-doodle-ink">
                     {(cart?.shipping_total ?? 0) > 0
                       ? formatINR(cart?.shipping_total ?? 0)
                       : "Free"}
                   </span>
                 </div>
-                <div className="flex justify-between text-doodle-ink/75 text-sm mt-2">
+                <div className="mt-2 flex justify-between text-sm text-doodle-ink/70">
                   <span>Taxes / GST</span>
-                  <span className="font-mono">
+                  <span className="font-medium text-doodle-ink">
                     {(cart?.tax_total ?? 0) > 0
                       ? formatINR(cart?.tax_total ?? 0)
                       : "Included"}
                   </span>
                 </div>
-                <div className="flex justify-between text-doodle-ink font-display text-2xl mt-4 pt-4 border-t border-dashed border-doodle-ink/15">
+                <div className="mt-4 flex justify-between border-t border-doodle-ink/10 pt-4 font-display text-2xl text-doodle-ink">
                   <span>Total</span>
                   <span>{formatINR(cart?.total ?? 0)}</span>
                 </div>
-                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/45">
+                <p className="mt-4 text-xs text-doodle-ink/50">
                   Prices inclusive of GST where applicable.
                 </p>
 
-                <div className="mt-7 text-center">
-                  <Link
-                    href="/checkout"
-                    className="
-                      inline-flex items-center justify-center
-                      h-14 px-8 rounded-full
-                      bg-doodle-orange text-doodle-stitch font-medium text-lg
-                      border-2 border-dashed border-doodle-stitch
-                      hover:scale-[1.015] active:scale-[0.98]
-                      transition-transform
-                    "
-                  >
-                    Continue to checkout →
+                <div className="mt-7">
+                  <Link href="/checkout" className="block">
+                    <PillButton variant="primary" size="lg" className="w-full">
+                      Continue to checkout
+                    </PillButton>
                   </Link>
                 </div>
               </div>

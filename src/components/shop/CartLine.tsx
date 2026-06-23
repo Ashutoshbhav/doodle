@@ -5,6 +5,7 @@ import { useTransition } from "react"
 import type { CartLine as CartLineT } from "@/lib/medusa/types"
 import { formatINR } from "@/lib/medusa/types"
 import { updateLine, removeLine } from "@/app/actions/checkout"
+import { Tag } from "@/components/ui/Tag"
 
 // Server actions cap qty at 1–99; this is the UX clamp layer on top, also
 // bounding by available stock so the shopper can't increment past what's left.
@@ -39,7 +40,7 @@ export function CartLine({ line }: { line: CartLineT }) {
   }
 
   return (
-    <div className="flex gap-4 py-5 border-b border-dashed border-doodle-ink/15 last:border-0">
+    <div className="flex gap-4 py-5 border-b border-doodle-ink/10 last:border-0">
       <div className="relative w-20 h-24 shrink-0 rounded-lg overflow-hidden bg-doodle-stitch">
         {thumbnail && (
           <Image
@@ -55,21 +56,21 @@ export function CartLine({ line }: { line: CartLineT }) {
         <div className="font-display text-lg text-doodle-ink leading-tight">
           {line.title}
         </div>
-        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55 mt-1">
+        <div className="font-sans text-[13px] text-doodle-ink/55 mt-1">
           {line.variant?.title}
         </div>
         <div className="mt-3 flex items-center gap-3">
-          <div className="inline-flex items-center rounded-full border-2 border-dashed border-doodle-ink/30">
+          <div className="inline-flex items-center rounded-full border border-doodle-ink/15 bg-card shadow-subtle">
             <button
               type="button"
               onClick={() => setQty(line.quantity - 1)}
               disabled={pending}
               aria-label="Decrease quantity"
-              className="px-3 py-1 text-doodle-ink disabled:opacity-50"
+              className="px-3 py-1 text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
             >
               −
             </button>
-            <span className="px-2 font-mono text-sm tabular-nums">
+            <span className="px-2 font-sans text-sm font-medium tabular-nums">
               {line.quantity}
             </span>
             <button
@@ -77,16 +78,12 @@ export function CartLine({ line }: { line: CartLineT }) {
               onClick={() => setQty(line.quantity + 1)}
               disabled={pending || atMax}
               aria-label="Increase quantity"
-              className="px-3 py-1 text-doodle-ink disabled:opacity-50"
+              className="px-3 py-1 text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
             >
               +
             </button>
           </div>
-          {atMax && maxQty < HARD_MAX && (
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/45">
-              Max in stock
-            </span>
-          )}
+          {atMax && maxQty < HARD_MAX && <Tag tone="muted">Max in stock</Tag>}
           <button
             type="button"
             onClick={() =>
@@ -95,7 +92,7 @@ export function CartLine({ line }: { line: CartLineT }) {
               })
             }
             disabled={pending}
-            className="text-xs font-mono uppercase tracking-[0.14em] text-doodle-ink/55 hover:text-doodle-ink disabled:opacity-50"
+            className="text-xs font-sans font-medium text-doodle-ink/55 hover:text-doodle-ink transition-colors disabled:opacity-50"
           >
             Remove
           </button>

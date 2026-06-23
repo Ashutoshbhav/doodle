@@ -2,224 +2,198 @@ import {
   ArrowDown,
   Sparkle,
   Lightning,
-  FireSimple,
   ArrowUpRight,
 } from "@phosphor-icons/react/dist/ssr";
 import { PatchScrubber } from "@/components/ui/PatchScrubber";
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { ScrollReveal, ParallaxLayer, MagneticHover } from "@/components/motion";
+import { ScrollReveal, MagneticHover } from "@/components/motion";
 import { hero as content } from "@/content/home";
 
 /* ============================================================
-   HERO v3 — split-color campaign layout
-   Left half: saturated red campaign zone (Souled Store energy)
-   Right half: cream product stage with the live demo
-   Bleeds edge-to-edge. Intentionally unmistakable from prior cream-canvas hero.
+   HERO v4 — "premium, but for kids" (Dialog-discipline lift)
+
+   Replaces the loud split-color red slab. New direction:
+   - One warm cream canvas (DOODLE soul), NOT a saturated red half.
+   - Confident editorial type scale on the left; the reserved Bagel
+     "Create." remains the ONE oversized stamp (lock honored).
+   - The signature PatchScrubber is the hero visual, lifted on soft
+     warm-ink shadows + a quiet brand color-block stack (NO dashed,
+     NO photo dependency — the live patch interaction is the proof).
+   - ONE orange accent per fold (the CTA + the emphasis word).
+   - Mono purged; clean sans + Caveat marker carry the labels.
+   - Radius capped at 16px; soft shadows replace dashed-on-everything.
    ============================================================ */
 
 const PATCH_LANES = content.patchLanes;
 
 export function Hero() {
   return (
-    <section
-      id="hero"
-      className="relative isolate overflow-hidden"
-    >
+    <section id="hero" className="relative isolate overflow-hidden bg-doodle-canvas">
       {/* ============================================================
-          DROP BANNER — top strip, streetwear drop energy
+          DROP BANNER — slim, calm. Clean sans, not mono. One live dot.
           ============================================================ */}
-      <div className="relative bg-doodle-ink text-doodle-stitch">
-        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-2.5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.28em]">
-            <span className="inline-flex items-center gap-1.5">
-              <FireSimple weight="fill" size={11} className="text-doodle-yellow" />
+      <div className="relative border-b border-doodle-ink/10 bg-doodle-canvas">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-6 py-3 md:px-10">
+          <div className="flex items-center gap-2.5 text-xs font-medium text-doodle-ink/70">
+            <span className="inline-flex items-center gap-1.5 text-doodle-ink">
+              <Sparkle weight="fill" size={13} className="text-doodle-orange" />
               {content.banner.firstDrop}
             </span>
-            <span className="opacity-30 hidden sm:inline">/</span>
+            <span className="hidden text-doodle-ink/25 sm:inline">·</span>
             <span className="hidden sm:inline">{content.banner.tees}</span>
-            <span className="opacity-30 hidden sm:inline">/</span>
+            <span className="hidden text-doodle-ink/25 md:inline">·</span>
             <span className="hidden md:inline">{content.banner.city}</span>
-            <span className="opacity-30 hidden md:inline">/</span>
+            <span className="hidden text-doodle-ink/25 md:inline">·</span>
             <span className="hidden md:inline">{content.banner.month}</span>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:inline text-[10px] font-mono uppercase tracking-[0.28em] text-doodle-stitch/55">
-              {content.banner.byline}
-            </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-doodle-stitch/35 text-doodle-stitch px-2.5 py-0.5 text-[10px] font-mono uppercase tracking-[0.22em]">
-              <span className="h-1.5 w-1.5 rounded-full bg-doodle-yellow animate-pulse" />
-              {content.banner.liveWaitlist}
-            </span>
-          </div>
+          <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-3 py-1 text-xs font-medium text-doodle-ink shadow-subtle">
+            <span className="h-1.5 w-1.5 rounded-full bg-doodle-orange" />
+            {content.banner.liveWaitlist}
+          </span>
         </div>
       </div>
 
       {/* ============================================================
-          MAIN STAGE — split-color 7/5 grid (lg+), stacked on mobile
+          MAIN STAGE — editorial 6/5 grid on one cream canvas.
+          Left: type + CTA. Right: the live patch demo on soft shadow.
           ============================================================ */}
-      <div className="grid lg:grid-cols-12 min-h-[88vh]">
-        {/* ---------- LEFT 7 — RED CAMPAIGN ZONE ---------- */}
-        <div className="relative lg:col-span-7 bg-doodle-red text-doodle-stitch overflow-hidden">
-          {/* Decorative scribbles — parallax behind text for depth */}
-          <ParallaxLayer speed={0.35} className="absolute inset-0 pointer-events-none">
-            <DecorativeLeft />
-          </ParallaxLayer>
+      <div className="mx-auto grid max-w-[1400px] items-center gap-12 px-6 py-16 md:px-10 md:py-20 lg:grid-cols-11 lg:gap-10 lg:py-24">
+        {/* ---------- LEFT — TYPE + CTA ---------- */}
+        <ScrollReveal
+          direction="up"
+          amount={0.1}
+          className="lg:col-span-6"
+        >
+          <Eyebrow variant="rule" accent="orange">
+            {content.eyebrow}
+          </Eyebrow>
 
-          <ScrollReveal direction="up" amount={0.1} className="relative z-10 h-full flex flex-col justify-center px-6 md:px-10 lg:px-16 xl:px-24 py-20 lg:py-24">
-            {/* Eyebrow */}
-            <Eyebrow variant="rule" tone="stitch">
-              {content.eyebrow}
-            </Eyebrow>
-
-            {/* MEGA H1
-                Two-register treatment per design-supervisor audit:
-                Lines 1-2 in Bricolage 900 (paragraph-shaped headline, capped at
-                the DESIGN.md ≤6rem hero ceiling) — the oversized register is
-                carried only by the reserved Bagel "Create." stamp below.
-                Anchor: Agence Foudre (Beni 230px / 0.7 line-height).
-                Reserved Bagel use — do not propagate elsewhere. */}
-            <h1
-              className="mt-5 font-display text-doodle-stitch leading-[0.84] tracking-[-0.04em]"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(3.2rem, 8vw, 6rem)",
-                fontStretch: "115%",
-              }}
+          {/* MEGA H1 — Bricolage paragraph-headline + the reserved Bagel
+              "Create." stamp (lock honored: Bagel stays exclusive to this
+              one word). Capped at the DESIGN.md ≤6rem hero ceiling. */}
+          <h1 className="mt-6 font-display leading-[0.9] tracking-[-0.035em] text-doodle-ink">
+            <span
+              className="block"
+              style={{ fontWeight: 800, fontSize: "clamp(2.8rem, 6.5vw, 5rem)" }}
             >
-              <span className="block uppercase">{content.headlineLine1}</span>
-              <span className="block uppercase">{content.headlineLine2}</span>
-            </h1>
-            <div className="mt-1 lg:mt-2 relative inline-block">
-              {/* Hand-drawn yellow marker swipe via rough-notation.
-                  Draws on mount with a 900ms sketch animation. */}
-              <RoughHighlight on="mount" strokeWidth={42} padding={0}>
+              {content.headlineLine1}{" "}
+              <span className="text-doodle-ink/45">{content.headlineLine2}</span>
+            </span>
+            <span className="mt-1 block">
+              <RoughHighlight on="mount" strokeWidth={40} padding={0}>
                 <span
-                  className="relative z-10 block uppercase text-doodle-stitch leading-[0.78]"
+                  className="relative z-10 inline-block text-doodle-ink"
                   style={{
                     fontFamily: "var(--font-bagel)",
-                    fontSize: "clamp(4.5rem, 13vw, 10rem)",
+                    fontSize: "clamp(3.6rem, 9vw, 6rem)",
                     letterSpacing: "-0.02em",
+                    lineHeight: 0.85,
                   }}
                 >
                   {content.headlineStamp}
                 </span>
               </RoughHighlight>
-            </div>
+            </span>
+          </h1>
 
-            {/* Sub */}
-            <p className="mt-8 max-w-xl text-2xl md:text-[1.65rem] leading-[1.15] text-doodle-stitch font-display tracking-[-0.01em]">
-              {content.subLead}{" "}
-              <span className="italic text-doodle-stitch/75">
-                {content.subEmphasis}
+          {/* Sub — display weight, one orange emphasis clause */}
+          <p className="mt-7 max-w-xl font-display text-2xl leading-[1.15] tracking-[-0.01em] text-doodle-ink md:text-[1.6rem]">
+            {content.subLead}{" "}
+            <span className="italic text-doodle-orange">{content.subEmphasis}</span>
+          </p>
+
+          {/* Body */}
+          <p className="mt-5 max-w-lg text-base leading-relaxed text-doodle-ink/70 md:text-lg">
+            {content.body}
+          </p>
+
+          {/* CTA */}
+          <div className="mt-9 max-w-md">
+            <WaitlistForm accent="orange" surface="canvas" />
+          </div>
+
+          {/* Microproof — clean sans pills on soft shadow (no mono, no dashed) */}
+          <div className="mt-8 flex flex-wrap items-center gap-2.5">
+            <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-3.5 py-2 text-xs font-medium text-doodle-ink/80 shadow-subtle">
+              <span className="inline-flex">
+                <span className="inline-block h-3 w-3 rounded-full bg-doodle-tee-pink ring-2 ring-doodle-stitch" />
+                <span className="-ml-1.5 inline-block h-3 w-3 rounded-full bg-doodle-tee-blue ring-2 ring-doodle-stitch" />
               </span>
-            </p>
+              {content.microproof.baseColours}
+            </span>
+            <span className="inline-flex items-center rounded-full bg-doodle-stitch px-3.5 py-2 text-xs font-medium text-doodle-ink/80 shadow-subtle">
+              {content.microproof.sizes}
+            </span>
+            <span className="inline-flex items-center rounded-full bg-doodle-stitch px-3.5 py-2 text-xs font-semibold text-doodle-ink shadow-subtle">
+              {content.microproof.price}
+            </span>
+          </div>
+        </ScrollReveal>
 
-            {/* Body */}
-            <p className="mt-5 max-w-lg text-base md:text-lg leading-relaxed text-doodle-stitch/85">
-              {content.body}
-            </p>
+        {/* ---------- RIGHT — LIVE PATCH DEMO ---------- */}
+        <div className="relative lg:col-span-5">
+          {/* Header row above the stage */}
+          <div className="mb-5 flex items-center justify-between">
+            <Eyebrow variant="marker" accent="orange">
+              {content.tryIt}
+            </Eyebrow>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-doodle-ink px-3 py-1.5 text-xs font-medium text-doodle-stitch shadow-subtle">
+              <Lightning weight="fill" size={11} className="text-doodle-yellow" />
+              {content.liveDemo}
+            </span>
+          </div>
 
-            {/* CTA */}
-            <div className="mt-9 max-w-md">
-              <WaitlistForm accent="orange" surface="tile" />
-            </div>
+          <MagneticHover strength={0.05} className="relative">
+            {/* Quiet brand color-block stack behind the frame — the hero
+                visual built from brand assets, NOT photos. Soft, capped 16px,
+                no dashed. Reads as intentional depth, not decoration. */}
+            <div
+              aria-hidden
+              className="absolute -right-3 -top-3 h-32 w-32 rounded-[1rem] bg-doodle-yellow/35"
+            />
+            <div
+              aria-hidden
+              className="absolute -bottom-4 -left-4 h-28 w-28 rounded-[1rem] bg-doodle-blue/15"
+            />
 
-            {/* Microproof */}
-            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] font-mono uppercase tracking-[0.22em] text-doodle-stitch/75">
-              <span className="inline-flex items-center gap-2">
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-doodle-tee-pink border border-doodle-stitch/30" />
-                <span className="inline-block h-2.5 w-2.5 rounded-full bg-doodle-tee-blue border border-doodle-stitch/30" />
-                <span>{content.microproof.baseColours}</span>
-              </span>
-              <span className="opacity-40">/</span>
-              <span>{content.microproof.sizes}</span>
-              <span className="opacity-40">/</span>
-              <span>{content.microproof.price}</span>
-            </div>
-          </ScrollReveal>
-        </div>
+            {/* Frame — soft card shadow, NOT dashed stitch border */}
+            <div className="relative rounded-[1rem] bg-doodle-stitch p-5 shadow-card-hover sm:p-6">
+              <PatchScrubber />
 
-        {/* ---------- RIGHT 5 — CREAM PRODUCT STAGE ---------- */}
-        <div className="relative lg:col-span-5 bg-doodle-canvas overflow-hidden">
-          {/* Background warmth */}
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                "radial-gradient(60% 50% at 50% 30%, rgba(212,168,0,0.22), transparent 70%)",
-            }}
-          />
-
-          {/* Floating "live demo" tab */}
-          <div className="relative z-10 h-full flex flex-col justify-center px-6 md:px-10 lg:px-12 py-16 lg:py-12">
-            <div className="flex items-center justify-between mb-5">
-              <span
-                className="text-2xl text-doodle-ink"
-                style={{ fontFamily: "var(--font-caveat)" }}
-              >
-                {content.tryIt}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-doodle-ink text-doodle-stitch px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.22em]">
-                <Lightning weight="fill" size={10} className="text-doodle-yellow" />
-                {content.liveDemo}
-              </span>
-            </div>
-
-            <MagneticHover strength={0.06} className="relative">
-              {/* Stacked colour blocks behind the frame (capped at 16px radius) */}
-              <div
-                aria-hidden
-                className="absolute inset-x-2 inset-y-1 rounded-[1rem] bg-doodle-yellow"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-x-6 inset-y-5 rounded-[1rem] bg-doodle-pink/85 -rotate-1"
-              />
-
-              {/* Frame */}
-              <div className="relative rounded-[1rem] bg-doodle-stitch p-4 sm:p-5 stitch-thick !border-doodle-ink shadow-[14px_16px_0_rgba(26,26,26,0.18)] mx-1 my-2">
-                <PatchScrubber />
-              </div>
-
-              {/* Floating product chip */}
-              <span className="absolute -top-3 -right-3 inline-flex items-center gap-1.5 rounded-full bg-doodle-ink text-doodle-stitch px-3 py-1.5 text-[10px] font-mono uppercase tracking-[0.22em] border-2 border-dashed border-doodle-stitch rotate-[6deg] shadow-[3px_3px_0_rgba(212,168,0,0.6)]">
+              {/* Floating product chip — soft shadow, no dashed */}
+              <span className="absolute -right-3 -top-3 inline-flex rotate-[5deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3 py-1.5 text-xs font-semibold text-doodle-stitch shadow-card">
                 <Sparkle weight="fill" size={11} className="text-doodle-yellow" />
                 {content.realProduct}
               </span>
-            </MagneticHover>
-          </div>
+            </div>
+          </MagneticHover>
         </div>
       </div>
 
       {/* ============================================================
-          PATCH LANES STRIP — full-bleed bottom band
+          PATCH LANES STRIP — soft-shadow chips on a hairline-topped band.
           ============================================================ */}
-      <div className="relative bg-doodle-canvas border-t-2 border-dashed border-doodle-ink/15">
-        <div className="mx-auto max-w-[1600px] px-6 md:px-10 py-7">
-          <div className="flex items-center justify-between mb-3">
-            <Eyebrow variant="rule" accent="orange">
+      <div className="border-t border-doodle-ink/10 bg-doodle-canvas">
+        <div className="mx-auto max-w-[1400px] px-6 py-7 md:px-10">
+          <div className="mb-4 flex items-center justify-between">
+            <Eyebrow variant="rule" accent="ink">
               {content.patchLanesEyebrow}
             </Eyebrow>
             <a
               href="#wall"
-              className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-doodle-ink hover:text-doodle-orange transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-doodle-ink/70 transition-colors hover:text-doodle-orange"
             >
               {content.seeAll}
-              <ArrowUpRight weight="bold" size={11} />
+              <ArrowUpRight weight="bold" size={13} />
             </a>
           </div>
           <div className="flex flex-wrap gap-2.5">
             {PATCH_LANES.map((lane) => (
               <span
                 key={lane.label}
-                className={`
-                  inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium
-                  border-2 border-dashed border-doodle-stitch shadow-[3px_3px_0_rgba(26,26,26,0.12)]
-                  ${lane.color}
-                `}
+                className={`inline-flex items-center rounded-full px-4 py-2 text-sm font-medium shadow-subtle transition-shadow hover:shadow-card ${lane.color}`}
               >
                 {lane.label}
               </span>
@@ -228,83 +202,11 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Down indicator */}
-      <div className="bg-doodle-canvas pb-6 flex items-center justify-center gap-2 text-doodle-ink/55">
-        <span className="font-mono text-[10px] uppercase tracking-[0.22em]">
-          {content.keepScrolling}
-        </span>
+      {/* Down indicator — clean sans */}
+      <div className="flex items-center justify-center gap-2 bg-doodle-canvas pb-7 text-doodle-ink/45">
+        <span className="text-xs font-medium">{content.keepScrolling}</span>
         <ArrowDown weight="bold" size={14} className="animate-bounce" />
       </div>
     </section>
-  );
-}
-
-function DecorativeLeft() {
-  return (
-    <>
-      {/* Big yellow circle */}
-      <div
-        aria-hidden
-        className="absolute -top-12 -right-12 h-56 w-56 rounded-full border-[3px] border-dashed border-doodle-stitch/30"
-      />
-      {/* Mid orange ring */}
-      <div
-        aria-hidden
-        className="absolute top-1/2 -left-16 h-48 w-48 rounded-full border-[3px] border-dashed border-doodle-stitch/25"
-      />
-      {/* Squiggle bottom-right */}
-      <svg
-        aria-hidden
-        className="absolute right-6 bottom-12 w-32 h-16 opacity-50"
-        viewBox="0 0 120 50"
-      >
-        <path
-          d="M 5 30 Q 25 5, 50 30 T 100 30 T 120 30"
-          fill="none"
-          stroke="var(--color-doodle-yellow)"
-          strokeWidth="5"
-          strokeLinecap="round"
-        />
-      </svg>
-      {/* Asterisk top-right */}
-      <svg
-        aria-hidden
-        className="absolute top-12 right-12 w-8 h-8 opacity-70"
-        viewBox="0 0 32 32"
-      >
-        <path
-          d="M16 4 L16 28 M4 16 L28 16 M7 7 L25 25 M25 7 L7 25"
-          stroke="var(--color-doodle-yellow)"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-        />
-      </svg>
-      {/* Star burst bottom-left */}
-      <svg
-        aria-hidden
-        className="absolute bottom-16 left-8 w-12 h-12 opacity-70"
-        viewBox="0 0 50 50"
-      >
-        {Array.from({ length: 8 }).map((_, i) => {
-          const a = (i / 8) * Math.PI * 2;
-          const x1 = 25 + Math.cos(a) * 8;
-          const y1 = 25 + Math.sin(a) * 8;
-          const x2 = 25 + Math.cos(a) * 22;
-          const y2 = 25 + Math.sin(a) * 22;
-          return (
-            <line
-              key={i}
-              x1={x1}
-              y1={y1}
-              x2={x2}
-              y2={y2}
-              stroke="var(--color-doodle-yellow)"
-              strokeWidth="3"
-              strokeLinecap="round"
-            />
-          );
-        })}
-      </svg>
-    </>
   );
 }

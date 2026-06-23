@@ -6,39 +6,59 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal, MagneticHover, ParallaxLayer } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { PatchShape, type PatchKey } from "@/components/ui/PatchShape";
 import { promise as content } from "@/content/home";
+
+/* ============================================================
+   PROMISE v2 — "premium, but for kids" (Dialog-discipline lift)
+
+   Was: 3 saturated colour-fill cards on dashed-stitch borders +
+   mono number chips + mono "more on this" link + dashed section rule.
+   Now: 3 calm cream cards on soft warm-ink shadow; each carries a
+   QUIET brand colour-block + a colour-tinted icon tile for warmth
+   (NOT a full saturated fill). One orange accent per section lives in
+   the headline emphasis. Mono purged; clean sans labels. Radius ≤16px.
+   ============================================================ */
 
 // Icons are structural (not copy); title/body come from content.pillars
 const PILLAR_ICONS = [PuzzlePiece, Recycle, ArrowsClockwise] as const;
 
+// A small patch trio per pillar — tactile brand objects that fill the card
+// foot. First key is the hero patch on the stage; the rest float quietly.
+const PILLAR_PATCHES: readonly [PatchKey, PatchKey, PatchKey][] = [
+  ["star", "lightning", "heart"],
+  ["rocket", "moon", "sun"],
+  ["smile", "flower", "diamond"],
+];
+
 const PILLARS = content.pillars.map((p, i) => ({
   color: p.color,
   Icon: PILLAR_ICONS[i],
+  patches: PILLAR_PATCHES[i],
   title: p.title,
   body: p.body,
 }));
 
-const SURFACE = {
+// Per-pillar warmth: a quiet colour-block behind the card + a tinted icon
+// tile. Surface stays cream; the colour is an accent, never the whole card.
+const ACCENT = {
   orange: {
-    bg: "bg-doodle-orange",
-    text: "text-doodle-stitch",
-    iconBg: "bg-doodle-stitch/15",
-    iconText: "text-doodle-stitch",
-    chip: "text-doodle-stitch/85",
+    block: "bg-doodle-orange/15",
+    iconBg: "bg-doodle-orange/12",
+    iconText: "text-doodle-orange",
+    link: "group-hover:text-doodle-orange",
   },
   blue: {
-    bg: "bg-doodle-blue",
-    text: "text-doodle-stitch",
-    iconBg: "bg-doodle-stitch/15",
-    iconText: "text-doodle-stitch",
-    chip: "text-doodle-stitch/85",
+    block: "bg-doodle-blue/15",
+    iconBg: "bg-doodle-blue/12",
+    iconText: "text-doodle-blue",
+    link: "group-hover:text-doodle-blue",
   },
   purple: {
-    bg: "bg-doodle-purple",
-    text: "text-doodle-stitch",
-    iconBg: "bg-doodle-stitch/15",
-    iconText: "text-doodle-stitch",
-    chip: "text-doodle-stitch/85",
+    block: "bg-doodle-purple/15",
+    iconBg: "bg-doodle-purple/12",
+    iconText: "text-doodle-purple",
+    link: "group-hover:text-doodle-purple",
   },
 } as const;
 
@@ -46,7 +66,7 @@ export function Promise() {
   return (
     <section
       id="promise"
-      className="relative border-b-2 border-dashed border-doodle-ink/15 py-24 md:py-32 bg-[color:var(--color-surface-blush)]"
+      className="relative overflow-hidden py-20 md:py-24 bg-[color:var(--color-surface-blush)]"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <ScrollReveal direction="up">
@@ -74,52 +94,75 @@ export function Promise() {
           </div>
         </ScrollReveal>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
-          {PILLARS.map(({ color, Icon, title, body }, i) => {
-            const s = SURFACE[color];
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {PILLARS.map(({ color, Icon, patches, title, body }, i) => {
+            const a = ACCENT[color];
             return (
               <ScrollReveal key={title} direction="up" delay={0.1 + i * 0.12}>
-                <MagneticHover strength={0.12}>
-                  <article
-                    className={`
-                      relative isolate overflow-hidden rounded-[1rem] p-7 sm:p-8
-                      ${s.bg} stitch-thick
-                      flex flex-col gap-6 min-h-[280px]
-                    `}
-                  >
-                {/* Number chip */}
-                <span
-                  className={`absolute top-5 right-5 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-mono uppercase tracking-[0.2em] ${s.chip} bg-doodle-ink/15`}
-                >
-                  {String(i + 1).padStart(2, "0")} / 03
-                </span>
+                <MagneticHover strength={0.1}>
+                  <div className="group relative">
+                    {/* Quiet brand colour-block behind the card — warmth as
+                        intentional composition, not a saturated fill. */}
+                    <div
+                      aria-hidden
+                      className={`absolute -right-3 -top-3 h-20 w-20 rounded-[1rem] ${a.block}`}
+                    />
 
-                {/* Decorative scribble */}
-                <DecorativeScribble color={color} />
+                    <article
+                      className="relative isolate flex min-h-[360px] flex-col gap-5 overflow-hidden rounded-[1rem] bg-card p-7 shadow-card transition-shadow duration-200 hover:shadow-card-hover sm:p-8"
+                    >
+                      {/* Quiet step index — clean sans, not mono */}
+                      <span className="absolute right-6 top-6 font-display text-sm font-semibold text-doodle-ink/25">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
 
-                <div
-                  className={`grid place-items-center h-14 w-14 rounded-lg ${s.iconBg} ${s.iconText} relative z-10`}
-                >
-                  <Icon weight="duotone" size={30} />
-                </div>
-
-                    <div className="relative z-10 mt-auto">
-                      <h3
-                        className={`font-display text-2xl leading-tight tracking-[-0.01em] ${s.text}`}
-                      >
-                        {title}
-                      </h3>
-                      <p className={`mt-3 text-sm leading-relaxed ${s.text}/85`}>
-                        {body}
-                      </p>
+                      {/* Patch-on-stage — the hero silicone patch sits on a soft
+                          tinted tile; the icon shrinks to a quiet corner marker.
+                          This is the tactile brand object, not a flat icon. */}
                       <div
-                        className={`mt-5 inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-[0.18em] ${s.chip}`}
+                        className={`relative z-10 grid h-20 w-20 place-items-center rounded-[0.85rem] ${a.iconBg}`}
                       >
-                        {content.moreOnThis}
-                        <ArrowUpRight weight="bold" size={12} />
+                        <PatchShape patch={patches[0]} size={54} />
+                        <span
+                          className={`absolute -bottom-2 -right-2 grid h-7 w-7 place-items-center rounded-full bg-card shadow-subtle ${a.iconText}`}
+                        >
+                          <Icon weight="bold" size={15} />
+                        </span>
                       </div>
-                    </div>
-                  </article>
+
+                      <div className="relative z-10">
+                        <h3 className="font-display text-2xl leading-tight tracking-[-0.01em] text-doodle-ink">
+                          {title}
+                        </h3>
+                        <p className="mt-3 text-sm leading-relaxed text-doodle-ink/70">
+                          {body}
+                        </p>
+                      </div>
+
+                      {/* Card foot — a quiet patch trio + the link. Fills the
+                          space that used to read empty; reads as the patches you
+                          swap onto the tee. */}
+                      <div className="relative z-10 mt-auto flex items-center justify-between border-t border-doodle-ink/10 pt-4">
+                        <div className="flex items-center">
+                          {patches.map((p, pi) => (
+                            <span
+                              key={p}
+                              className="-ml-2 inline-grid h-9 w-9 place-items-center rounded-full bg-doodle-canvas shadow-subtle ring-2 ring-card first:ml-0"
+                              style={{ zIndex: 3 - pi }}
+                            >
+                              <PatchShape patch={p} size={26} />
+                            </span>
+                          ))}
+                        </div>
+                        <div
+                          className={`inline-flex items-center gap-1.5 text-xs font-semibold text-doodle-ink/55 transition-colors ${a.link}`}
+                        >
+                          {content.moreOnThis}
+                          <ArrowUpRight weight="bold" size={12} />
+                        </div>
+                      </div>
+                    </article>
+                  </div>
                 </MagneticHover>
               </ScrollReveal>
             );
@@ -127,80 +170,5 @@ export function Promise() {
         </div>
       </div>
     </section>
-  );
-}
-
-function DecorativeScribble({
-  color,
-}: {
-  color: "orange" | "blue" | "purple";
-}) {
-  // Each pillar gets a different doodle in the bottom-right corner
-  if (color === "orange") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute -right-8 -bottom-6 opacity-25"
-        width="180"
-        height="180"
-        viewBox="0 0 180 180"
-      >
-        <path
-          d="M 20 80 Q 50 30 90 60 Q 140 100 100 140 Q 60 160 30 130"
-          fill="none"
-          stroke="white"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
-  if (color === "blue") {
-    return (
-      <svg
-        aria-hidden
-        className="absolute -right-6 -bottom-8 opacity-25"
-        width="200"
-        height="200"
-        viewBox="0 0 200 200"
-      >
-        {Array.from({ length: 5 }).map((_, i) => (
-          <circle
-            key={i}
-            cx={60 + i * 24}
-            cy={140}
-            r={8 - i}
-            fill="white"
-          />
-        ))}
-        <path
-          d="M 20 100 Q 60 50 120 80 T 200 70"
-          fill="none"
-          stroke="white"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeDasharray="2 6"
-        />
-      </svg>
-    );
-  }
-  return (
-    <svg
-      aria-hidden
-      className="absolute -right-4 -bottom-4 opacity-25"
-      width="160"
-      height="160"
-      viewBox="0 0 160 160"
-    >
-      <path
-        d="M 30 130 Q 30 80 60 60 Q 90 40 90 80 Q 90 130 130 130"
-        fill="none"
-        stroke="white"
-        strokeWidth="4"
-        strokeLinecap="round"
-      />
-      <circle cx="60" cy="60" r="6" fill="white" />
-      <circle cx="130" cy="130" r="6" fill="white" />
-    </svg>
   );
 }

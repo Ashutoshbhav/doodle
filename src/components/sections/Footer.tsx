@@ -33,9 +33,9 @@ export function Footer() {
       id="footer"
       className="relative bg-doodle-ink text-doodle-canvas pt-20 pb-10 overflow-hidden"
     >
-      {/* Decorative top stitch divider */}
+      {/* Hairline top divider — one quiet orange seam */}
       <div
-        className="absolute inset-x-0 top-0 h-1 bg-[repeating-linear-gradient(90deg,var(--color-doodle-stitch)_0_8px,transparent_8px_18px)] opacity-40"
+        className="absolute inset-x-0 top-0 h-px bg-doodle-orange/50"
         aria-hidden
       />
 
@@ -65,8 +65,8 @@ export function Footer() {
                   aria-label={label}
                   className="
                     grid place-items-center h-10 w-10 rounded-full
-                    border-2 border-dashed border-doodle-canvas/40
-                    text-doodle-canvas/80 hover:text-doodle-orange hover:border-doodle-orange
+                    bg-doodle-canvas/10
+                    text-doodle-canvas/80 hover:text-doodle-orange hover:bg-doodle-canvas/15
                     transition-colors
                     focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40
                   "
@@ -81,7 +81,7 @@ export function Footer() {
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
             {COLUMNS.map((col) => (
               <div key={col.title}>
-                <Eyebrow variant="mono" tone="stitch">
+                <Eyebrow variant="rule" tone="stitch">
                   {col.title}
                 </Eyebrow>
                 <ul className="mt-4 space-y-2">
@@ -102,8 +102,8 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 pt-6 border-t border-dashed border-doodle-canvas/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-doodle-canvas/55">
+        <div className="mt-16 pt-6 border-t border-doodle-canvas/15 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="text-[12px] font-medium text-doodle-canvas/55">
             <span className="text-doodle-canvas/85 font-semibold">{content.brandName}</span>
             <span className="px-1.5 opacity-50">{content.brandBy}</span>
             <span className="text-doodle-canvas/85 font-semibold">{content.brandParent}</span>

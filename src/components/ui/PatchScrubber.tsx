@@ -30,23 +30,26 @@ type PatchKey =
   | "flower"
   | "hex";
 
+// Brand-token patch palette (locked DOODLE hexes — NOT the drifted values).
+// orange #e8650a · blue #1a56c4 · yellow #d4a800 · pink #d4607a
+// purple #8b80e0 · red #c8312a
 const PATCH_COLOR: Record<PatchKey, string> = {
-  bear: "#8b7ac6",
-  star: "#f2c84a",
-  lightning: "#f2c84a",
-  heart: "#d4738a",
-  rocket: "#e87a3d",
-  moon: "#2a56b3",
-  cloud: "#2a56b3",
-  sun: "#e87a3d",
-  drop: "#2a56b3",
-  burst: "#e87a3d",
-  diamond: "#d4738a",
-  smile: "#f2c84a",
-  stripe: "#d24a3d",
-  arrow: "#8b7ac6",
-  flower: "#d4738a",
-  hex: "#2a56b3",
+  bear: "#8b80e0",
+  star: "#d4a800",
+  lightning: "#d4a800",
+  heart: "#d4607a",
+  rocket: "#e8650a",
+  moon: "#1a56c4",
+  cloud: "#1a56c4",
+  sun: "#e8650a",
+  drop: "#1a56c4",
+  burst: "#e8650a",
+  diamond: "#d4607a",
+  smile: "#d4a800",
+  stripe: "#c8312a",
+  arrow: "#8b80e0",
+  flower: "#d4607a",
+  hex: "#1a56c4",
 };
 
 function PatchShape({ patch, size }: { patch: PatchKey; size: number }) {
@@ -66,7 +69,6 @@ function PatchShape({ patch, size }: { patch: PatchKey; size: number }) {
 function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
   const stroke = "white";
   const sw = 2.5;
-  const dash = "3 4";
   switch (patch) {
     case "bear":
       return (
@@ -74,7 +76,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
           <circle cx="28" cy="30" r="11" fill={fill} />
           <circle cx="72" cy="30" r="11" fill={fill} />
           <circle cx="50" cy="58" r="32" fill={fill} />
-          <circle cx="50" cy="58" r="32" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="58" r="32" fill="none" stroke={stroke} strokeWidth={sw} />
           <circle cx="40" cy="54" r="3" fill="white" />
           <circle cx="60" cy="54" r="3" fill="white" />
           <ellipse cx="50" cy="68" rx="6" ry="4" fill="white" />
@@ -85,7 +87,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
         <>
           <circle cx="50" cy="50" r="38" fill={fill} />
           <path d="M50 22 L57 44 L80 44 L62 58 L68 80 L50 66 L32 80 L38 58 L20 44 L43 44 Z" fill="white" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "lightning":
@@ -93,7 +95,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
         <>
           <circle cx="50" cy="50" r="38" fill={fill} />
           <path d="M 56 22 L 36 54 L 50 54 L 42 78 L 64 44 L 50 44 Z" fill="white" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "heart":
@@ -101,7 +103,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
         <>
           <circle cx="50" cy="50" r="38" fill={fill} />
           <path d="M50 76 C28 60 20 48 28 36 C36 28 47 32 50 41 C53 32 64 28 72 36 C80 48 72 60 50 76 Z" fill="white" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "rocket":
@@ -113,7 +115,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
           <path d="M36 56 L 28 70 L 38 66 Z" fill="white" />
           <path d="M64 56 L 72 70 L 62 66 Z" fill="white" />
           <path d="M44 70 Q 50 82 56 70" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "moon":
@@ -121,7 +123,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
         <>
           <circle cx="50" cy="50" r="38" fill={fill} />
           <path d="M 60 24 A 30 30 0 1 0 70 70 A 22 22 0 1 1 60 24 Z" fill="white" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "cloud":
@@ -129,7 +131,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
         <>
           <circle cx="50" cy="50" r="38" fill={fill} />
           <path d="M28 60 Q 28 48 40 48 Q 42 36 54 38 Q 66 36 68 48 Q 78 48 78 58 Q 78 68 68 68 L 36 68 Q 28 68 28 60 Z" fill="white" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "sun":
@@ -144,7 +146,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
             return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={fill} strokeWidth="6" strokeLinecap="round" />;
           })}
           <circle cx="50" cy="50" r="26" fill={fill} />
-          <circle cx="50" cy="50" r="26" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="26" fill="none" stroke={stroke} strokeWidth={sw} />
           <circle cx="42" cy="46" r="3" fill="white" />
           <circle cx="58" cy="46" r="3" fill="white" />
           <path d="M42 56 Q 50 62 58 56" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" />
@@ -155,7 +157,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
         <>
           <circle cx="50" cy="50" r="38" fill={fill} />
           <path d="M50 22 C 60 38 70 48 70 60 A 20 20 0 1 1 30 60 C 30 48 40 38 50 22 Z" fill="white" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "burst":
@@ -170,14 +172,14 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
             const y2 = 50 + Math.sin(a) * 48;
             return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke={fill} strokeWidth="6" strokeLinecap="round" />;
           })}
-          <circle cx="50" cy="50" r="34" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="34" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "diamond":
       return (
         <>
           <path d="M50 14 L 86 50 L 50 86 L 14 50 Z" fill={fill} />
-          <path d="M50 14 L 86 50 L 50 86 L 14 50 Z" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <path d="M50 14 L 86 50 L 50 86 L 14 50 Z" fill="none" stroke={stroke} strokeWidth={sw} />
           <path d="M50 26 L 74 50 L 50 74 L 26 50 Z" fill="white" opacity="0.6" />
         </>
       );
@@ -188,7 +190,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
           <circle cx="38" cy="42" r="4.5" fill="white" />
           <circle cx="62" cy="42" r="4.5" fill="white" />
           <path d="M34 58 Q 50 76 66 58" fill="none" stroke="white" strokeWidth="5" strokeLinecap="round" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "stripe":
@@ -198,7 +200,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
           <line x1="22" y1="40" x2="78" y2="40" stroke="white" strokeWidth="6" strokeLinecap="round" />
           <line x1="22" y1="50" x2="78" y2="50" stroke="white" strokeWidth="6" strokeLinecap="round" />
           <line x1="22" y1="60" x2="78" y2="60" stroke="white" strokeWidth="6" strokeLinecap="round" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "arrow":
@@ -206,7 +208,7 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
         <>
           <circle cx="50" cy="50" r="38" fill={fill} />
           <path d="M30 50 L 65 50 M 50 35 L 65 50 L 50 65" fill="none" stroke="white" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "flower":
@@ -220,14 +222,14 @@ function PatchBody({ patch, fill }: { patch: PatchKey; fill: string }) {
             return <circle key={deg} cx={cx} cy={cy} r="11" fill="white" />;
           })}
           <circle cx="50" cy="50" r="9" fill={fill} />
-          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <circle cx="50" cy="50" r="38" fill="none" stroke={stroke} strokeWidth={sw} />
         </>
       );
     case "hex":
       return (
         <>
           <path d="M50 14 L 82 32 L 82 68 L 50 86 L 18 68 L 18 32 Z" fill={fill} />
-          <path d="M50 14 L 82 32 L 82 68 L 50 86 L 18 68 L 18 32 Z" fill="none" stroke={stroke} strokeWidth={sw} strokeDasharray={dash} />
+          <path d="M50 14 L 82 32 L 82 68 L 50 86 L 18 68 L 18 32 Z" fill="none" stroke={stroke} strokeWidth={sw} />
           <path d="M50 28 L 70 38 L 70 62 L 50 72 L 30 62 L 30 38 Z" fill="white" opacity="0.7" />
         </>
       );
@@ -448,7 +450,7 @@ export function PatchScrubber() {
 
       {/* Scrubber controls */}
       <div className="mx-auto mt-7 max-w-[440px]">
-        <div className="flex items-baseline justify-between gap-3 text-xs font-mono uppercase tracking-[0.18em] text-doodle-ink/50">
+        <div className="flex items-baseline justify-between gap-3 text-xs font-semibold uppercase tracking-[0.08em] text-doodle-ink/55">
           <span>Drag to remix &rarr;</span>
           <span>
             {String(index + 1).padStart(2, "0")} / {PRESETS.length}
@@ -472,7 +474,7 @@ export function PatchScrubber() {
 
         <div className="relative mt-4">
           {/* Track */}
-          <div className="h-2 rounded-full bg-doodle-ink/10 stitch-thick !border-doodle-ink/25" />
+          <div className="h-2 rounded-full bg-doodle-ink/10" />
           {/* Fill */}
           <motion.div
             className="absolute top-0 left-0 h-2 rounded-full bg-doodle-orange"
@@ -481,7 +483,7 @@ export function PatchScrubber() {
           />
           {/* Thumb */}
           <motion.div
-            className="absolute -top-2 h-6 w-6 -translate-x-1/2 rounded-full bg-doodle-canvas border-2 border-dashed border-doodle-ink shadow-md"
+            className="absolute -top-2 h-6 w-6 -translate-x-1/2 rounded-full bg-doodle-stitch shadow-card"
             animate={{ left: `${(index / (PRESETS.length - 1)) * 100}%` }}
             transition={{ type: "spring", stiffness: 240, damping: 24 }}
           />
@@ -507,12 +509,12 @@ export function PatchScrubber() {
               aria-label={`Choose look: ${p.name}`}
               aria-pressed={i === index}
               className={`
-                grid place-items-center h-9 w-9 rounded-full text-[10px] font-mono transition
-                border-2 border-dashed
+                grid place-items-center h-9 w-9 rounded-full text-[11px] font-semibold
+                transition-[box-shadow,background-color,transform] duration-200
                 ${
                   i === index
-                    ? "bg-doodle-orange text-doodle-stitch border-doodle-stitch scale-110"
-                    : "bg-doodle-canvas text-doodle-ink/60 border-doodle-ink/30 hover:border-doodle-ink"
+                    ? "bg-doodle-orange text-doodle-stitch shadow-card scale-110"
+                    : "bg-doodle-stitch text-doodle-ink/60 shadow-subtle hover:shadow-card hover:text-doodle-ink"
                 }
               `}
             >

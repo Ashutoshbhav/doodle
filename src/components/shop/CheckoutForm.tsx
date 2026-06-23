@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation"
 import Script from "next/script"
 import type { Cart } from "@/lib/medusa/types"
 import { formatINR } from "@/lib/medusa/types"
+import { Field, SelectField } from "@/components/ui/Field"
+import { PillButton } from "@/components/ui/PillButton"
 import {
   setCustomerContact,
   setShippingAddress,
@@ -194,14 +196,14 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
           }
         >
           <div className="grid sm:grid-cols-2 gap-4">
-            <Input label="First name *" value={firstName} onChange={setFirstName} />
-            <Input label="Last name" value={lastName} onChange={setLastName} />
-            <Input label="Email *" type="email" value={email} onChange={setEmail} />
-            <Input label="Phone *" type="tel" value={phone} onChange={setPhone} />
+            <Field label="First name *" value={firstName} onChange={setFirstName} autoComplete="given-name" />
+            <Field label="Last name" value={lastName} onChange={setLastName} autoComplete="family-name" />
+            <Field label="Email *" type="email" value={email} onChange={setEmail} autoComplete="email" />
+            <Field label="Phone *" type="tel" inputMode="tel" value={phone} onChange={setPhone} autoComplete="tel" />
           </div>
-          <PrimaryButton onClick={submitContact} disabled={busy}>
+          <PillButton type="button" onClick={submitContact} disabled={busy} showArrow={false}>
             {busy ? "Saving…" : "Continue to shipping"}
-          </PrimaryButton>
+          </PillButton>
         </Section>
 
         <Section
@@ -216,17 +218,17 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
           }
         >
           <div className="grid gap-4">
-            <Input label="Address line 1 *" value={address1} onChange={setAddress1} />
-            <Input label="Address line 2" value={address2} onChange={setAddress2} />
+            <Field label="Address line 1 *" value={address1} onChange={setAddress1} autoComplete="address-line1" />
+            <Field label="Address line 2" value={address2} onChange={setAddress2} autoComplete="address-line2" />
             <div className="grid sm:grid-cols-2 gap-4">
-              <Input label="City *" value={city} onChange={setCity} />
-              <Select label="State *" value={state} onChange={setState} options={INDIA_STATES} />
-              <Input label="Pincode *" value={postalCode} onChange={setPostalCode} maxLength={6} />
+              <Field label="City *" value={city} onChange={setCity} autoComplete="address-level2" />
+              <SelectField label="State *" value={state} onChange={setState} options={INDIA_STATES} />
+              <Field label="Pincode *" value={postalCode} onChange={setPostalCode} maxLength={6} inputMode="numeric" autoComplete="postal-code" />
             </div>
           </div>
-          <PrimaryButton onClick={submitShipping} disabled={busy}>
+          <PillButton type="button" onClick={submitShipping} disabled={busy} showArrow={false}>
             {busy ? "Saving…" : "Continue to payment"}
-          </PrimaryButton>
+          </PillButton>
         </Section>
 
         <Section
@@ -239,10 +241,10 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
           <fieldset className="space-y-3">
             <label
               className={[
-                "flex items-start gap-3 p-4 rounded-lg border-2 border-dashed cursor-pointer transition-colors",
+                "flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-[border-color,box-shadow] duration-200",
                 payment === "razorpay"
-                  ? "border-doodle-ink bg-doodle-canvas"
-                  : "border-doodle-ink/25 hover:border-doodle-ink/50",
+                  ? "border-doodle-orange bg-card shadow-subtle"
+                  : "border-doodle-ink/15 hover:border-doodle-ink/30",
               ].join(" ")}
             >
               <input
@@ -260,10 +262,10 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
             </label>
             <label
               className={[
-                "flex items-start gap-3 p-4 rounded-lg border-2 border-dashed cursor-pointer transition-colors",
+                "flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-[border-color,box-shadow] duration-200",
                 payment === "cod"
-                  ? "border-doodle-ink bg-doodle-canvas"
-                  : "border-doodle-ink/25 hover:border-doodle-ink/50",
+                  ? "border-doodle-orange bg-card shadow-subtle"
+                  : "border-doodle-ink/15 hover:border-doodle-ink/30",
               ].join(" ")}
             >
               <input
@@ -282,13 +284,13 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
               </div>
             </label>
           </fieldset>
-          <PrimaryButton onClick={submitPayment} disabled={busy}>
+          <PillButton type="button" onClick={submitPayment} disabled={busy} showArrow={false}>
             {busy ? "Processing…" : payment === "cod" ? "Place order (COD)" : `Pay ${formatINR(cart.total ?? 0)}`}
-          </PrimaryButton>
+          </PillButton>
         </Section>
 
         {err && (
-          <div className="rounded-lg bg-doodle-red/10 border-2 border-dashed border-doodle-red px-4 py-3 text-sm text-doodle-red">
+          <div className="rounded-lg bg-doodle-red/10 px-4 py-3 text-sm font-sans text-doodle-red">
             {err}
           </div>
         )}
@@ -313,14 +315,14 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-lg bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-5 sm:p-7">
+    <div className="rounded-lg bg-card shadow-card p-5 sm:p-7">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-2xl text-doodle-ink">{title}</h2>
         {done && (
           <button
             type="button"
             onClick={onEdit}
-            className="text-xs font-mono uppercase tracking-[0.14em] text-doodle-ink/60 hover:text-doodle-ink"
+            className="text-xs font-sans font-medium text-doodle-ink/60 hover:text-doodle-ink transition-colors"
           >
             Edit
           </button>
@@ -335,101 +337,3 @@ function Section({
   )
 }
 
-function Input({
-  label,
-  value,
-  onChange,
-  type = "text",
-  maxLength,
-}: {
-  label: string
-  value: string
-  onChange: (v: string) => void
-  type?: string
-  maxLength?: number
-}) {
-  return (
-    <label className="block">
-      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55">
-        {label}
-      </span>
-      <input
-        type={type}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        maxLength={maxLength}
-        className="
-          mt-1.5 block w-full h-11 px-3 rounded-lg
-          bg-doodle-stitch border-2 border-dashed border-doodle-ink/25
-          focus:border-doodle-ink focus:outline-none
-          text-doodle-ink font-sans text-base
-        "
-      />
-    </label>
-  )
-}
-
-function Select({
-  label,
-  value,
-  onChange,
-  options,
-}: {
-  label: string
-  value: string
-  onChange: (v: string) => void
-  options: readonly string[]
-}) {
-  return (
-    <label className="block">
-      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/55">
-        {label}
-      </span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="
-          mt-1.5 block w-full h-11 px-3 rounded-lg
-          bg-doodle-stitch border-2 border-dashed border-doodle-ink/25
-          focus:border-doodle-ink focus:outline-none
-          text-doodle-ink font-sans text-base
-        "
-      >
-        <option value="">Select…</option>
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}
-
-function PrimaryButton({
-  children,
-  onClick,
-  disabled,
-}: {
-  children: React.ReactNode
-  onClick: () => void
-  disabled?: boolean
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="
-        inline-flex items-center justify-center
-        h-12 px-6 rounded-full
-        bg-doodle-orange text-doodle-stitch font-medium text-base
-        border-2 border-dashed border-doodle-stitch
-        hover:scale-[1.02] active:scale-[0.98] transition-transform
-        disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100
-      "
-    >
-      {children}
-    </button>
-  )
-}

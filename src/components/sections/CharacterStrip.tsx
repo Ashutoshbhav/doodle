@@ -11,9 +11,21 @@ import {
   useVelocity,
   useReducedMotion,
 } from "motion/react";
-import { Smiley, SmileyXEyes, SmileyWink, SmileyMelting, SmileyNervous } from "@phosphor-icons/react/dist/ssr";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { characterStrip as content } from "@/content/home";
+
+/* ============================================================
+   CHARACTER STRIP v2 — "premium, but for kids" (Dialog discipline)
+
+   - Dashed borders + mono mood labels purged.
+   - Smiley placeholders replaced with INTENTIONAL designed tiles:
+     a monogram initial in a brand-colour rounded tile (the "face"),
+     the base-tee SVG with SOLID strokes, two clean patch shapes.
+     Reads finished + playful — never an empty smiley.
+   - Cards sit on a cream canvas, soft warm-ink shadow, 16px radius.
+   - One orange accent per card (the age chip); the rest of the
+     palette is product/illustration, not chrome.
+   ============================================================ */
 
 // Modular wrap: keeps a value cycling between [min, max).
 // Used to make the marquee loop seamlessly past -50% back to 0%.
@@ -30,23 +42,21 @@ type Character = {
   bg: CharColor;
   shirt: CharColor;
   patches: [CharColor, CharColor];
-  Face: typeof Smiley;
   mood: string;
 };
 
-// [PLACEHOLDER] character set — Ash will replace with the real illustrated kids
-// Visual data (colors, face icons) lives here; name/age/mood come from content.
+// [PLACEHOLDER] character set — Ash will replace with the real illustrated kids.
+// Visual data (colours only) lives here; name/age/mood come from content.
 const CHAR_VISUALS: {
   bg: CharColor;
   shirt: CharColor;
   patches: [CharColor, CharColor];
-  Face: typeof Smiley;
 }[] = [
-  { bg: "yellow", shirt: "orange", patches: ["blue", "purple"], Face: Smiley },
-  { bg: "blue", shirt: "yellow", patches: ["pink", "red"], Face: SmileyWink },
-  { bg: "pink", shirt: "purple", patches: ["yellow", "blue"], Face: SmileyMelting },
-  { bg: "purple", shirt: "pink", patches: ["orange", "yellow"], Face: SmileyXEyes },
-  { bg: "orange", shirt: "blue", patches: ["red", "yellow"], Face: SmileyNervous },
+  { bg: "yellow", shirt: "orange", patches: ["blue", "purple"] },
+  { bg: "blue", shirt: "yellow", patches: ["pink", "red"] },
+  { bg: "pink", shirt: "purple", patches: ["yellow", "blue"] },
+  { bg: "purple", shirt: "pink", patches: ["orange", "yellow"] },
+  { bg: "orange", shirt: "blue", patches: ["red", "yellow"] },
 ];
 
 const CHARS: Character[] = content.characters.map((c, i) => ({
@@ -56,13 +66,33 @@ const CHARS: Character[] = content.characters.map((c, i) => ({
   ...CHAR_VISUALS[i],
 }));
 
-const BG = {
+// Soft tinted "stage" backgrounds for the monogram tile (calm, not saturated).
+const STAGE = {
+  orange: "bg-doodle-orange/15",
+  blue: "bg-doodle-blue/15",
+  yellow: "bg-doodle-yellow/30",
+  purple: "bg-doodle-purple/15",
+  red: "bg-doodle-red/12",
+  pink: "bg-doodle-pink/18",
+} as const;
+
+const MONO = {
   orange: "bg-doodle-orange",
   blue: "bg-doodle-blue",
   yellow: "bg-doodle-yellow",
   purple: "bg-doodle-purple",
   red: "bg-doodle-red",
   pink: "bg-doodle-pink",
+} as const;
+
+// Monogram text colour — readable on the tile fill.
+const MONO_TEXT = {
+  orange: "text-doodle-stitch",
+  blue: "text-doodle-stitch",
+  yellow: "text-doodle-ink",
+  purple: "text-doodle-stitch",
+  red: "text-doodle-stitch",
+  pink: "text-doodle-stitch",
 } as const;
 
 // Maps to the locked CSS custom props so SVG fills read the same tokens as
@@ -83,19 +113,18 @@ export function CharacterStrip() {
   return (
     <section
       id="characters"
-      className="relative border-b-2 border-dashed border-doodle-ink/15 py-20 md:py-24 overflow-hidden"
+      className="relative py-20 md:py-24 overflow-hidden bg-doodle-canvas"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10 mb-10">
         <Eyebrow variant="rule" accent="orange">
           {content.eyebrow}
         </Eyebrow>
-        <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink max-w-3xl">
+        <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink max-w-3xl">
           {content.headlineLead}{" "}
           <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
           {content.headlineEnd}
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
-          {/* [PLACEHOLDER] supporting copy */}
           {content.body}
         </p>
       </div>
@@ -120,7 +149,7 @@ export function CharacterStrip() {
 /**
  * Marquee whose speed is modulated by page scroll velocity.
  * Stays at base speed when idle, accelerates in scroll direction when user
- * scrolls. Lusion-tier signature interaction.
+ * scrolls.
  */
 function VelocityMarquee({ children }: { children: React.ReactNode }) {
   const baseVelocity = -2; // px/frame at 60fps, negative = leftward
@@ -163,48 +192,41 @@ function VelocityMarquee({ children }: { children: React.ReactNode }) {
 }
 
 function CharacterCard({ c }: { c: Character }) {
-  const Face = c.Face;
+  const initial = c.name.replace(/[^A-Za-z]/g, "").charAt(0).toUpperCase();
+
   return (
-    <li
-      className={`
-        relative shrink-0 w-[260px] md:w-[300px] rounded-[1rem]
-        ${BG[c.bg]} border-[3px] border-dashed border-doodle-stitch
-        p-6 flex flex-col items-center text-center
-      `}
-    >
-      {/* Face */}
-      <div className="relative h-32 w-32 grid place-items-center">
-        <div className="absolute inset-0 rounded-full bg-doodle-stitch/35" />
-        <Face
-          weight="duotone"
-          size={86}
-          className="relative text-doodle-ink"
-        />
+    <li className="relative shrink-0 w-[260px] md:w-[300px] rounded-[1rem] bg-doodle-stitch p-6 shadow-card flex flex-col items-center text-center">
+      {/* Designed "portrait" — soft tinted stage + monogram tile (no smiley) */}
+      <div
+        className={`relative grid h-32 w-full place-items-center rounded-[0.75rem] ${STAGE[c.bg]}`}
+      >
+        <div
+          className={`grid h-20 w-20 place-items-center rounded-[0.75rem] ${MONO[c.bg]} shadow-subtle`}
+        >
+          <span className={`font-display text-3xl leading-none ${MONO_TEXT[c.bg]}`}>
+            {initial}
+          </span>
+        </div>
       </div>
 
-      {/* T-shirt */}
-      <svg
-        viewBox="0 0 200 180"
-        className="mt-4 w-44 h-40"
-        aria-hidden
-      >
+      {/* Base-tee SVG — SOLID strokes (dashed purged), clean patches */}
+      <svg viewBox="0 0 200 180" className="mt-5 w-40 h-36" aria-hidden>
         <path
           d="M 50 32 L 80 18 Q 100 32 120 18 L 150 32 L 168 56 L 144 72 L 144 158 Q 100 168 56 158 L 56 72 L 32 56 Z"
           fill={FILL_VAR[c.shirt]}
-          stroke="white"
+          stroke="var(--color-doodle-stitch)"
           strokeWidth="3"
           strokeLinejoin="round"
         />
-        <path
-          d="M 50 32 L 80 18 Q 100 32 120 18 L 150 32 L 168 56 L 144 72 L 144 158 Q 100 168 56 158 L 56 72 L 32 56 Z"
-          fill="none"
-          stroke="white"
-          strokeWidth="1.5"
-          strokeDasharray="3 3"
-          transform="scale(0.94) translate(6.4, 6)"
+        {/* Two patches on tee — solid, soft */}
+        <circle
+          cx="100"
+          cy="84"
+          r="22"
+          fill={FILL_VAR[c.patches[0]]}
+          stroke="var(--color-doodle-stitch)"
+          strokeWidth="2.5"
         />
-        {/* Two patches on tee */}
-        <circle cx="100" cy="84" r="22" fill={FILL_VAR[c.patches[0]]} stroke="white" strokeWidth="2.5" strokeDasharray="3 4" />
         <rect
           x="120"
           y="118"
@@ -212,19 +234,21 @@ function CharacterCard({ c }: { c: Character }) {
           height="32"
           rx="9"
           fill={FILL_VAR[c.patches[1]]}
-          stroke="white"
+          stroke="var(--color-doodle-stitch)"
           strokeWidth="2.5"
-          strokeDasharray="3 4"
         />
       </svg>
 
-      {/* Name + mood */}
-      <div className="mt-2">
-        <div className="font-display text-xl text-doodle-stitch">
-          {c.name}, {c.age}
+      {/* Name + mood — clean sans, one orange accent chip for the age */}
+      <div className="mt-2 flex flex-col items-center gap-1.5">
+        <div className="font-display text-xl text-doodle-ink leading-tight">
+          {c.name}
         </div>
-        <div className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.22em] text-doodle-stitch/80">
-          {c.mood}
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center rounded-full bg-doodle-orange/12 px-2.5 py-0.5 text-xs font-semibold text-doodle-orange">
+            Age {c.age}
+          </span>
+          <span className="text-xs font-medium text-doodle-ink/55">{c.mood}</span>
         </div>
       </div>
     </li>

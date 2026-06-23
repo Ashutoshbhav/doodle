@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation"
 import Image from "next/image"
+import Link from "next/link"
 import type { Metadata } from "next"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { VariantPicker } from "@/components/shop/VariantPicker"
+import { PatchScrubber } from "@/components/ui/PatchScrubber"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { Eyebrow } from "@/components/ui/Eyebrow"
@@ -147,49 +149,74 @@ export default async function PDPPage({
       />
       <NavWithCart />
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
-        <section className="mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-24 grid gap-12 lg:grid-cols-2">
-          <div className="relative aspect-[4/5] rounded-lg overflow-hidden border-2 border-dashed border-doodle-ink/20 bg-doodle-stitch">
-            {hero ? (
-              <Image
-                src={hero}
-                alt={product.title ?? ""}
-                fill
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover"
-              />
-            ) : (
-              <div className="grid place-items-center h-full">
-                <span className="font-mono text-xs uppercase tracking-[0.14em] text-doodle-ink/40">
-                  Photo coming soon
-                </span>
+        <section className="mx-auto max-w-7xl px-6 md:px-10 py-12 md:py-20">
+          {/* Breadcrumb — quiet clean-sans wayfinding */}
+          <nav className="flex items-center gap-2 text-xs font-medium text-doodle-ink/50">
+            <Link href="/" className="transition-colors hover:text-doodle-ink">Home</Link>
+            <span aria-hidden className="text-doodle-ink/25">/</span>
+            <Link href="/shop" className="transition-colors hover:text-doodle-ink">Shop</Link>
+            <span aria-hidden className="text-doodle-ink/25">/</span>
+            <span className="truncate text-doodle-ink/70">{product.title}</span>
+          </nav>
+
+          <div className="mt-8 grid gap-12 lg:grid-cols-2 lg:gap-16">
+            {/* MEDIA — large product area. The signature PatchScrubber IS the
+                PDP hero (DESIGN.md mandate): the live "build the look" interaction
+                that masks onto the real product photos. Falls back to the static
+                hero image only if the product carries its own art. */}
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-[1rem] bg-doodle-stitch p-5 shadow-card-hover sm:p-6">
+                <PatchScrubber />
               </div>
-            )}
-          </div>
 
-          <div>
-            <Eyebrow variant="mono" accent="orange">First drop</Eyebrow>
-            <h1 className="mt-3 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              {product.title}
-            </h1>
-            {product.subtitle && (
-              <p className="mt-3 text-doodle-ink/70 italic">
-                {product.subtitle}
-              </p>
-            )}
-            {product.description && (
-              <p className="mt-5 text-base leading-relaxed text-doodle-ink/75 max-w-md">
-                {product.description}
-              </p>
-            )}
-
-            <div className="mt-10">
-              <VariantPicker product={product} />
+              {hero && (
+                <div className="relative mt-5 aspect-[4/5] overflow-hidden rounded-[1rem] bg-doodle-stitch shadow-card">
+                  <Image
+                    src={hero}
+                    alt={product.title ?? ""}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+              )}
             </div>
 
-            <div className="mt-10 space-y-2 font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/40">
-              <div>Country of Origin: {countryOfOrigin}</div>
-              <div>Free shipping on orders above ₹999</div>
+            {/* INFO COLUMN — clean composition. One orange accent lives in the
+                add-to-cart (VariantPicker → PillButton). */}
+            <div className="lg:pt-2">
+              <Eyebrow variant="rule" accent="orange">First drop</Eyebrow>
+              <h1 className="mt-5 font-display text-[clamp(2rem,4vw,3rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
+                {product.title}
+              </h1>
+              {product.subtitle && (
+                <p className="mt-3 font-display text-xl italic text-doodle-ink/65">
+                  {product.subtitle}
+                </p>
+              )}
+              {product.description && (
+                <p className="mt-5 max-w-md text-base leading-relaxed text-doodle-ink/75">
+                  {product.description}
+                </p>
+              )}
+
+              <div className="mt-10">
+                <VariantPicker product={product} />
+              </div>
+
+              {/* Origin / shipping — clean sans rows on a soft card, not mono.
+                  Country of origin satisfies the E-Commerce Rules 2020 mandate. */}
+              <dl className="mt-10 divide-y divide-doodle-ink/10 rounded-[1rem] bg-doodle-canvas px-5 shadow-subtle">
+                <div className="flex items-center justify-between py-3.5 text-sm">
+                  <dt className="text-doodle-ink/60">Country of origin</dt>
+                  <dd className="font-medium text-doodle-ink">{countryOfOrigin}</dd>
+                </div>
+                <div className="flex items-center justify-between py-3.5 text-sm">
+                  <dt className="text-doodle-ink/60">Shipping</dt>
+                  <dd className="font-medium text-doodle-ink">Free over ₹999</dd>
+                </div>
+              </dl>
             </div>
           </div>
         </section>

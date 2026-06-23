@@ -11,10 +11,14 @@ import {
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { PatchShape, type PatchKey } from "@/components/ui/PatchShape";
 import { howItWorks as content } from "@/content/home";
 
 // Icons are structural (not copy); label/title/body come from content.steps
 const STEP_ICONS = [TShirt, Stack, Sparkle] as const;
+
+// One signature patch per step — the tactile object the step is about.
+const STEP_PATCH: readonly PatchKey[] = ["star", "lightning", "heart"];
 
 const STEPS = content.steps.map((s, i) => ({
   Icon: STEP_ICONS[i],
@@ -24,17 +28,19 @@ const STEPS = content.steps.map((s, i) => ({
   body: s.body,
 }));
 
+// Tinted soft tiles (no dashed rings). Icon takes the colour; the tile is a
+// quiet tint of it; the step number sits on a soft colour chip.
 const TILE = {
-  blue: { ring: "border-doodle-blue", chip: "bg-doodle-blue", icon: "text-doodle-blue" },
-  yellow: { ring: "border-doodle-yellow", chip: "bg-doodle-yellow", icon: "text-doodle-yellow" },
-  pink: { ring: "border-doodle-pink", chip: "bg-doodle-pink", icon: "text-doodle-pink" },
+  blue: { tile: "bg-doodle-blue/10", icon: "text-doodle-blue", chip: "bg-doodle-blue" },
+  yellow: { tile: "bg-doodle-yellow/15", icon: "text-doodle-yellow", chip: "bg-doodle-yellow" },
+  pink: { tile: "bg-doodle-pink/12", icon: "text-doodle-pink", chip: "bg-doodle-pink" },
 } as const;
 
 export function HowItWorks() {
   return (
     <section
       id="how"
-      className="relative border-b-2 border-dashed border-doodle-ink/15 py-24 md:py-32 bg-doodle-canvas"
+      className="relative overflow-hidden py-20 md:py-24 bg-doodle-canvas"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
@@ -52,22 +58,44 @@ export function HowItWorks() {
             </h2>
           </div>
           <p className="md:col-span-5 text-base text-doodle-ink/70 leading-relaxed">
-            {/* [PLACEHOLDER] supporting copy */}
             {content.body}
           </p>
         </div>
 
-        <ol className="mt-14 grid gap-6 md:grid-cols-3 relative">
-          {/* Connector arrows on desktop */}
+        <ol className="mt-12 grid gap-6 md:grid-cols-3 relative">
+          {/* Connector — a calm solid hairline, not a dashed rule */}
           <div
             aria-hidden
-            className="hidden md:block absolute top-[140px] left-[33%] right-[33%] h-1 border-t-[3px] border-dashed border-doodle-ink/20"
+            className="hidden md:block absolute top-[88px] left-[33%] right-[33%] h-px bg-doodle-ink/12"
           />
 
           {STEPS.map((step, i) => (
             <Step key={step.label} step={step} index={i} />
           ))}
         </ol>
+
+        {/* Closing patch line — fills the space below the steps with the actual
+            tactile objects the steps are about. A row of silicone patches on a
+            soft cream rail, one orange "200+ patches" cap. */}
+        <div className="mt-14 flex flex-col items-center gap-5 rounded-[1rem] bg-doodle-stitch px-6 py-7 shadow-card sm:flex-row sm:justify-between sm:gap-8 sm:px-9">
+          <div className="flex shrink-0 items-center">
+            {(["star", "lightning", "heart", "rocket", "moon", "sun"] as PatchKey[]).map(
+              (p, i) => (
+                <span
+                  key={p}
+                  className="-ml-3 inline-grid h-12 w-12 place-items-center rounded-full bg-doodle-canvas shadow-subtle ring-2 ring-doodle-stitch first:ml-0"
+                  style={{ zIndex: 10 - i }}
+                >
+                  <PatchShape patch={p} size={34} />
+                </span>
+              ),
+            )}
+          </div>
+          <p className="text-center font-display text-lg leading-snug text-doodle-ink sm:text-right">
+            Snap on any patch from the library.{" "}
+            <span className="italic text-doodle-orange">200+ and growing.</span>
+          </p>
+        </div>
       </div>
     </section>
   );
@@ -83,6 +111,7 @@ function Step({
   const ref = React.useRef<HTMLLIElement | null>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const t = TILE[step.color];
+  const patch = STEP_PATCH[index];
 
   return (
     <motion.li
@@ -97,22 +126,29 @@ function Step({
       }}
       className="relative flex flex-col items-center text-center"
     >
-      {/* Big number outline — magnetic to cursor for tactile playfulness */}
-      <MagneticHover strength={0.18}>
+      {/* Soft tinted tile — magnetic to cursor for tactile playfulness.
+          Replaces the dashed-ring circle: borderless, soft-shadow, ≤16px. */}
+      <MagneticHover strength={0.16}>
         <div
           aria-hidden
           className={`
-            relative grid place-items-center h-44 w-44 rounded-full
-            bg-doodle-canvas border-[3px] border-dashed ${t.ring}
+            relative grid h-40 w-40 place-items-center rounded-[1rem]
+            ${t.tile} shadow-card
           `}
         >
-          <step.Icon weight="duotone" size={64} className={t.icon} />
+          <step.Icon weight="duotone" size={52} className={t.icon} />
 
+          {/* Signature patch peeking off the tile — the tactile object itself */}
+          <span className="absolute -bottom-3 left-1/2 inline-grid h-14 w-14 -translate-x-1/2 rotate-[-6deg] place-items-center rounded-full bg-doodle-stitch shadow-card ring-2 ring-doodle-canvas">
+            <PatchShape patch={patch} size={40} />
+          </span>
+
+          {/* Step number — solid colour chip, clean sans, no dashed border */}
           <span
             className={`
-              absolute -top-3 -right-2 ${t.chip} text-doodle-stitch
-              rounded-full h-9 w-9 grid place-items-center
-              font-mono text-xs border-2 border-dashed border-doodle-stitch
+              absolute -right-2 -top-2 grid h-9 w-9 place-items-center
+              rounded-full ${t.chip} text-sm font-semibold text-doodle-stitch
+              shadow-subtle ring-4 ring-doodle-canvas
             `}
           >
             {String(index + 1).padStart(2, "0")}
@@ -120,7 +156,7 @@ function Step({
         </div>
       </MagneticHover>
 
-      <Eyebrow variant="mono" className="mt-6">
+      <Eyebrow variant="rule" accent="ink" className="mt-10">
         {step.label}
       </Eyebrow>
       <h3 className="mt-2 font-display text-2xl text-doodle-ink leading-tight tracking-[-0.01em]">

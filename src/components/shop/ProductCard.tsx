@@ -3,6 +3,9 @@ import Image from "next/image"
 import type { Product } from "@/lib/medusa/types"
 import { formatINR } from "@/lib/medusa/types"
 
+// Premium-for-kids (Wave 2): soft in-plane shadow card instead of a dashed
+// border on everything. Clean white image frame (no dashed). ONE orange accent
+// = the price. Sans title. Hover = shadow deepen + gentle lift (no border swap).
 export function ProductCard({ product }: { product: Product }) {
   const thumbnail =
     product.thumbnail ?? product.images?.[0]?.url ?? null
@@ -17,9 +20,10 @@ export function ProductCard({ product }: { product: Product }) {
     <Link
       href={`/shop/${product.handle}`}
       className="
-        group block rounded-lg bg-doodle-canvas overflow-hidden
-        border-2 border-dashed border-doodle-ink/20
-        hover:border-doodle-ink/45 hover:scale-[1.015] active:scale-[0.97] transition-all
+        group block rounded-lg bg-card overflow-hidden
+        shadow-card hover:shadow-card-hover
+        hover:-translate-y-0.5 active:translate-y-0
+        transition-[box-shadow,transform] duration-200
       "
     >
       <div className="relative aspect-[4/5] bg-doodle-stitch overflow-hidden">
@@ -29,11 +33,11 @@ export function ProductCard({ product }: { product: Product }) {
             alt={product.title ?? ""}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-cover transition-transform group-hover:scale-105"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="grid place-items-center h-full">
-            <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-doodle-ink/40">
+            <span className="font-sans text-xs text-doodle-ink/40">
               No image
             </span>
           </div>
@@ -43,7 +47,7 @@ export function ProductCard({ product }: { product: Product }) {
         <h3 className="font-display text-xl text-doodle-ink leading-tight tracking-[-0.01em]">
           {product.title}
         </h3>
-        <p className="mt-2 font-mono text-sm text-doodle-ink/70">
+        <p className="mt-2 font-sans text-base font-semibold text-doodle-orange">
           {cheapest != null ? formatINR(cheapest) : ""}
         </p>
       </div>

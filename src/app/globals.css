@@ -84,6 +84,21 @@
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
+  /* Soft in-plane shadows — Dialog-discipline craft, tuned warm.
+     Low-opacity INK (not harsh black) so cards lift off cream without
+     reading as adult-minimal grey-UI. Replaces the dashed-2px-border-on-
+     everything pattern. Hover deepens to --shadow-card-hover.
+     Two stacked layers each: tight contact + soft ambient. */
+  --shadow-subtle:
+    0 1px 2px rgba(26, 26, 26, 0.04),
+    0 1px 3px rgba(26, 26, 26, 0.06);
+  --shadow-card:
+    0 2px 4px rgba(26, 26, 26, 0.05),
+    0 6px 16px -4px rgba(26, 26, 26, 0.10);
+  --shadow-card-hover:
+    0 4px 8px rgba(26, 26, 26, 0.06),
+    0 12px 28px -6px rgba(26, 26, 26, 0.16);
+
   /* Radius scale — DOODLE leans large + organic */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);

@@ -96,10 +96,11 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
             href="/shop"
             className="
               inline-flex items-center justify-center
-              h-9 px-4 rounded-full gap-2
+              h-9 px-5 rounded-full gap-2
               bg-doodle-orange text-doodle-stitch font-medium text-sm
-              border-2 border-dashed border-doodle-stitch
-              hover:scale-[1.02] active:scale-[0.97] transition-transform
+              shadow-card hover:bg-doodle-orange/95 hover:shadow-card-hover
+              hover:-translate-y-0.5 active:scale-[0.97]
+              transition-[box-shadow,background-color,transform] duration-200
               focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40
             "
           >

@@ -11,13 +11,14 @@ import {
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { MagneticHover } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { PatchShape, type PatchKey } from "@/components/ui/PatchShape";
 import { dualCTA as content } from "@/content/home";
 
 export function DualCTA() {
   return (
     <section
       id="dual-cta"
-      className="relative border-b-2 border-dashed border-doodle-ink/15 py-24 md:py-32"
+      className="relative border-b border-doodle-ink/10 py-16 md:py-24"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-6 lg:grid-cols-2">
@@ -41,7 +42,7 @@ function ConsumerCard() {
       transition={{ type: "spring", stiffness: 220, damping: 24 }}
       className="
         relative isolate overflow-hidden rounded-[1rem] bg-doodle-blue
-        p-8 sm:p-10 lg:p-12 stitch-thick
+        p-8 sm:p-10 lg:p-12 shadow-card
         flex flex-col gap-7 min-h-[460px]
       "
     >
@@ -50,7 +51,7 @@ function ConsumerCard() {
       <div className="relative z-10">
         <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
           <Sparkle weight="fill" size={10} />
-          <Eyebrow variant="mono" tone="stitch">{content.consumer.badge}</Eyebrow>
+          <Eyebrow variant="rule" tone="stitch">{content.consumer.badge}</Eyebrow>
         </span>
       </div>
 
@@ -62,10 +63,12 @@ function ConsumerCard() {
           </span>
         </h2>
         <p className="mt-4 text-sm sm:text-base text-doodle-stitch/85 max-w-md">
-          {/* [PLACEHOLDER] supporting copy */}
           {content.consumer.body}
         </p>
       </div>
+
+      {/* Patch cluster fills the gap between copy and the form */}
+      <PatchCluster patches={["rocket", "heart", "star", "lightning"]} />
 
       <div className="relative z-10 mt-auto">
         <WaitlistForm accent="orange" surface="tile" />
@@ -87,7 +90,7 @@ function StockistCard() {
       transition={{ type: "spring", stiffness: 220, damping: 24, delay: 0.08 }}
       className="
         relative isolate overflow-hidden rounded-[1rem] bg-doodle-purple
-        p-8 sm:p-10 lg:p-12 stitch-thick
+        p-8 sm:p-10 lg:p-12 shadow-card
         flex flex-col gap-7 min-h-[460px]
       "
     >
@@ -96,9 +99,9 @@ function StockistCard() {
       <div className="relative z-10 flex items-center gap-3">
         <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
           <Storefront weight="fill" size={10} />
-          <Eyebrow variant="mono" tone="stitch">{content.stockist.badge}</Eyebrow>
+          <Eyebrow variant="rule" tone="stitch">{content.stockist.badge}</Eyebrow>
         </span>
-        <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-doodle-stitch/65">
+        <span className="text-[11px] font-medium text-doodle-stitch/65">
           {content.stockist.badgeNote}
         </span>
       </div>
@@ -111,10 +114,12 @@ function StockistCard() {
           </span>
         </h2>
         <p className="mt-4 text-sm sm:text-base text-doodle-stitch/85 max-w-md">
-          {/* [PLACEHOLDER] supporting copy */}
           {content.stockist.body}
         </p>
       </div>
+
+      {/* Patch cluster fills the gap between copy and the CTA row */}
+      <PatchCluster patches={["diamond", "flower", "moon", "burst"]} />
 
       <div className="relative z-10 mt-auto flex flex-wrap items-center gap-3">
         <a
@@ -122,8 +127,8 @@ function StockistCard() {
           className="
             inline-flex items-center gap-3 h-12 px-6 rounded-full
             bg-doodle-stitch text-doodle-purple font-medium text-sm
-            border-2 border-dashed border-doodle-stitch
-            hover:scale-[1.02] active:scale-[0.97] transition-transform
+            shadow-card hover:shadow-card-hover hover:-translate-y-0.5 active:scale-[0.97]
+            transition-[box-shadow,transform] duration-200
             focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-stitch/40
           "
         >
@@ -131,12 +136,30 @@ function StockistCard() {
           <span>{content.stockist.ctaLabel}</span>
           <ArrowRight weight="bold" size={14} />
         </a>
-        <span className="text-xs font-mono uppercase tracking-[0.2em] text-doodle-stitch/65">
+        <span className="text-xs font-medium text-doodle-stitch/65">
           {content.stockist.emailNote}
         </span>
       </div>
     </motion.div>
     </MagneticHover>
+  );
+}
+
+/* A row of real silicone-charm patches on a soft white tray —
+   fills the previously-empty mid-card space with on-brand product. */
+function PatchCluster({ patches }: { patches: PatchKey[] }) {
+  return (
+    <div className="relative z-10 flex w-fit items-center gap-1 rounded-full bg-doodle-stitch/15 px-3 py-2 backdrop-blur-sm">
+      {patches.map((key, i) => (
+        <span
+          key={key}
+          className="-ml-2 inline-block first:ml-0 drop-shadow-[0_3px_6px_rgba(26,26,26,0.18)]"
+          style={{ transform: `rotate(${(i % 2 === 0 ? -1 : 1) * (4 + i)}deg)` }}
+        >
+          <PatchShape patch={key} size={40} />
+        </span>
+      ))}
+    </div>
   );
 }
 
@@ -147,7 +170,7 @@ function DecorScene({ tone }: { tone: "blue" | "purple" }) {
       {/* Big circle */}
       <div
         aria-hidden
-        className="absolute -top-12 -right-12 h-44 w-44 rounded-full border-[3px] border-dashed border-doodle-stitch/40"
+        className="absolute -top-12 -right-12 h-44 w-44 rounded-full border-2 border-doodle-stitch/25"
       />
       {/* Squiggle */}
       <svg
