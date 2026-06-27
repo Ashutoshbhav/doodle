@@ -17,6 +17,7 @@ import { ScrollReveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { PatchShape, type PatchKey } from "@/components/ui/PatchShape";
 import { patchMath as content } from "@/content/home";
+import { PATCH_COUNT, TEE_COUNT } from "@/lib/patches";
 
 type Stat = {
   value: string;
@@ -25,7 +26,15 @@ type Stat = {
   tone?: "ink" | "blue" | "red" | "purple" | "pink";
 };
 
-const STATS: readonly Stat[] = content.stats;
+// Patch + colour counts come straight from the registry so the maths can
+// never drift from what's actually in the catalogue (no-assumptions).
+const STATS: readonly Stat[] = content.stats.map((s) =>
+  s.label === "patches"
+    ? { ...s, value: String(PATCH_COUNT) }
+    : s.label === "base colours"
+      ? { ...s, value: String(TEE_COUNT) }
+      : s,
+);
 
 const TONE_CLASS: Record<NonNullable<Stat["tone"]>, string> = {
   ink: "text-doodle-ink",

@@ -4,7 +4,7 @@ import {
   Lightning,
   ArrowUpRight,
 } from "@phosphor-icons/react/dist/ssr";
-import { PatchScrubber } from "@/components/ui/PatchScrubber";
+import { HeroTee } from "@/components/sections/HeroTee";
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -160,7 +160,7 @@ export function Hero() {
 
             {/* Frame — soft card shadow, NOT dashed stitch border */}
             <div className="relative rounded-[1rem] bg-doodle-stitch p-5 shadow-card-hover sm:p-6">
-              <PatchScrubber />
+              <HeroTee />
 
               {/* Floating product chip — soft shadow, no dashed */}
               <span className="absolute -right-3 -top-3 inline-flex rotate-[5deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3 py-1.5 text-xs font-semibold text-doodle-stitch shadow-card">

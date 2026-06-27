@@ -1,32 +1,20 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion } from "motion/react";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { PatchShape, PATCH_KEYS, type PatchKey } from "@/components/ui/PatchShape";
+import { PATCHES, EMBROIDERED_PATCHES, PATCH_COUNT, type Patch } from "@/lib/patches";
 import { patchWall as content } from "@/content/home";
 
 /* ============================================================
-   PatchWall — the real patch wall.
-
-   Was: a heading + 24 Phosphor-icon tiles + a literal
-   placeholder caption + a large cream void from
-   py-24/py-32. Now: the actual silicone-charm patches rendered
-   from the shared PatchShape SVGs, scattered-sticker style, with
-   the empty area filled by the wall itself. No placeholder caption.
-   Padding tightened (py-16/py-24) so no dead space.
+   PatchWall — the real patch library, two collections:
+   the silicone charms (hero set, matches the velcro product)
+   and the embroidered iron-on patches. All real, transparent,
+   AI-upscaled images. Large + named. No placeholders.
    ============================================================ */
-
-// Map each content patch to a real PatchShape key, cycling the
-// 16 shapes so all 24 tiles read as distinct silicone charms.
-const PATCHES: { key: PatchKey; name: string }[] = content.patches.map(
-  (p, i) => ({
-    key: PATCH_KEYS[i % PATCH_KEYS.length],
-    name: p.name,
-  }),
-);
 
 export function PatchWall() {
   return (
@@ -38,7 +26,7 @@ export function PatchWall() {
               {content.eyebrow}
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              <span className="italic text-doodle-orange">{content.headlineCount}</span> {content.headlineMid}{" "}
+              <span className="italic text-doodle-orange">{PATCH_COUNT}</span> {content.headlineMid}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
                 {content.headlineHighlight}
               </RoughHighlight>{" "}
@@ -60,27 +48,55 @@ export function PatchWall() {
           </div>
         </div>
 
-        {/* The wall — real silicone-charm patches on a soft cream tray */}
-        <div className="mt-10 rounded-[1rem] bg-doodle-stitch p-5 shadow-card sm:p-7 md:mt-12">
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-6 md:gap-4">
-            {PATCHES.map((patch, i) => (
-              <PatchTile key={patch.name + i} patch={patch} index={i} />
-            ))}
-          </div>
-        </div>
+        <CollectionTray
+          label="Silicone charms"
+          note="Soft 3D rubber. Our signature velcro patch."
+          patches={PATCHES}
+          cols="grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
+          className="mt-10 md:mt-12"
+        />
+
+        <CollectionTray
+          label="Embroidered patches"
+          note="Stitched fabric, same velcro snap. A whole new lineup."
+          patches={EMBROIDERED_PATCHES}
+          cols="grid-cols-3 sm:grid-cols-4 md:grid-cols-6"
+          className="mt-6"
+        />
       </div>
     </section>
   );
 }
 
-function PatchTile({
-  patch,
-  index,
+function CollectionTray({
+  label,
+  note,
+  patches,
+  cols,
+  className = "",
 }: {
-  patch: { key: PatchKey; name: string };
-  index: number;
+  label: string;
+  note: string;
+  patches: Patch[];
+  cols: string;
+  className?: string;
 }) {
-  // Slight randomised tilt for a "scattered stickers" feel
+  return (
+    <div className={`rounded-[1rem] bg-doodle-stitch p-5 shadow-card sm:p-7 ${className}`}>
+      <div className="mb-5 flex items-baseline justify-between gap-3">
+        <h3 className="font-display text-lg text-doodle-ink sm:text-xl">{label}</h3>
+        <span className="text-xs italic text-doodle-ink/55 sm:text-sm">{note}</span>
+      </div>
+      <div className={`grid gap-4 md:gap-6 ${cols}`}>
+        {patches.map((patch, i) => (
+          <PatchTile key={patch.key} patch={patch} index={i} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PatchTile({ patch, index }: { patch: Patch; index: number }) {
   const baseTilt = ((index * 13) % 7) - 3;
   return (
     <motion.button
@@ -89,12 +105,8 @@ function PatchTile({
       initial={{ opacity: 0, scale: 0.85, rotate: 0 }}
       whileInView={{ opacity: 1, scale: 1, rotate: baseTilt }}
       viewport={{ once: true, margin: "-50px" }}
-      whileHover={{
-        y: -6,
-        rotate: baseTilt + (baseTilt > 0 ? 4 : -4),
-        scale: 1.05,
-      }}
-      whileTap={{ scale: 0.96 }}
+      whileHover={{ y: -6, rotate: 0, scale: 1.04 }}
+      whileTap={{ scale: 0.97 }}
       transition={{
         type: "spring",
         stiffness: 280,
@@ -102,29 +114,33 @@ function PatchTile({
         delay: (index % 12) * 0.03,
       }}
       className="
-        group relative grid aspect-square cursor-pointer place-items-center
-        rounded-[0.85rem] bg-doodle-canvas
+        group flex cursor-pointer flex-col items-center gap-2.5
+        rounded-[0.9rem] bg-doodle-canvas p-3 sm:p-4
         shadow-subtle transition-shadow hover:shadow-card
-        focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-ink/30
+        focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-ink/20
       "
     >
-      <span className="block h-3/5 w-3/5">
-        <ResponsivePatch patch={patch.key} />
+      <span className="grid aspect-square w-full place-items-center">
+        <Image
+          src={patch.src}
+          alt={patch.name}
+          width={220}
+          height={220}
+          className="
+            h-[90%] w-[90%] object-contain
+            drop-shadow-[0_8px_14px_rgba(42,42,46,0.20)]
+            transition-transform duration-200 group-hover:scale-105
+          "
+        />
       </span>
-      {/* Patch name overlay on hover — clean sans, not mono */}
-      <span className="absolute inset-x-0 bottom-2 text-center text-[11px] font-semibold text-doodle-ink/0 transition-colors group-hover:text-doodle-ink">
-        {patch.name}
+      <span className="text-center">
+        <span className="block text-[12px] font-semibold tracking-[-0.01em] text-doodle-ink/85 sm:text-[13px]">
+          {patch.name}
+        </span>
+        <span className="mt-0.5 block text-[10px] italic leading-tight text-doodle-ink/45 sm:text-[11px]">
+          {patch.bio}
+        </span>
       </span>
     </motion.button>
-  );
-}
-
-/* PatchShape takes a fixed pixel size; wrap it so it scales to the
-   tile via a full-bleed inline SVG sizing trick. */
-function ResponsivePatch({ patch }: { patch: PatchKey }) {
-  return (
-    <span className="grid h-full w-full place-items-center [&>svg]:h-full [&>svg]:w-full">
-      <PatchShape patch={patch} size={100} />
-    </span>
   );
 }

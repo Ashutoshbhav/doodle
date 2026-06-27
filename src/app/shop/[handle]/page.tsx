@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
@@ -8,6 +7,9 @@ import { PatchScrubber } from "@/components/ui/PatchScrubber"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { Eyebrow } from "@/components/ui/Eyebrow"
+import { BuildYourTee } from "@/components/sections/BuildYourTee"
+import { ProductDetails } from "@/components/shop/ProductDetails"
+import { PatchWall } from "@/components/sections/PatchWall"
 import type { Product } from "@/lib/medusa/types"
 
 export const dynamic = "force-dynamic"
@@ -55,7 +57,22 @@ export default async function PDPPage({
 }) {
   const { handle } = await params
   const product = await fetchProduct(handle)
-  if (!product) notFound()
+
+  // Commerce is deferred (no Medusa backend yet) → render the real, viewable
+  // static Starter Kit PDP instead of a 404, built from the live pieces.
+  if (!product) {
+    return (
+      <>
+        <NavWithCart />
+        <main className="bg-[color:var(--color-surface-blush)]">
+          <BuildYourTee />
+          <ProductDetails />
+          <PatchWall />
+        </main>
+        <Footer />
+      </>
+    )
+  }
 
   const hero = product.images?.[0]?.url ?? product.thumbnail ?? null
 

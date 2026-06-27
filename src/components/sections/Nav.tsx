@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
+import { User } from "@phosphor-icons/react/dist/ssr";
 import { CartButton } from "@/components/shop/CartButton";
 
 const NAV_LINKS = [
@@ -34,29 +35,34 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
         aria-label="Primary"
         className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-6 md:px-10"
       >
+        {/* Real DOODLE wordmark — the 3D lettering lifted from the official
+            2026 catalogue cover (transparent PNG). */}
         <Link
           href="/"
           aria-label="DOODLE — home"
-          className="relative flex items-center gap-2"
+          className="relative flex items-center"
         >
           <Image
-            src="/brand/wordmark-logo.jpeg"
+            src="/brand/logo.png"
             alt="DOODLE"
-            width={160}
-            height={48}
+            width={150}
+            height={56}
             priority
-            className="h-10 w-auto md:h-12 object-contain mix-blend-multiply"
+            unoptimized
+            className="h-9 w-auto md:h-11 object-contain"
           />
         </Link>
 
-        <ul className="hidden lg:flex items-center gap-1">
+        <ul className="hidden lg:flex items-center gap-0.5">
           {NAV_LINKS.map(({ href, label }) => (
             <li key={href}>
               <Link
                 href={href}
                 className="
-                  relative inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-doodle-ink/75
-                  transition-colors hover:text-doodle-ink
+                  relative inline-flex items-center rounded-full px-3.5 py-2
+                  font-sans text-[0.9375rem] font-medium tracking-[-0.005em] text-doodle-ink/70
+                  transition-[color,background-color] duration-200
+                  hover:text-doodle-ink hover:bg-doodle-ink/[0.05]
                   focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30
                 "
               >
@@ -71,25 +77,13 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
             href="/account"
             aria-label="Your account"
             className="
-              inline-flex h-9 w-9 items-center justify-center rounded-full
-              text-doodle-ink/70 transition-colors hover:text-doodle-ink
+              grid place-items-center h-11 w-11 rounded-full
+              text-doodle-ink/80 transition-[color,background-color] duration-200
+              hover:text-doodle-ink hover:bg-doodle-ink/5
               focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30
             "
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden
-            >
-              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
+            <User weight="duotone" size={22} aria-hidden />
           </Link>
           <CartButton count={cartCount} />
           <Link

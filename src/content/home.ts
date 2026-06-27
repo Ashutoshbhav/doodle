@@ -29,17 +29,17 @@ export const hero = {
   body: "A t-shirt with velcro panels and a growing universe of patches your child swaps whenever they feel like it. One tee. Infinite personalities.",
   // Microproof row beneath the form
   microproof: {
-    baseColours: "2 base colours",
+    baseColours: "6 base colours",
     sizes: "Sizes 3–6 yrs",
     price: "From ₹370",
   },
   // Right product stage
-  tryIt: "try it ↓",
-  liveDemo: "Live demo",
+  tryIt: "build yours ↓",
+  liveDemo: "The real thing",
   realProduct: "Real product",
   // Patch lanes strip
   patchLanesEyebrow: "Patch lanes",
-  seeAll: "See all 200+",
+  seeAll: "See the library",
   patchLanes: [
     { label: "Originals", color: "bg-doodle-pink text-doodle-stitch" },
     { label: "Animals", color: "bg-doodle-blue text-doodle-stitch" },
@@ -138,7 +138,7 @@ export const patchWall = {
   headlineHighlight: "Endless",
   headlineEnd: "looks.",
   body: "Letters, planets, mood blobs, monograms — the catalogue grows every drop. Mix four on a tee and never repeat an outfit.",
-  seeAll: "See all 200+",
+  seeAll: "See the library",
   // Patch tiles — `name` is the label shown on hover
   patches: [
     { iconName: "Rocket", color: "orange", name: "Launchpad" },
