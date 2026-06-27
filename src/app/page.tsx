@@ -19,6 +19,7 @@ import { TrustStrip } from "@/components/sections/TrustStrip";
 import { BuildYourTee } from "@/components/sections/BuildYourTee";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PatchWall } from "@/components/sections/PatchWall";
+import { PacksShowcase } from "@/components/sections/PacksShowcase";
 import { PatchMath } from "@/components/sections/PatchMath";
 import { Promise as PromiseSection } from "@/components/sections/Promise";
 import { EarlyVoices } from "@/components/sections/EarlyVoices";
@@ -38,6 +39,7 @@ export default function Home() {
         <BuildYourTee />
         <HowItWorks />
         <PatchWall />
+        <PacksShowcase />
         <PatchMath />
         <PromiseSection />
         <EarlyVoices />

@@ -145,3 +145,55 @@ export const TEE_COUNT = TEES.length;
 
 export const patchByKey = (key: string): Patch =>
   [...PATCHES, ...EMBROIDERED_PATCHES].find((p) => p.key === key) ?? PATCHES[0];
+
+/* ------------------------------------------------------------
+   Patch packs — sold separately, six at a time.
+   • Embroidered = fixed themed packs (the catalogue sheets).
+   • Silicone   = "Mix Your Six", build your own from the charms.
+   NOTE: "player-one" currently has 5 (its 6th was an IP-infringing
+   patch we excluded) — add an original 6th before selling as a 6-pack.
+   ------------------------------------------------------------ */
+export type Pack = {
+  key: string;
+  name: string;
+  tagline: string;
+  collection: "embroidered" | "silicone";
+  mix?: boolean; // build-your-own from the collection
+  patchKeys: string[];
+  price: number; // ₹  (confirm pack price with Ash)
+};
+
+export const PACKS: Pack[] = [
+  {
+    key: "cosmic-crew", name: "Cosmic Crew", tagline: "Six little space explorers",
+    collection: "embroidered", price: 250,
+    patchKeys: ["cosmo-frog", "spaced-out", "major-meow", "space-jam", "rocket-pup", "cosmo-koala"],
+  },
+  {
+    key: "beach-club", name: "Beach Club", tagline: "Sun, surf and six goofs",
+    collection: "embroidered", price: 250,
+    patchKeys: ["skater-koala", "beach-crab", "pool-party", "surfs-up", "chill-bunny", "snorkel-fox"],
+  },
+  {
+    key: "player-one", name: "Player One", tagline: "The game-room crew",
+    collection: "embroidered", price: 250,
+    patchKeys: ["game-on", "sir-brave", "catnap", "sneaky-ninja", "dj-whiskers"],
+  },
+  {
+    key: "magic-makers", name: "Magic Makers", tagline: "Six unicorns, infinite sparkle",
+    collection: "embroidered", price: 250,
+    patchKeys: ["groovy-unicorn", "magic-pop", "lovecorn", "rainbow-mane", "blaze-mane", "sleepy-unicorn"],
+  },
+  {
+    key: "pit-crew", name: "Pit Crew", tagline: "Six pint-sized racers",
+    collection: "embroidered", price: 250,
+    patchKeys: ["lil-roadster", "rally-racer", "trail-boss", "midnight-cruiser", "hot-rod", "speedy"],
+  },
+  {
+    key: "mix-your-six", name: "Mix Your Six", tagline: "Any six silicone charms, your call",
+    collection: "silicone", price: 250, mix: true, patchKeys: [],
+  },
+];
+
+export const packPatches = (pack: Pack): Patch[] =>
+  pack.mix ? PATCHES.slice(0, 6) : pack.patchKeys.map(patchByKey);
