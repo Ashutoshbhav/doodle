@@ -75,34 +75,67 @@ export const EMBROIDERED_PATCHES: Patch[] = [
    Tee colourways — the 6 catalogue base colours (upscaled images).
    `swatch` is the dot shown in the colour picker.
    ------------------------------------------------------------ */
-// `py` = vertical centre (% of the square stage) of that tee's velcro panel.
-// Tuned per image because the catalogue crops differ. Patches land here.
-export type Tee = { key: string; name: string; src: string; swatch: string; py: number };
+// `panel` = the velcro receiving area of that tee, as a rectangle in % of the
+// square stage. Measured per image because the catalogue mockups differ a lot
+// (coral is a thin band, purple is a big tall panel). Patches scatter INSIDE it.
+export type TeePanel = { x0: number; x1: number; y0: number; y1: number };
+export type Tee = { key: string; name: string; src: string; swatch: string; panel: TeePanel };
 
 export const TEES: Tee[] = [
-  { key: "pink", name: "Bubblegum Pink", src: "/product/tee-pink.png", swatch: "#F4A7B9", py: 32 },
-  { key: "sky", name: "Powder Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", py: 35 },
-  { key: "coral", name: "Coral", src: "/product/tee-coral.png", swatch: "#E8836B", py: 31 },
-  { key: "purple", name: "Lavender", src: "/product/tee-purple.png", swatch: "#B79CE8", py: 33 },
-  { key: "yellow", name: "Mustard", src: "/product/tee-yellow.png", swatch: "#E6B800", py: 35 },
-  { key: "charcoal", name: "Charcoal", src: "/product/tee-charcoal.png", swatch: "#3A3A3A", py: 33 },
+  { key: "pink", name: "Bubblegum Pink", src: "/product/tee-pink.png", swatch: "#F4A7B9", panel: { x0: 26, x1: 74, y0: 27, y1: 38 } },
+  { key: "sky", name: "Powder Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", panel: { x0: 30, x1: 70, y0: 30, y1: 42 } },
+  { key: "coral", name: "Coral", src: "/product/tee-coral.png", swatch: "#E8836B", panel: { x0: 25, x1: 75, y0: 25, y1: 38 } },
+  { key: "purple", name: "Lavender", src: "/product/tee-purple.png", swatch: "#B79CE8", panel: { x0: 22, x1: 78, y0: 28, y1: 50 } },
+  { key: "yellow", name: "Mustard", src: "/product/tee-yellow.png", swatch: "#E6B800", panel: { x0: 28, x1: 74, y0: 31, y1: 43 } },
+  { key: "charcoal", name: "Charcoal", src: "/product/tee-charcoal.png", swatch: "#3A3A3A", panel: { x0: 22, x1: 80, y0: 26, y1: 34 } },
 ];
 
-/* Velcro-panel patch placement: a centred row inside the panel band. Patch
-   size is kept below the per-slot width so patches NEVER overlap, and capped
-   so they fit within the panel height. */
-export const VELCRO = { x0: 27, x1: 73 };
-export function velcroSlots(n: number, py: number) {
-  if (n <= 0) return [] as { x: number; y: number; size: number; rot: number }[];
-  const span = VELCRO.x1 - VELCRO.x0;
-  const slotW = span / n;
-  const size = Math.min(slotW * 0.78, 8);
-  return Array.from({ length: n }, (_, i) => ({
-    x: VELCRO.x0 + slotW * (i + 0.5),
-    y: py + (i % 2 ? -0.6 : 0.6),
-    size,
-    rot: ((i * 37) % 9) - 4,
-  }));
+/* Seeded RNG so each colour gets its own stable scatter (positions change as
+   you switch colours = the ever-changing look) without overlap. */
+function hashStr(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+function makeRng(seed: number) {
+  let s = seed >>> 0;
+  return () => {
+    s = (Math.imul(s, 1664525) + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
+
+/* Scatter `n` patches INSIDE the panel rectangle: a grid sized to the panel's
+   aspect (so big panels get bigger patches, multiple rows), each patch jittered
+   within its own cell so they never overlap, and the whole arrangement keyed to
+   `seed` (the tee colour) so it re-shuffles per colour. */
+export type Slot = { x: number; y: number; size: number; rot: number };
+export function velcroSlots(n: number, panel: TeePanel, seed: string): Slot[] {
+  if (n <= 0) return [];
+  const W = panel.x1 - panel.x0;
+  const H = panel.y1 - panel.y0;
+  const rows = Math.max(1, Math.min(n, Math.round(Math.sqrt((n * H) / W))));
+  const cols = Math.ceil(n / rows);
+  const cellW = W / cols;
+  const cellH = H / rows;
+  const size = Math.max(4, Math.min(cellW, cellH) * 0.82);
+  const rand = makeRng(hashStr(seed) + n * 7919);
+  const out: Slot[] = [];
+  for (let i = 0; i < n; i++) {
+    const r = Math.floor(i / cols);
+    const itemsInRow = r === rows - 1 ? n - cols * (rows - 1) : cols;
+    const c = i - r * cols;
+    const rowStart = panel.x0 + (W - itemsInRow * cellW) / 2; // centre the row
+    const cx = rowStart + cellW * (c + 0.5);
+    const cy = panel.y0 + cellH * (r + 0.5);
+    const jx = (rand() - 0.5) * (cellW - size) * 0.7;
+    const jy = (rand() - 0.5) * (cellH - size) * 0.6;
+    out.push({ x: cx + jx, y: cy + jy, size, rot: (rand() - 0.5) * 12 });
+  }
+  return out;
 }
 
 /* Live counts — derived, never hand-typed, so marketing copy can't drift

@@ -13,7 +13,7 @@ const PICKS = ["bear-brown", "star", "rainbow", "crown"]
 const PINK = TEES.find((t) => t.key === "pink") ?? TEES[0];
 
 export function HeroTee() {
-  const slots = velcroSlots(PICKS.length, PINK.py);
+  const slots = velcroSlots(PICKS.length, PINK.panel, PINK.key);
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[420px]">
       <div

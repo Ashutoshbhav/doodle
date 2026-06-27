@@ -29,7 +29,7 @@ export function BuildYourTee() {
   const tee = TEES.find((t) => t.key === teeKey) ?? TEES[0];
   const tray = tab === "silicone" ? PATCHES : EMBROIDERED_PATCHES;
   const full = placed.length >= MAX;
-  const slots = velcroSlots(placed.length, tee.py);
+  const slots = velcroSlots(placed.length, tee.panel, tee.key);
 
   const add = (p: Patch) => setPlaced((prev) => (prev.length >= MAX ? prev : [...prev, p]));
   const removeAt = (i: number) => setPlaced((prev) => prev.filter((_, j) => j !== i));
