@@ -166,32 +166,32 @@ export type Pack = {
 export const PACKS: Pack[] = [
   {
     key: "cosmic-crew", name: "Cosmic Crew", tagline: "Six little space explorers",
-    collection: "embroidered", price: 250,
+    collection: "embroidered", price: 700,
     patchKeys: ["cosmo-frog", "spaced-out", "major-meow", "space-jam", "rocket-pup", "cosmo-koala"],
   },
   {
     key: "beach-club", name: "Beach Club", tagline: "Sun, surf and six goofs",
-    collection: "embroidered", price: 250,
+    collection: "embroidered", price: 700,
     patchKeys: ["skater-koala", "beach-crab", "pool-party", "surfs-up", "chill-bunny", "snorkel-fox"],
   },
   {
     key: "player-one", name: "Player One", tagline: "The game-room crew",
-    collection: "embroidered", price: 250,
+    collection: "embroidered", price: 700,
     patchKeys: ["game-on", "sir-brave", "catnap", "sneaky-ninja", "dj-whiskers"],
   },
   {
     key: "magic-makers", name: "Magic Makers", tagline: "Six unicorns, infinite sparkle",
-    collection: "embroidered", price: 250,
+    collection: "embroidered", price: 700,
     patchKeys: ["groovy-unicorn", "magic-pop", "lovecorn", "rainbow-mane", "blaze-mane", "sleepy-unicorn"],
   },
   {
     key: "pit-crew", name: "Pit Crew", tagline: "Six pint-sized racers",
-    collection: "embroidered", price: 250,
+    collection: "embroidered", price: 700,
     patchKeys: ["lil-roadster", "rally-racer", "trail-boss", "midnight-cruiser", "hot-rod", "speedy"],
   },
   {
     key: "mix-your-six", name: "Mix Your Six", tagline: "Any six silicone charms, your call",
-    collection: "silicone", price: 250, mix: true, patchKeys: [],
+    collection: "silicone", price: 600, mix: true, patchKeys: [],
   },
 ];
 

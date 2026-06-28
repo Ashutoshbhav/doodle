@@ -209,6 +209,7 @@ export function BuildYourTee() {
 
             <div className="mt-6 flex flex-wrap items-center gap-4">
               <span className="font-display text-2xl text-doodle-ink">₹999</span>
+              <span className="text-base text-doodle-ink/40 line-through">₹1499</span>
               <Link
                 href="/shop"
                 className="inline-flex h-11 items-center justify-center rounded-full bg-doodle-orange px-6 text-sm font-medium text-doodle-stitch shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
