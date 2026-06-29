@@ -121,7 +121,11 @@ export function velcroSlots(n: number, panel: TeePanel, seed: string): Slot[] {
   const cols = Math.ceil(n / rows);
   const cellW = W / cols;
   const cellH = H / rows;
-  const size = Math.max(4, Math.min(cellW, cellH) * 0.82);
+  // Size by slot width so patches read bigger; on a single row they may sit
+  // slightly proud of a thin panel band (like real velcro patches), on
+  // multiple rows we also bound by row height. Always < slot width ⇒ no overlap.
+  const byW = cellW * 0.86;
+  const size = Math.max(5, Math.min(byW, rows > 1 ? cellH * 0.86 : 12, 12));
   const rand = makeRng(hashStr(seed) + n * 7919);
   const out: Slot[] = [];
   for (let i = 0; i < n; i++) {
