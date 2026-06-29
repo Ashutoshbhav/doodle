@@ -175,7 +175,7 @@ export const PACKS: Pack[] = [
     patchKeys: ["skater-koala", "beach-crab", "pool-party", "surfs-up", "chill-bunny", "snorkel-fox"],
   },
   {
-    key: "player-one", name: "Player One", tagline: "The game-room crew",
+    key: "player-one", name: "Player One", tagline: "Five for the game room",
     collection: "embroidered", price: 700,
     patchKeys: ["game-on", "sir-brave", "catnap", "sneaky-ninja", "dj-whiskers"],
   },
