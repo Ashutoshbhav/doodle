@@ -52,6 +52,7 @@ export function PatchWall() {
           label="Silicone charms"
           note="Soft 3D rubber. Our signature velcro patch."
           patches={PATCHES}
+          price={100}
           cols="grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
           className="mt-10 md:mt-12"
         />
@@ -60,6 +61,7 @@ export function PatchWall() {
           label="Embroidered patches"
           note="Stitched fabric, same velcro snap. A whole new lineup."
           patches={EMBROIDERED_PATCHES}
+          price={150}
           cols="grid-cols-3 sm:grid-cols-4 md:grid-cols-6"
           className="mt-6"
         />
@@ -72,12 +74,14 @@ function CollectionTray({
   label,
   note,
   patches,
+  price,
   cols,
   className = "",
 }: {
   label: string;
   note: string;
   patches: Patch[];
+  price: number;
   cols: string;
   className?: string;
 }) {
@@ -85,18 +89,18 @@ function CollectionTray({
     <div className={`rounded-[1rem] bg-doodle-stitch p-5 shadow-card sm:p-7 ${className}`}>
       <div className="mb-5 flex items-baseline justify-between gap-3">
         <h3 className="font-display text-lg text-doodle-ink sm:text-xl">{label}</h3>
-        <span className="text-xs italic text-doodle-ink/55 sm:text-sm">{note}</span>
+        <span className="text-xs italic text-doodle-ink/55 sm:text-sm">{note} · ₹{price} each</span>
       </div>
       <div className={`grid gap-4 md:gap-6 ${cols}`}>
         {patches.map((patch, i) => (
-          <PatchTile key={patch.key} patch={patch} index={i} />
+          <PatchTile key={patch.key} patch={patch} index={i} price={price} />
         ))}
       </div>
     </div>
   );
 }
 
-function PatchTile({ patch, index }: { patch: Patch; index: number }) {
+function PatchTile({ patch, index, price }: { patch: Patch; index: number; price: number }) {
   const baseTilt = ((index * 13) % 7) - 3;
   return (
     <motion.button
@@ -140,6 +144,7 @@ function PatchTile({ patch, index }: { patch: Patch; index: number }) {
         <span className="mt-0.5 block text-[10px] italic leading-tight text-doodle-ink/45 sm:text-[11px]">
           {patch.bio}
         </span>
+        <span className="mt-1 block text-[11px] font-semibold text-doodle-ink/70">₹{price}</span>
       </span>
     </motion.button>
   );

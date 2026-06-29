@@ -83,7 +83,7 @@ export type Tee = { key: string; name: string; src: string; swatch: string; pane
 
 export const TEES: Tee[] = [
   { key: "pink", name: "Bubblegum Pink", src: "/product/tee-pink.png", swatch: "#F4A7B9", panel: { x0: 26, x1: 74, y0: 27, y1: 38 } },
-  { key: "sky", name: "Powder Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", panel: { x0: 30, x1: 70, y0: 30, y1: 42 } },
+  { key: "sky", name: "Powder Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", panel: { x0: 30, x1: 70, y0: 33, y1: 45 } },
   { key: "coral", name: "Coral", src: "/product/tee-coral.png", swatch: "#E8836B", panel: { x0: 25, x1: 75, y0: 25, y1: 38 } },
   { key: "purple", name: "Lavender", src: "/product/tee-purple.png", swatch: "#B79CE8", panel: { x0: 22, x1: 78, y0: 28, y1: 50 } },
   { key: "yellow", name: "Mustard", src: "/product/tee-yellow.png", swatch: "#E6B800", panel: { x0: 28, x1: 74, y0: 31, y1: 43 } },
