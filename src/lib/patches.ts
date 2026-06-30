@@ -82,12 +82,12 @@ export type TeePanel = { x0: number; x1: number; y0: number; y1: number };
 export type Tee = { key: string; name: string; src: string; swatch: string; panel: TeePanel };
 
 export const TEES: Tee[] = [
-  { key: "pink", name: "Bubblegum Pink", src: "/product/tee-pink.png", swatch: "#F4A7B9", panel: { x0: 26, x1: 74, y0: 27, y1: 38 } },
-  { key: "sky", name: "Powder Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", panel: { x0: 30, x1: 70, y0: 33, y1: 45 } },
-  { key: "coral", name: "Coral", src: "/product/tee-coral.png", swatch: "#E8836B", panel: { x0: 25, x1: 75, y0: 25, y1: 38 } },
-  { key: "purple", name: "Lavender", src: "/product/tee-purple.png", swatch: "#B79CE8", panel: { x0: 22, x1: 78, y0: 28, y1: 50 } },
-  { key: "yellow", name: "Mustard", src: "/product/tee-yellow.png", swatch: "#E6B800", panel: { x0: 28, x1: 74, y0: 31, y1: 43 } },
-  { key: "charcoal", name: "Charcoal", src: "/product/tee-charcoal.png", swatch: "#3A3A3A", panel: { x0: 22, x1: 80, y0: 26, y1: 34 } },
+  { key: "pink", name: "Bubblegum Pink", src: "/product/tee-pink.png", swatch: "#F4A7B9", panel: { x0: 26, x1: 74, y0: 28, y1: 40 } },
+  { key: "sky", name: "Powder Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", panel: { x0: 31, x1: 69, y0: 34, y1: 45 } },
+  { key: "coral", name: "Coral", src: "/product/tee-coral.png", swatch: "#E8836B", panel: { x0: 27, x1: 73, y0: 28, y1: 38 } },
+  { key: "purple", name: "Lavender", src: "/product/tee-purple.png", swatch: "#B79CE8", panel: { x0: 23, x1: 77, y0: 24, y1: 38 } },
+  { key: "yellow", name: "Mustard", src: "/product/tee-yellow.png", swatch: "#E6B800", panel: { x0: 31, x1: 71, y0: 33, y1: 45 } },
+  { key: "charcoal", name: "Charcoal", src: "/product/tee-charcoal.png", swatch: "#3A3A3A", panel: { x0: 24, x1: 76, y0: 27, y1: 35 } },
 ];
 
 /* Seeded RNG so each colour gets its own stable scatter (positions change as
@@ -115,29 +115,37 @@ function makeRng(seed: number) {
 export type Slot = { x: number; y: number; size: number; rot: number };
 export function velcroSlots(n: number, panel: TeePanel, seed: string): Slot[] {
   if (n <= 0) return [];
-  const W = panel.x1 - panel.x0;
-  const H = panel.y1 - panel.y0;
+  // Inset the panel so patches sit clearly INSIDE the velcro area, never on or
+  // past the edge. Placement happens entirely within this inner box.
+  const padX = (panel.x1 - panel.x0) * 0.07;
+  const padY = (panel.y1 - panel.y0) * 0.12;
+  const ix0 = panel.x0 + padX;
+  const iy0 = panel.y0 + padY;
+  const W = panel.x1 - panel.x0 - 2 * padX;
+  const H = panel.y1 - panel.y0 - 2 * padY;
+
   const rows = Math.max(1, Math.min(n, Math.round(Math.sqrt((n * H) / W))));
   const cols = Math.ceil(n / rows);
   const cellW = W / cols;
   const cellH = H / rows;
-  // Size by slot width so patches read bigger; on a single row they may sit
-  // slightly proud of a thin panel band (like real velcro patches), on
-  // multiple rows we also bound by row height. Always < slot width ⇒ no overlap.
-  const byW = cellW * 0.86;
-  const size = Math.max(5, Math.min(byW, rows > 1 ? cellH * 0.86 : 12, 12));
+  // Fit within a cell in BOTH dimensions, so a patch can never exceed the panel
+  // (vertically or horizontally). < cell width ⇒ never overlaps either.
+  const size = Math.max(3.5, Math.min(cellW, cellH) * 0.82);
   const rand = makeRng(hashStr(seed) + n * 7919);
+
   const out: Slot[] = [];
   for (let i = 0; i < n; i++) {
     const r = Math.floor(i / cols);
     const itemsInRow = r === rows - 1 ? n - cols * (rows - 1) : cols;
     const c = i - r * cols;
-    const rowStart = panel.x0 + (W - itemsInRow * cellW) / 2; // centre the row
+    const rowStart = ix0 + (W - itemsInRow * cellW) / 2; // centre the row
     const cx = rowStart + cellW * (c + 0.5);
-    const cy = panel.y0 + cellH * (r + 0.5);
-    const jx = (rand() - 0.5) * (cellW - size) * 0.7;
-    const jy = (rand() - 0.5) * (cellH - size) * 0.6;
-    out.push({ x: cx + jx, y: cy + jy, size, rot: (rand() - 0.5) * 12 });
+    const cy = iy0 + cellH * (r + 0.5);
+    // jitter strictly bounded by the leftover room in the cell ⇒ the patch
+    // always stays fully within its cell, and therefore within the panel.
+    const jx = (rand() - 0.5) * Math.max(0, cellW - size) * 0.5;
+    const jy = (rand() - 0.5) * Math.max(0, cellH - size) * 0.5;
+    out.push({ x: cx + jx, y: cy + jy, size, rot: (rand() - 0.5) * 8 });
   }
   return out;
 }
