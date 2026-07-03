@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
+import { getIndiaRegionId } from "@/lib/medusa/cart"
 import { VariantPicker } from "@/components/shop/VariantPicker"
 import { PatchScrubber } from "@/components/ui/PatchScrubber"
 import { NavWithCart } from "@/components/sections/NavWithCart"
@@ -20,11 +21,13 @@ const SITE_URL =
 async function fetchProduct(handle: string): Promise<Product | null> {
   if (!isCommerceConfigured) return null
   try {
+    const regionId = await getIndiaRegionId()
     const { products } = await medusa.store.product.list({
       handle,
       limit: 1,
       fields:
         "*variants.calculated_price,*variants.options,*variants.inventory_quantity,*variants.manage_inventory,*variants.allow_backorder,*options.values,*images,thumbnail,handle,title,description,subtitle,origin_country,metadata",
+      region_id: regionId,
     })
     return (products[0] as unknown as Product) ?? null
   } catch {

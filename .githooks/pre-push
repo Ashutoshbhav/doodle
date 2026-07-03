@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "[pre-push] production build (same as Vercel)..."
+npm run build > /tmp/doodle-build.log 2>&1 || { echo "\n❌ PUSH BLOCKED — build failed:"; tail -20 /tmp/doodle-build.log; exit 1; }
+echo "[pre-push] ✓ build ok"

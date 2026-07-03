@@ -1,4 +1,5 @@
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
+import { getIndiaRegionId } from "@/lib/medusa/cart"
 import { ProductCard } from "@/components/shop/ProductCard"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
@@ -19,9 +20,11 @@ export const dynamic = "force-dynamic"
 async function safeListProducts(): Promise<Product[]> {
   if (!isCommerceConfigured) return []
   try {
+    const regionId = await getIndiaRegionId()
     const { products } = await medusa.store.product.list({
       limit: 50,
       fields: "*variants.calculated_price,*images,thumbnail,handle,title",
+      region_id: regionId,
     })
     return products as unknown as Product[]
   } catch {
