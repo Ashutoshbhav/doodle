@@ -1,12 +1,34 @@
 "use client";
 
 import * as React from "react";
-import { useActionState, useEffect, useRef } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { CheckCircle, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
+import { CheckCircle, EnvelopeSimple, WhatsappLogo, LinkSimple } from "@phosphor-icons/react/dist/ssr";
 import { joinWaitlist, type WaitlistResult } from "@/app/actions/waitlist";
 import { PillButton } from "@/components/ui/PillButton";
 import { env } from "@/env";
+
+/* Referral capture: a visitor landing on any page with ?ref=<code> gets the
+   code parked in sessionStorage; when they sign up, it rides along as
+   source "ref:<code>" (unless the form has an explicit campaign source,
+   which wins — /drop attribution must stay intact). */
+const REF_KEY = "doodle-ref";
+
+function useReferral(): string | null {
+  const [ref, setRef] = useState<string | null>(null);
+  useEffect(() => {
+    try {
+      const incoming = new URLSearchParams(window.location.search).get("ref");
+      if (incoming && /^[a-z0-9]{4,16}$/i.test(incoming)) {
+        sessionStorage.setItem(REF_KEY, incoming.toLowerCase());
+      }
+      setRef(sessionStorage.getItem(REF_KEY));
+    } catch {
+      // storage blocked (private mode) — referral attribution just skips
+    }
+  }, []);
+  return ref;
+}
 
 type Props = {
   /** Optional accent — defaults to orange (primary). */
@@ -57,6 +79,10 @@ export function WaitlistForm({
     }
   }, [conversionTrack, state]);
 
+  const incomingRef = useReferral();
+  // Explicit campaign source (the /drop LP) always wins over a referral.
+  const effectiveSource = source ?? (incomingRef ? `ref:${incomingRef}` : undefined);
+
   const inputColor =
     surface === "canvas"
       ? "bg-doodle-stitch text-doodle-ink placeholder:text-doodle-ink/40"
@@ -75,13 +101,14 @@ export function WaitlistForm({
             className="flex items-start gap-3 rounded-[1rem] bg-doodle-stitch px-5 py-4 shadow-card"
           >
             <CheckCircle weight="duotone" size={28} className="text-doodle-orange shrink-0 mt-0.5" />
-            <div>
+            <div className="min-w-0 flex-1">
               <div className="font-display text-lg leading-tight text-doodle-ink">
                 You&rsquo;re in.
               </div>
               <p className="mt-1 text-sm text-doodle-ink/70 leading-snug">
                 {state.message}
               </p>
+              {state.code && <ShareRow code={state.code} />}
             </div>
           </motion.div>
         ) : (
@@ -127,8 +154,8 @@ export function WaitlistForm({
               aria-hidden="true"
               className="absolute left-[-9999px] top-0 h-0 w-0 opacity-0"
             />
-            {source ? (
-              <input type="hidden" name="source" value={source} />
+            {effectiveSource ? (
+              <input type="hidden" name="source" value={effectiveSource} />
             ) : null}
             <PillButton
               type="submit"
@@ -154,6 +181,49 @@ export function WaitlistForm({
       <p className="mt-3 px-2 text-xs text-doodle-ink/55">
         No spam, ever. One email when the first drop is ready.
       </p>
+    </div>
+  );
+}
+
+/* Post-signup referral row — the zero-budget growth loop. Every friend who
+   joins via the link is recorded as source "ref:<code>", and the first-drop
+   list is worked in referral order. */
+function ShareRow({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+  const link = `${env.NEXT_PUBLIC_SITE_URL}/?ref=${code}`;
+  const shareText = `Found this for the kids — one tee, swappable velcro patches. Join the first-drop list with my link: ${link}`;
+  const waShare = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+
+  return (
+    <div className="mt-3 border-t border-doodle-ink/10 pt-3">
+      <p className="text-xs leading-snug text-doodle-ink/60">
+        Know another parent who&rsquo;d love this? Friends who join with your
+        link move you up the first-drop list.
+      </p>
+      <div className="mt-2.5 flex flex-wrap items-center gap-2">
+        <a
+          href={waShare}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-doodle-orange px-4 text-xs font-semibold text-doodle-stitch shadow-subtle transition-transform active:scale-[0.97]"
+        >
+          <WhatsappLogo weight="fill" size={14} aria-hidden />
+          Share on WhatsApp
+        </a>
+        <button
+          type="button"
+          onClick={() => {
+            void navigator.clipboard?.writeText(link).then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            });
+          }}
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-doodle-canvas px-4 text-xs font-semibold text-doodle-ink shadow-subtle transition-transform active:scale-[0.97]"
+        >
+          <LinkSimple weight="bold" size={14} aria-hidden />
+          {copied ? "Copied!" : "Copy link"}
+        </button>
+      </div>
     </div>
   );
 }

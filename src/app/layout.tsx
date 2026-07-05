@@ -66,14 +66,14 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: "DOODLE by CANVAS",
   url: SITE_URL,
-  logo: `${SITE_URL}/brand/wordmark-logo.jpeg`,
+  logo: `${SITE_URL}/icon.png`,
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
-  alternates: {
-    canonical: "/",
-  },
+  // NO site-wide canonical here: Next merges metadata, so a root canonical
+  // of "/" makes every page without its own alternates claim to be a
+  // duplicate of the homepage. Each indexable page sets its own.
   title: {
     default: "DOODLE — modular kids' clothing with interchangeable patches",
     template: "%s · DOODLE",
@@ -97,19 +97,18 @@ export const metadata: Metadata = {
     description:
       "Kids design their own clothes. Swap patches on tees, backpacks and accessories. Join the waitlist.",
     locale: "en_IN",
-    images: [{ url: "/brand/wordmark-logo.jpeg", width: 2048, height: 2048, alt: "DOODLE" }],
+    // Dedicated 1200x630 card under 300 KB — WhatsApp (the real sharing
+    // channel here) silently drops previews for oversized images.
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: "DOODLE — Don't Just Dress. Create." }],
   },
   twitter: {
     card: "summary_large_image",
     title: "DOODLE — modular kids' clothing with interchangeable patches",
     description:
       "Kids design their own clothes. Swap patches on tees, backpacks and accessories. Join the waitlist.",
-    images: ["/brand/wordmark-logo.jpeg"],
+    images: ["/og.png"],
   },
-  icons: {
-    icon: "/brand/wordmark-logo.jpeg",
-    apple: "/brand/wordmark-logo.jpeg",
-  },
+  // Favicons come from the src/app/icon.png + apple-icon.png conventions.
   robots: {
     index: true,
     follow: true,
@@ -134,6 +133,13 @@ export default function RootLayout({
       className={`${figtree.variable} ${geistMono.variable} ${bricolage.variable} ${caveat.variable} ${bagel.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
+        {/* Skip link — visible only on keyboard focus */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-doodle-ink focus:px-5 focus:py-2.5 focus:text-sm focus:font-medium focus:text-doodle-canvas"
+        >
+          Skip to content
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

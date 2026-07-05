@@ -7,6 +7,7 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent, useReducedMoti
 import { User, List, X } from "@phosphor-icons/react/dist/ssr";
 import { CartButton } from "@/components/shop/CartButton";
 import { isCommerceEnabled } from "@/lib/commerce";
+import { whatsappHref } from "@/lib/whatsapp";
 
 /* Waitlist mode vs shop mode: until commerce is enabled in this deployment,
    the nav never promises a shop it can't deliver — the primary CTA sends
@@ -218,9 +219,20 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
                 </Link>
                 <p className="mt-6 text-sm text-doodle-ink/60">
                   Questions?{" "}
-                  <a href="mailto:hello@doodlebycanvas.in" className="font-medium text-doodle-ink underline underline-offset-2">
-                    hello@doodlebycanvas.in
-                  </a>
+                  {whatsappHref() ? (
+                    <a
+                      href={whatsappHref()!}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-medium text-doodle-ink underline underline-offset-2"
+                    >
+                      WhatsApp us
+                    </a>
+                  ) : (
+                    <a href="mailto:hello@doodlebycanvas.in" className="font-medium text-doodle-ink underline underline-offset-2">
+                      hello@doodlebycanvas.in
+                    </a>
+                  )}
                 </p>
               </div>
             </nav>

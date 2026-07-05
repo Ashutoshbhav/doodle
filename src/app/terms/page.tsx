@@ -5,6 +5,7 @@ export const metadata = {
   title: "Terms & Conditions — DOODLE",
   description:
     "The terms that govern your use of doodlebycanvas.in and any purchase from DOODLE (by CANVAS).",
+  alternates: { canonical: "/terms" },
 };
 
 export default function TermsPage() {

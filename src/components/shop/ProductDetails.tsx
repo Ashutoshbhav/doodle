@@ -1,21 +1,25 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Truck,
   HandCoins,
   ArrowsClockwise,
   ShieldCheck,
 } from "@phosphor-icons/react/dist/ssr";
+import { sizeChart } from "@/content/help";
 
 /* ProductDetails — size selector, spec table, and a trust panel for the
-   Starter Kit PDP. Pairs with the BuildYourTee configurator above it. */
+   Starter Kit PDP. Pairs with the BuildYourTee configurator above it.
+   Sizes come from the signed production spec (src/content/help.ts). */
 
-const SIZES = [
-  { key: "S", age: "3–4 yrs" },
-  { key: "M", age: "4–5 yrs" },
-  { key: "L", age: "5–6 yrs" },
-];
+const SIZES = sizeChart.map((row) => ({
+  key: row.size,
+  age: row.age,
+  chest: row.garmentChest,
+  length: row.length,
+}));
 
 const DETAILS: [string, string][] = [
   ["Fabric", "100% combed cotton, 200–220 GSM"],
@@ -41,13 +45,21 @@ export function ProductDetails() {
         <div>
           <div className="flex items-center justify-between">
             <h3 className="font-display text-lg text-doodle-ink">Pick a size</h3>
-            <button
-              type="button"
-              onClick={() => setShowGuide((s) => !s)}
-              className="text-sm font-medium text-doodle-orange hover:underline"
-            >
-              Size guide
-            </button>
+            <span className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setShowGuide((s) => !s)}
+                className="text-sm font-medium text-doodle-orange hover:underline"
+              >
+                Quick fit note
+              </button>
+              <Link
+                href="/size-guide"
+                className="text-sm font-medium text-doodle-orange hover:underline"
+              >
+                Full size guide
+              </Link>
+            </span>
           </div>
 
           <div className="mt-4 flex gap-3">
@@ -71,8 +83,11 @@ export function ProductDetails() {
 
           {showGuide && (
             <p className="mt-3 text-[13px] leading-relaxed text-doodle-ink/60">
-              Sizes run true to age. If your child is between sizes or you want
-              room to grow, size up, the velcro panel sits the same on every fit.
+              {/* Numbers from the production spec — chest is the garment laid
+                  flat, armpit to armpit, doubled. */}
+              {SIZES.map((s) => `${s.key}: chest ${s.chest} cm, length ${s.length} cm`).join(" · ")}
+              . Between sizes? Size up — the velcro panel sits the same on
+              every fit.
             </p>
           )}
 

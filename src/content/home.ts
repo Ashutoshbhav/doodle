@@ -391,6 +391,8 @@ export const footer = {
     {
       title: "Help",
       links: [
+        { href: "/size-guide", label: "Size guide" },
+        { href: "/faq", label: "FAQs" },
         { href: "/refunds", label: "Returns & refunds" },
         { href: "/shipping", label: "Shipping" },
         { href: "/contact", label: "Contact" },

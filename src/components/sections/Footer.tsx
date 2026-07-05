@@ -4,12 +4,14 @@ import {
   InstagramLogo,
   YoutubeLogo,
   EnvelopeSimple,
+  WhatsappLogo,
   HandCoins,
   Truck,
   ArrowsClockwise,
   ShieldCheck,
   MapPin,
 } from "@phosphor-icons/react/dist/ssr";
+import { whatsappHref } from "@/lib/whatsapp";
 import { ScrollReveal } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CookieSettings } from "@/components/ui/CookieSettings";
@@ -84,6 +86,18 @@ export function Footer() {
             </div>
 
             <div className="mt-6 flex items-center gap-3">
+              {/* WhatsApp appears as soon as NEXT_PUBLIC_WHATSAPP_NUMBER is set */}
+              {whatsappHref() && (
+                <a
+                  href={whatsappHref()!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Chat on WhatsApp"
+                  className="grid place-items-center h-10 w-10 rounded-full bg-doodle-canvas/10 text-doodle-canvas/80 hover:text-doodle-orange hover:bg-doodle-canvas/15 transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
+                >
+                  <WhatsappLogo weight="duotone" size={18} />
+                </a>
+              )}
               {SOCIALS.map(({ href, label, Icon }) => (
                 <a
                   key={label}

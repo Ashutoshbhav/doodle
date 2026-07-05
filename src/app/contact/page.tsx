@@ -2,11 +2,13 @@ import { NavWithCart } from "@/components/sections/NavWithCart";
 import { Footer } from "@/components/sections/Footer";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { contact, legalCommon } from "@/content/legal";
+import { whatsappHref, whatsappNumber } from "@/lib/whatsapp";
 
 export const metadata = {
   title: "Contact us — DOODLE",
   description:
     "Reach DOODLE (by CANVAS) for orders, returns and support, plus our Grievance Officer details.",
+  alternates: { canonical: "/contact" },
 };
 
 export default function ContactPage() {
@@ -31,6 +33,25 @@ export default function ContactPage() {
               {contact.channels.heading}
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              {whatsappHref() && (
+                <div className="rounded-lg bg-doodle-canvas border-2 border-dashed border-doodle-ink/20 p-5">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-doodle-ink/50">
+                    WhatsApp
+                  </div>
+                  <a
+                    href={whatsappHref()!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1.5 inline-block font-display text-lg text-doodle-ink hover:text-doodle-orange transition-colors"
+                  >
+                    +{whatsappNumber}
+                  </a>
+                  <p className="mt-2 text-sm leading-relaxed text-doodle-ink/65">
+                    The fastest way to reach us. A founder replies, usually the
+                    same day.
+                  </p>
+                </div>
+              )}
               {contact.channels.items.map((item) => (
                 <div
                   key={item.label}

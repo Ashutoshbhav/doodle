@@ -31,6 +31,9 @@ export const env = createEnv({
     // Razorpay PUBLIC key id (safe to expose; secret + webhook secret stay on the
     // backend). Used to open Razorpay Checkout. Optional until payments go live.
     NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1).optional(),
+    // WhatsApp click-to-chat number in international format WITHOUT "+",
+    // e.g. "919876543210". Links render only when this is set.
+    NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().regex(/^\d{10,15}$/).optional(),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
@@ -44,6 +47,7 @@ export const env = createEnv({
     NEXT_PUBLIC_MEDUSA_BASE_URL: process.env.NEXT_PUBLIC_MEDUSA_BASE_URL,
     NEXT_PUBLIC_MEDUSA_PUB_KEY: process.env.NEXT_PUBLIC_MEDUSA_PUB_KEY,
     NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+    NEXT_PUBLIC_WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
   },
   emptyStringAsUndefined: true,
 });

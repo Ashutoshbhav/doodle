@@ -121,7 +121,7 @@ export function BuildYourTee() {
                   aria-label={t.name}
                   aria-pressed={t.key === teeKey}
                   title={t.name}
-                  className={`h-8 w-8 rounded-full shadow-subtle transition-transform duration-200 ${
+                  className={`h-10 w-10 rounded-full shadow-subtle transition-transform duration-200 ${
                     t.key === teeKey
                       ? "scale-110 ring-2 ring-doodle-ink ring-offset-2 ring-offset-doodle-canvas"
                       : "hover:scale-105"

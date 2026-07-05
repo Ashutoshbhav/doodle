@@ -4,10 +4,16 @@ import { medusa, isCommerceConfigured } from "@/lib/medusa/client";
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://doodlebycanvas.in";
 
-// Static route list — always emitted, no network dependency.
+// Static route list — always emitted, no network dependency. /shop joins
+// only when commerce is actually on (in waitlist mode it's a noindexed
+// empty state and has no business in the sitemap).
 const ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
-  { path: "/shop", priority: 0.9, changeFrequency: "weekly" as const },
+  ...(isCommerceConfigured
+    ? [{ path: "/shop", priority: 0.9, changeFrequency: "weekly" as const }]
+    : []),
+  { path: "/faq", priority: 0.6, changeFrequency: "monthly" as const },
+  { path: "/size-guide", priority: 0.6, changeFrequency: "monthly" as const },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" as const },
   { path: "/terms", priority: 0.3, changeFrequency: "yearly" as const },
   { path: "/refunds", priority: 0.3, changeFrequency: "yearly" as const },

@@ -5,8 +5,13 @@ import { getDb, schema } from "@/db";
 import { rateLimit } from "@/lib/ratelimit";
 
 export type WaitlistResult =
-  | { ok: true; isNew: boolean; message: string }
+  | { ok: true; isNew: boolean; message: string; code?: string }
   | { ok: false; message: string };
+
+// Referral code = first 8 hex chars of the row's uuid. Enough to attribute
+// ("who referred this signup" lands in source as "ref:<code>"), reveals
+// nothing about the referrer, needs no schema change.
+const referralCode = (id: string) => id.replace(/-/g, "").slice(0, 8);
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -70,6 +75,7 @@ export async function joinWaitlist(
   }
 
   let isNew = false;
+  let code: string | undefined;
   try {
     const inserted = await db
       .insert(schema.waitlist)
@@ -77,6 +83,16 @@ export async function joinWaitlist(
       .onConflictDoNothing({ target: schema.waitlist.email })
       .returning({ id: schema.waitlist.id });
     isNew = inserted.length > 0;
+    if (isNew) {
+      code = referralCode(inserted[0].id);
+    } else {
+      // Duplicate signup — still hand back their share link.
+      const existing = await db.query.waitlist.findFirst({
+        where: (w, { eq }) => eq(w.email, email),
+        columns: { id: true },
+      });
+      if (existing) code = referralCode(existing.id);
+    }
   } catch (error) {
     // DPDP: don't ship the user's email to Sentry. Tags are enough to triage.
     Sentry.captureException(error, {
@@ -97,6 +113,7 @@ export async function joinWaitlist(
   return {
     ok: true,
     isNew,
+    code,
     message: "You're on the list. We'll write when the first drop is ready.",
   };
 }

@@ -5,6 +5,7 @@ export const metadata = {
   title: "Privacy Policy — DOODLE",
   description:
     "How DOODLE (by CANVAS) collects, uses and protects your personal data, and your rights under India's DPDP Act, 2023.",
+  alternates: { canonical: "/privacy" },
 };
 
 export default function PrivacyPage() {

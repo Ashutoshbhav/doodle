@@ -5,6 +5,7 @@ export const metadata = {
   title: "Return & Refund Policy — DOODLE",
   description:
     "DOODLE (by CANVAS) return window, conditions, reverse pickup, refund methods and timelines.",
+  alternates: { canonical: "/refunds" },
 };
 
 export default function RefundsPage() {

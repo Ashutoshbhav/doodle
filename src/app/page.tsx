@@ -14,6 +14,7 @@
  * booked venues). Files kept in the repo, just not rendered.
  */
 
+import type { Metadata } from "next";
 import { AnnouncementBar } from "@/components/sections/AnnouncementBar";
 import { NavWithCart } from "@/components/sections/NavWithCart";
 import { Hero } from "@/components/sections/Hero";
@@ -27,12 +28,16 @@ import { Founders } from "@/components/sections/Founders";
 import { DualCTA } from "@/components/sections/DualCTA";
 import { Footer } from "@/components/sections/Footer";
 
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
 export default function Home() {
   return (
     <>
       <AnnouncementBar />
       <NavWithCart />
-      <main className="bg-background text-foreground">
+      <main id="main" className="bg-background text-foreground">
         <Hero />
         <TrustStrip />
         <BuildYourTee />

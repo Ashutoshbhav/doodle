@@ -60,17 +60,19 @@ export function CartLine({ line }: { line: CartLineT }) {
           {line.variant?.title}
         </div>
         <div className="mt-3 flex items-center gap-3">
+          {/* 44px tap targets — the minus button removes the line at qty 1,
+              so a mis-tap here is destructive. Never shrink these. */}
           <div className="inline-flex items-center rounded-full border border-doodle-ink/15 bg-card shadow-subtle">
             <button
               type="button"
               onClick={() => setQty(line.quantity - 1)}
               disabled={pending}
               aria-label="Decrease quantity"
-              className="px-3 py-1 text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
+              className="grid h-11 w-11 place-items-center text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
             >
               −
             </button>
-            <span className="px-2 font-sans text-sm font-medium tabular-nums">
+            <span className="px-1 font-sans text-sm font-medium tabular-nums">
               {line.quantity}
             </span>
             <button
@@ -78,7 +80,7 @@ export function CartLine({ line }: { line: CartLineT }) {
               onClick={() => setQty(line.quantity + 1)}
               disabled={pending || atMax}
               aria-label="Increase quantity"
-              className="px-3 py-1 text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
+              className="grid h-11 w-11 place-items-center text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
             >
               +
             </button>
@@ -92,7 +94,7 @@ export function CartLine({ line }: { line: CartLineT }) {
               })
             }
             disabled={pending}
-            className="text-xs font-sans font-medium text-doodle-ink/55 hover:text-doodle-ink transition-colors disabled:opacity-50"
+            className="inline-flex h-11 items-center px-2 text-xs font-sans font-medium text-doodle-ink/55 hover:text-doodle-ink transition-colors disabled:opacity-50"
           >
             Remove
           </button>

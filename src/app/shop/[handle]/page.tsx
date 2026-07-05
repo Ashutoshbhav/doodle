@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { getIndiaRegionId } from "@/lib/medusa/cart"
@@ -42,10 +43,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { handle } = await params
   const product = await fetchProduct(handle)
-  const ogImage = product?.images?.[0]?.url ?? product?.thumbnail ?? undefined
+  // No product: either commerce is off (showroom fallback renders — point
+  // Google at /shop and don't index the duplicate) or the handle is junk
+  // (the page 404s; keep metadata inert). Never self-canonicalize an
+  // arbitrary handle — that minted infinite duplicate URLs.
+  if (!product) {
+    return {
+      title: "DOODLE",
+      alternates: { canonical: "/shop" },
+      robots: { index: false, follow: true },
+    }
+  }
+  const ogImage = product.images?.[0]?.url ?? product.thumbnail ?? undefined
   return {
-    title: product ? `${product.title} — DOODLE` : "DOODLE",
-    description: product?.description?.slice(0, 160) ?? undefined,
+    title: `${product.title} — DOODLE`,
+    description: product.description?.slice(0, 160) ?? undefined,
     alternates: {
       canonical: `/shop/${handle}`,
     },
@@ -61,8 +73,14 @@ export default async function PDPPage({
   const { handle } = await params
   const product = await fetchProduct(handle)
 
+  // Commerce ON + unknown handle = a real 404, not a soft-404 lookalike.
+  if (!product && isCommerceConfigured) {
+    notFound()
+  }
+
   // Commerce is deferred (no Medusa backend yet) → render the real, viewable
-  // static Starter Kit PDP instead of a 404, built from the live pieces.
+  // static Starter Kit PDP instead of a 404, built from the live pieces
+  // (noindexed + canonicalized to /shop in generateMetadata above).
   if (!product) {
     return (
       <>

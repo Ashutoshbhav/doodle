@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/shop/ProductCard"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { Eyebrow } from "@/components/ui/Eyebrow"
+import { WaitlistForm } from "@/components/ui/WaitlistForm"
 import type { Product } from "@/lib/medusa/types"
 
 export const metadata = {
@@ -13,6 +14,9 @@ export const metadata = {
   alternates: {
     canonical: "/shop",
   },
+  // Waitlist mode serves an empty state — don't ask Google to index it.
+  // Flips to indexable automatically when the commerce env vars land.
+  robots: isCommerceConfigured ? undefined : { index: false, follow: true },
 }
 
 export const dynamic = "force-dynamic"
@@ -38,7 +42,7 @@ export default async function ShopPage() {
   return (
     <>
       <NavWithCart />
-      <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
+      <main id="main" className="bg-[color:var(--color-surface-blush)] min-h-screen">
         <section className="mx-auto max-w-7xl px-6 md:px-10 py-16 md:py-24">
           {/* PLP header — clean sans eyebrow, display headline, one orange
               emphasis. Filter/count row reads as quiet metadata, not chrome. */}
@@ -73,6 +77,10 @@ export default async function ShopPage() {
                 The first drop is being packed right now. Drop your email and
                 we&apos;ll write the day it&apos;s live.
               </p>
+              {/* The copy asks for an email — so the form has to be here. */}
+              <div className="mt-7 flex justify-center">
+                <WaitlistForm source="shop" />
+              </div>
             </div>
           ) : (
             <div className="mt-14 grid grid-cols-2 gap-6 md:gap-8 lg:grid-cols-4">

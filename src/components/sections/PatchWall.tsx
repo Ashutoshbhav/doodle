@@ -102,15 +102,15 @@ function CollectionTray({
 
 function PatchTile({ patch, index, price }: { patch: Patch; index: number; price: number }) {
   const baseTilt = ((index * 13) % 7) - 3;
+  // A div, not a button: a styled button with no onClick reads as broken on
+  // touch. If tiles ever get a tap action (detail popover, add-to-kit),
+  // restore button semantics along with it.
   return (
-    <motion.button
-      type="button"
-      aria-label={`Patch: ${patch.name}`}
+    <motion.div
       initial={{ opacity: 0, scale: 0.85, rotate: 0 }}
       whileInView={{ opacity: 1, scale: 1, rotate: baseTilt }}
       viewport={{ once: true, margin: "-50px" }}
       whileHover={{ y: -6, rotate: 0, scale: 1.04 }}
-      whileTap={{ scale: 0.97 }}
       transition={{
         type: "spring",
         stiffness: 280,
@@ -118,10 +118,9 @@ function PatchTile({ patch, index, price }: { patch: Patch; index: number; price
         delay: (index % 12) * 0.03,
       }}
       className="
-        group flex cursor-pointer flex-col items-center gap-2.5
+        group flex flex-col items-center gap-2.5
         rounded-[0.9rem] bg-doodle-canvas p-3 sm:p-4
         shadow-subtle transition-shadow hover:shadow-card
-        focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-ink/20
       "
     >
       <span className="grid aspect-square w-full place-items-center">
@@ -146,6 +145,6 @@ function PatchTile({ patch, index, price }: { patch: Patch; index: number; price
         </span>
         <span className="mt-1 block text-[11px] font-semibold text-doodle-ink/70">₹{price}</span>
       </span>
-    </motion.button>
+    </motion.div>
   );
 }
