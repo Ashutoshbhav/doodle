@@ -162,7 +162,10 @@ export const patchByKey = (key: string): Patch =>
    Patch packs — sold separately, six at a time.
    • Embroidered = fixed themed packs (the catalogue sheets).
    • Silicone   = "Mix Your Six", build your own from the charms.
-   NOTE: "player-one" currently has 5 (its 6th was an IP-infringing
+   Keys = Medusa product handles; names + ₹799 verified against the
+   live store API (India region) so this file can't drift from the
+   real catalogue again.
+   NOTE: "epic-quest" currently shows 5 (its 6th was an IP-infringing
    patch we excluded) — add an original 6th before selling as a 6-pack.
    ------------------------------------------------------------ */
 export type Pack = {
@@ -172,33 +175,33 @@ export type Pack = {
   collection: "embroidered" | "silicone";
   mix?: boolean; // build-your-own from the collection
   patchKeys: string[];
-  price: number; // ₹  (confirm pack price with Ash)
+  price: number; // ₹ (stock-sheet price, matches backend)
 };
 
 export const PACKS: Pack[] = [
   {
-    key: "cosmic-crew", name: "Cosmic Crew", tagline: "Six little space explorers",
-    collection: "embroidered", price: 700,
+    key: "space-squad", name: "Space Squad", tagline: "Six little space explorers",
+    collection: "embroidered", price: 799,
     patchKeys: ["cosmo-frog", "spaced-out", "major-meow", "space-jam", "rocket-pup", "cosmo-koala"],
   },
   {
-    key: "beach-club", name: "Beach Club", tagline: "Sun, surf and six goofs",
-    collection: "embroidered", price: 700,
+    key: "sunny-pals", name: "Sunny Pals", tagline: "Sun, surf and six goofs",
+    collection: "embroidered", price: 799,
     patchKeys: ["skater-koala", "beach-crab", "pool-party", "surfs-up", "chill-bunny", "snorkel-fox"],
   },
   {
-    key: "player-one", name: "Player One", tagline: "Five for the game room",
-    collection: "embroidered", price: 700,
+    key: "epic-quest", name: "Epic Quest", tagline: "Five little heroes, one big quest",
+    collection: "embroidered", price: 799,
     patchKeys: ["game-on", "sir-brave", "catnap", "sneaky-ninja", "dj-whiskers"],
   },
   {
-    key: "magic-makers", name: "Magic Makers", tagline: "Six unicorns, infinite sparkle",
-    collection: "embroidered", price: 700,
+    key: "moodicorns", name: "Moodicorns", tagline: "Six unicorns, every mood covered",
+    collection: "embroidered", price: 799,
     patchKeys: ["groovy-unicorn", "magic-pop", "lovecorn", "rainbow-mane", "blaze-mane", "sleepy-unicorn"],
   },
   {
-    key: "pit-crew", name: "Pit Crew", tagline: "Six pint-sized racers",
-    collection: "embroidered", price: 700,
+    key: "tiny-travellers", name: "Tiny Travellers", tagline: "Six rides, zero speed limits",
+    collection: "embroidered", price: 799,
     patchKeys: ["lil-roadster", "rally-racer", "trail-boss", "midnight-cruiser", "hot-rod", "speedy"],
   },
   {
