@@ -81,13 +81,15 @@ export const EMBROIDERED_PATCHES: Patch[] = [
 export type TeePanel = { x0: number; x1: number; y0: number; y1: number };
 export type Tee = { key: string; name: string; src: string; swatch: string; panel: TeePanel };
 
+// Names = the Medusa variant colour names (stock sheet), so the homepage
+// matches what the shop and checkout call each colour.
 export const TEES: Tee[] = [
-  { key: "pink", name: "Bubblegum Pink", src: "/product/tee-pink.png", swatch: "#F4A7B9", panel: { x0: 26, x1: 74, y0: 28, y1: 40 } },
-  { key: "sky", name: "Powder Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", panel: { x0: 31, x1: 69, y0: 34, y1: 45 } },
-  { key: "coral", name: "Coral", src: "/product/tee-coral.png", swatch: "#E8836B", panel: { x0: 27, x1: 73, y0: 28, y1: 38 } },
-  { key: "purple", name: "Lavender", src: "/product/tee-purple.png", swatch: "#B79CE8", panel: { x0: 23, x1: 77, y0: 24, y1: 38 } },
-  { key: "yellow", name: "Mustard", src: "/product/tee-yellow.png", swatch: "#E6B800", panel: { x0: 31, x1: 71, y0: 33, y1: 45 } },
-  { key: "charcoal", name: "Charcoal", src: "/product/tee-charcoal.png", swatch: "#3A3A3A", panel: { x0: 24, x1: 76, y0: 27, y1: 35 } },
+  { key: "pink", name: "Blossom Pink", src: "/product/tee-pink.png", swatch: "#F4A7B9", panel: { x0: 26, x1: 74, y0: 28, y1: 40 } },
+  { key: "sky", name: "Sky Blue", src: "/product/tee-sky.png", swatch: "#A8D8EA", panel: { x0: 31, x1: 69, y0: 34, y1: 45 } },
+  { key: "coral", name: "Happy Orange", src: "/product/tee-coral.png", swatch: "#E8836B", panel: { x0: 27, x1: 73, y0: 28, y1: 38 } },
+  { key: "purple", name: "Magic Lavender", src: "/product/tee-purple.png", swatch: "#B79CE8", panel: { x0: 23, x1: 77, y0: 24, y1: 38 } },
+  { key: "yellow", name: "Sunny Yellow", src: "/product/tee-yellow.png", swatch: "#E6B800", panel: { x0: 31, x1: 71, y0: 33, y1: 45 } },
+  { key: "charcoal", name: "Charcoal Grey", src: "/product/tee-charcoal.png", swatch: "#3A3A3A", panel: { x0: 24, x1: 76, y0: 27, y1: 35 } },
 ];
 
 /* Seeded RNG so each colour gets its own stable scatter (positions change as
