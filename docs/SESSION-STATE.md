@@ -1,8 +1,20 @@
 # DOODLE — Session State
 
-_Last updated: 2026-06-14 (LIVE LAUNCH + commerce-readiness pass)_
+_Last updated: 2026-07-05 (frontend catalogue reconcile shipped)_
 
 When Ash says **"DOODLE"** in a future session, read this file first, then `docs/BRIEF.md`, then resume.
+
+---
+
+## 📌 CURRENT (2026-07-05) — details live in Claude's memory (`doodle-current-state`)
+
+- Production = waitlist at doodlebycanvas.in (no commerce env vars — deliberate). Preview = commerce test surface. Posture: **"reconcile now, hold the flip"** — flip only on Ash's explicit go.
+- Backend live on Railway (`doodle-backend-production-32b1.up.railway.app`): live Razorpay, real images, stock matches the stock sheet. Repo HEAD `ccc88b8`.
+- **2026-07-05: frontend catalogue reconciled** (commits `383504a` + `0b94222`): PACKS = real products @ ₹799 (space-squad, sunny-pals, epic-quest, moodicorns, tiny-travellers; keys = Medusa handles), Mix Your Six ₹600 kept, tee colour names = Medusa variant names. Verified against the live store API, India region.
+- Next: Ash verifies deployed homepage → Shiprocket wallet (~₹500) + creds on Railway → Ash e2e test on preview → production flip (3 env vars).
+- Open flags: embroidered patches priced ₹150 each on PatchWall but no single-embroidered product in backend; epic-quest is a 5-patch composite (needs original 6th); Pattern Pack ₹600/5 vs 6 singles ₹600 value-ladder oddity.
+
+Everything below this line is historical context (accurate as of its own date).
 
 ---
 
