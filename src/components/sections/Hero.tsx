@@ -9,6 +9,7 @@ import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ScrollReveal, MagneticHover } from "@/components/motion";
+import { TEES } from "@/lib/patches";
 import { hero as content } from "@/content/home";
 
 /* ============================================================
@@ -45,8 +46,6 @@ export function Hero() {
             <span className="hidden sm:inline">{content.banner.tees}</span>
             <span className="hidden text-doodle-ink/25 md:inline">·</span>
             <span className="hidden md:inline">{content.banner.city}</span>
-            <span className="hidden text-doodle-ink/25 md:inline">·</span>
-            <span className="hidden md:inline">{content.banner.month}</span>
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-3 py-1 text-xs font-medium text-doodle-ink shadow-subtle">
             <span className="h-1.5 w-1.5 rounded-full bg-doodle-orange" />
@@ -117,9 +116,16 @@ export function Hero() {
           {/* Microproof — clean sans pills on soft shadow (no mono, no dashed) */}
           <div className="mt-8 flex flex-wrap items-center gap-2.5">
             <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-3.5 py-2 text-xs font-medium text-doodle-ink/80 shadow-subtle">
+              {/* One dot per real colourway — derived from the registry so the
+                  dot count can never disagree with the label. */}
               <span className="inline-flex">
-                <span className="inline-block h-3 w-3 rounded-full bg-doodle-tee-pink ring-2 ring-doodle-stitch" />
-                <span className="-ml-1.5 inline-block h-3 w-3 rounded-full bg-doodle-tee-blue ring-2 ring-doodle-stitch" />
+                {TEES.map((t) => (
+                  <span
+                    key={t.key}
+                    className="inline-block h-3 w-3 rounded-full ring-2 ring-doodle-stitch first:ml-0 -ml-1.5"
+                    style={{ backgroundColor: t.swatch }}
+                  />
+                ))}
               </span>
               {content.microproof.baseColours}
             </span>

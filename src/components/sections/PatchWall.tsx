@@ -39,7 +39,7 @@ export function PatchWall() {
 
           <div className="md:col-span-4 md:text-right">
             <a
-              href="#dual-cta"
+              href="#join"
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-doodle-ink/70 transition-colors hover:text-doodle-orange"
             >
               {content.seeAll}

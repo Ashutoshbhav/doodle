@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { PACKS, packPatches, type Pack } from "@/lib/patches";
+import { isCommerceEnabled } from "@/lib/commerce";
 
 /* PacksShowcase — patch packs sold separately, six at a time. Five themed
    embroidered packs + the "Mix Your Six" build-your-own from the silicone
@@ -61,13 +62,15 @@ function PackCard({ pack }: { pack: Pack }) {
         )}
       </div>
 
+      {/* In waitlist mode the button never says "Add" — it can't deliver.
+          It routes to the waitlist instead. */}
       <div className="mt-6 flex items-center justify-between pt-2">
         <span className="font-display text-2xl text-doodle-ink">₹{pack.price}</span>
         <Link
-          href={pack.mix ? "/#shop" : "/shop"}
+          href={pack.mix ? "/#shop" : isCommerceEnabled ? `/shop/${pack.key}` : "/#join"}
           className="inline-flex h-10 items-center justify-center rounded-full bg-doodle-orange px-5 text-sm font-medium text-doodle-stitch shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
         >
-          {pack.mix ? "Build it" : "Add pack"}
+          {pack.mix ? "Build it" : isCommerceEnabled ? "Add pack" : "Get drop alerts"}
         </Link>
       </div>
     </div>

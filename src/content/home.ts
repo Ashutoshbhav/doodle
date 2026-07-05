@@ -9,12 +9,12 @@
 
 /* ---------------- HERO ---------------- */
 export const hero = {
-  // Top drop banner
+  // Top drop banner — no calendar dates here: a stale date reads as an
+  // abandoned brand. Add a month back ONLY with a confirmed drop window.
   banner: {
     firstDrop: "First drop",
     tees: "200 tees",
     city: "Bangalore",
-    month: "May 2026",
     byline: "Doodle by Canvas",
     liveWaitlist: "Live waitlist",
   },
@@ -27,26 +27,28 @@ export const hero = {
   subLead: "Kids don’t outgrow clothes.",
   subEmphasis: "They outgrow characters.",
   body: "A t-shirt with velcro panels and a growing universe of patches your child swaps whenever they feel like it. One tee. Infinite personalities.",
-  // Microproof row beneath the form
+  // Microproof row beneath the form — every number here must match the
+  // live catalogue (tee ₹999, patch ₹100, sizes 3-4Y to 9-10Y).
   microproof: {
-    baseColours: "6 base colours",
-    sizes: "Sizes 3–6 yrs",
-    price: "From ₹370",
+    baseColours: "6 colours",
+    sizes: "Sizes 3–10 yrs",
+    price: "Tee ₹999 · patches from ₹100",
   },
   // Right product stage
   tryIt: "build yours ↓",
-  liveDemo: "The real thing",
-  realProduct: "Real product",
-  // Patch lanes strip
+  liveDemo: "Live demo",
+  realProduct: "Tap to build",
+  // Patch lanes strip — the six real collections in the catalogue, nothing
+  // aspirational (no licensed-fandom lanes, ever).
   patchLanesEyebrow: "Patch lanes",
   seeAll: "See the library",
   patchLanes: [
     { label: "Originals", color: "bg-doodle-pink text-doodle-stitch" },
-    { label: "Animals", color: "bg-doodle-blue text-doodle-stitch" },
-    { label: "Letters", color: "bg-doodle-yellow text-doodle-ink" },
-    { label: "Superhero", color: "bg-doodle-red text-doodle-stitch" },
-    { label: "Anime", color: "bg-doodle-purple text-doodle-stitch" },
-    { label: "Sweet Treats", color: "bg-doodle-orange text-doodle-stitch" },
+    { label: "Space", color: "bg-doodle-blue text-doodle-stitch" },
+    { label: "Summer", color: "bg-doodle-yellow text-doodle-ink" },
+    { label: "Gamer", color: "bg-doodle-red text-doodle-stitch" },
+    { label: "Unicorns", color: "bg-doodle-purple text-doodle-stitch" },
+    { label: "Cars", color: "bg-doodle-orange text-doodle-stitch" },
   ],
   keepScrolling: "keep scrolling",
 } as const;
@@ -88,7 +90,7 @@ export const promise = {
     {
       color: "blue",
       title: "One tee instead of five.",
-      body: "Three Avengers tees, two Pokémon tees, half a wardrobe that already doesn't count anymore. We replaced all of that with one shirt and a small pile of patches.",
+      body: "Five character tees, half a wardrobe that stopped counting the moment the phase ended. We replaced all of that with one shirt and a small pile of patches.",
     },
     {
       color: "purple",
@@ -112,13 +114,13 @@ export const howItWorks = {
       color: "blue",
       label: "Step 01",
       title: "Pick your base",
-      body: "Start with a tee, hoodie or backpack. Patch slots are pre-stitched and ready to receive.",
+      body: "Start with a tee in one of six colours. The velcro panel is stitched in and ready to receive.",
     },
     {
       color: "yellow",
       label: "Step 02",
       title: "Choose your patches",
-      body: "Browse the patch library, mix prints with shapes with letters. Build today’s mood.",
+      body: "Browse the library — bears, rockets, unicorns, race cars. Build today’s mood.",
     },
     {
       color: "pink",
@@ -137,7 +139,7 @@ export const patchWall = {
   headlineMid: "patches.",
   headlineHighlight: "Endless",
   headlineEnd: "looks.",
-  body: "Letters, planets, mood blobs, monograms — the catalogue grows every drop. Mix four on a tee and never repeat an outfit.",
+  body: "Bears, rockets, unicorns, race cars — the catalogue grows every drop. Mix six on a tee and never repeat an outfit.",
   seeAll: "See the library",
   // Patch tiles — `name` is the label shown on hover
   patches: [
@@ -265,34 +267,48 @@ export const earlyVoices = {
 } as const;
 
 /* ---------------- FOUNDERS ---------------- */
+// Real people only. Bios stay empty until each founder writes their own
+// line — an empty bio renders cleaner than an invented one.
 export const founders = {
   eyebrow: "The makers",
-  // Headline rendered as: "Three people, [one] workshop, a [stubborn] idea."
-  headlineLead: "Three people,",
+  // Headline rendered as: "Five people, [one] idea, a [stubborn] belief."
+  headlineLead: "Five people,",
   headlineEmphasis: "one",
-  headlineMid: "workshop, a",
+  headlineMid: "idea, a",
   headlineHighlight: "stubborn",
-  headlineEnd: "idea.",
-  body: "Cut, sewn, sketched and shipped from a single Bengaluru studio. We answer every email ourselves.",
+  headlineEnd: "belief.",
+  body: "Five MBA classmates from Scaler School of Business, building DOODLE out of Bangalore. We answer every email ourselves.",
   petPatchLabel: "Pet patch",
   people: [
     {
-      name: "[Founder One]",
-      role: "Co-founder · Product",
-      bio: "Built the patch attachment system. Has a 6-year-old who is the harshest tester on Earth.",
-      favPatchLabel: "Volt",
+      name: "Ronit Dadra",
+      role: "Co-founder",
+      bio: "",
+      favPatchLabel: "Stella the Star",
     },
     {
-      name: "[Founder Two]",
-      role: "Co-founder · Brand",
-      bio: "Drew every doodle in the first patch library. Believes every t-shirt should hold a story.",
-      favPatchLabel: "First crush",
+      name: "Lakshay Vashist",
+      role: "Co-founder",
+      bio: "",
+      favPatchLabel: "Bruno the Bear",
     },
     {
-      name: "[Founder Three]",
-      role: "Co-founder · Operations",
-      bio: "Runs the Bengaluru workshop. Cares about cotton sourcing more than is reasonable.",
-      favPatchLabel: "North star",
+      name: "Ashutosh Bhavale",
+      role: "Co-founder",
+      bio: "",
+      favPatchLabel: "Romy the Rainbow",
+    },
+    {
+      name: "Rohit Prasad",
+      role: "Co-founder",
+      bio: "",
+      favPatchLabel: "Pim the Penguin",
+    },
+    {
+      name: "Aditya Geda",
+      role: "Co-founder",
+      bio: "",
+      favPatchLabel: "Otto the Octopus",
     },
   ],
 } as const;
@@ -351,7 +367,7 @@ export const dualCTA = {
     headlineEmphasis: "We’ll bring the patches.",
     body: "Looking for boutique kids’ stores, design schools and play-cafes across India. Wholesale terms, sample kits, and consignment options available.",
     ctaLabel: "Send a stockist note",
-    emailNote: "[hello@example.in — replace]",
+    emailNote: "hello@doodlebycanvas.in",
   },
 } as const;
 
@@ -359,41 +375,40 @@ export const dualCTA = {
 export const footer = {
   tagline:
     "Modular kids’ clothing with patches that swap, mix and remix. Designed in India. Made for the way kids actually play.",
+  // Every link below must resolve. No "#" placeholders, no pages that don't
+  // exist yet — a dead FAQ link advertises the gap. Add links back only
+  // when their destination ships.
   columns: [
     {
       title: "Explore",
       links: [
-        { href: "#how", label: "How it works" },
-        { href: "#wall", label: "Patch library" },
-        { href: "#characters", label: "Looks gallery" },
-        { href: "#why", label: "Why DOODLE" },
+        { href: "/#shop", label: "Build your tee" },
+        { href: "/#how", label: "How it works" },
+        { href: "/#wall", label: "Patch library" },
+        { href: "/#packs", label: "Patch packs" },
       ],
     },
     {
       title: "Help",
       links: [
-        { href: "#", label: "Sizing guide" },
-        { href: "#", label: "Care & washing" },
-        { href: "#", label: "FAQs" },
         { href: "/refunds", label: "Returns & refunds" },
         { href: "/shipping", label: "Shipping" },
+        { href: "/contact", label: "Contact" },
       ],
     },
     {
       title: "Company",
       links: [
-        { href: "#founders", label: "Founders" },
-        { href: "#voices", label: "Press kit" },
-        { href: "#dual-cta", label: "Stockists" },
-        { href: "/contact", label: "Contact" },
+        { href: "/#founders", label: "The makers" },
+        { href: "/#join", label: "Stockists" },
+        { href: "/privacy", label: "Privacy" },
       ],
     },
   ],
+  // Socials: email only until the real Instagram/YouTube handles exist.
+  // Never link a "#" icon, and never TikTok (banned in India since 2020).
   socials: [
-    { href: "#", label: "Instagram", iconName: "InstagramLogo" },
-    { href: "#", label: "TikTok", iconName: "TiktokLogo" },
-    { href: "#", label: "YouTube", iconName: "YoutubeLogo" },
-    { href: "mailto:hello@example.in", label: "Email", iconName: "EnvelopeSimple" },
+    { href: "mailto:hello@doodlebycanvas.in", label: "Email", iconName: "EnvelopeSimple" },
   ],
   brandName: "DOODLE",
   brandBy: "by",

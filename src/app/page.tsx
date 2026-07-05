@@ -1,15 +1,17 @@
 /**
  * DOODLE — Home (composition root)
  *
- * Section order follows the benchmarked apparel blueprint: announcement →
- * hero → trust → build-your-tee (interactive, buyable) → education → patch
- * library → patch-math → one brand-story → social proof → founders →
- * offline → CTA → footer.
+ * Tight editorial model (SKIMS-length, not Souled-Store-length): every
+ * section has exactly one job and no two sections repeat a job.
+ * announcement → hero (waitlist) → trust → build-your-tee (interactive) →
+ * education → patch library → packs → brand promise → makers → CTA → footer.
  *
  * Consolidated 2026-06-27: dropped TheRealThing + WhyDoodle (merged into the
- * single Promise brand-story) and CharacterStrip (placeholder smileys) for
- * restraint. The static FeaturedTee was replaced by the interactive
- * BuildYourTee demo. Files kept in the repo, just not rendered.
+ * single Promise brand-story) and CharacterStrip (placeholder smileys).
+ * Consolidated 2026-07-05: dropped PatchMath (restated PatchWall's job),
+ * EarlyVoices (invented testimonials — reinstate ONLY with real, consented
+ * quotes) and FindUsOffline (expired pop-up dates — reinstate ONLY with
+ * booked venues). Files kept in the repo, just not rendered.
  */
 
 import { AnnouncementBar } from "@/components/sections/AnnouncementBar";
@@ -20,11 +22,8 @@ import { BuildYourTee } from "@/components/sections/BuildYourTee";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PatchWall } from "@/components/sections/PatchWall";
 import { PacksShowcase } from "@/components/sections/PacksShowcase";
-import { PatchMath } from "@/components/sections/PatchMath";
 import { Promise as PromiseSection } from "@/components/sections/Promise";
-import { EarlyVoices } from "@/components/sections/EarlyVoices";
 import { Founders } from "@/components/sections/Founders";
-import { FindUsOffline } from "@/components/sections/FindUsOffline";
 import { DualCTA } from "@/components/sections/DualCTA";
 import { Footer } from "@/components/sections/Footer";
 
@@ -40,11 +39,8 @@ export default function Home() {
         <HowItWorks />
         <PatchWall />
         <PacksShowcase />
-        <PatchMath />
         <PromiseSection />
-        <EarlyVoices />
         <Founders />
-        <FindUsOffline />
         <DualCTA />
       </main>
       <Footer />

@@ -59,7 +59,7 @@ export function FindUsOffline() {
 
           <div className="md:col-span-4 md:text-right">
             <a
-              href="#dual-cta"
+              href="#join"
               className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-4 py-2 text-xs font-semibold text-doodle-ink shadow-subtle transition-shadow hover:shadow-card"
             >
               {content.alertsCta}

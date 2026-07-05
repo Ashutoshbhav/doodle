@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, useInView } from "motion/react";
-import { Heart, Lightning, Star } from "@phosphor-icons/react/dist/ssr";
+import { Heart, Lightning, Star, Rocket, Sun } from "@phosphor-icons/react/dist/ssr";
 import type { Icon } from "@phosphor-icons/react";
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
@@ -21,7 +21,7 @@ import { founders as content } from "@/content/home";
      One orange accent (the fav-patch pin) per card.
    ============================================================ */
 
-type FounderColor = "orange" | "blue" | "purple";
+type FounderColor = "orange" | "blue" | "purple" | "pink" | "yellow";
 
 // Visual data (stage colour + favourite-patch icon) is structural;
 // name/role/bio/favPatch.label come from content.people
@@ -32,6 +32,8 @@ const FOUNDER_VISUALS: {
   { tint: "orange", FavIcon: Lightning },
   { tint: "blue", FavIcon: Heart },
   { tint: "purple", FavIcon: Star },
+  { tint: "pink", FavIcon: Rocket },
+  { tint: "yellow", FavIcon: Sun },
 ];
 
 const FOUNDERS = content.people.map((p, i) => ({
@@ -47,13 +49,17 @@ const STAGE = {
   orange: "bg-doodle-orange/15",
   blue: "bg-doodle-blue/15",
   purple: "bg-doodle-purple/15",
+  pink: "bg-doodle-pink/15",
+  yellow: "bg-doodle-yellow/15",
 } as const;
 
-// Monogram tile fill + readable text.
+// Monogram tile fill + readable text (dark ink on the yellow tile for AA).
 const MONO = {
   orange: "bg-doodle-orange text-doodle-stitch",
   blue: "bg-doodle-blue text-doodle-stitch",
   purple: "bg-doodle-purple text-doodle-stitch",
+  pink: "bg-doodle-pink text-doodle-stitch",
+  yellow: "bg-doodle-yellow text-doodle-ink",
 } as const;
 
 export function Founders() {
@@ -83,7 +89,7 @@ export function Founders() {
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FOUNDERS.map((f, i) => (
             <FounderCard key={f.name + i} f={f} index={i} />
           ))}
@@ -118,7 +124,7 @@ function FounderCard({
           damping: 22,
           delay: index * 0.1,
         }}
-        className="relative rounded-[1rem] bg-doodle-stitch p-7 shadow-card transition-shadow hover:shadow-card-hover flex flex-col gap-5 min-h-[420px] sm:p-8"
+        className="relative rounded-[1rem] bg-doodle-stitch p-7 shadow-card transition-shadow hover:shadow-card-hover flex flex-col gap-5 sm:p-8"
       >
         {/* Portrait placeholder — soft tinted stage + monogram (no smiley) */}
         <div
@@ -147,7 +153,8 @@ function FounderCard({
           </div>
         </div>
 
-        <p className="text-sm leading-relaxed text-doodle-ink/75">{f.bio}</p>
+        {/* Bio renders only when the founder has written one — never filler */}
+        {f.bio && <p className="text-sm leading-relaxed text-doodle-ink/75">{f.bio}</p>}
 
         <div className="mt-auto flex items-center justify-between gap-2 rounded-full bg-doodle-ink/[0.05] px-4 py-2.5">
           <span className="text-xs font-medium text-doodle-ink/55">

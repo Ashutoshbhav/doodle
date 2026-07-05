@@ -17,7 +17,7 @@ import { dualCTA as content } from "@/content/home";
 export function DualCTA() {
   return (
     <section
-      id="dual-cta"
+      id="join"
       className="relative border-b border-doodle-ink/10 py-16 md:py-24"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
@@ -123,7 +123,7 @@ function StockistCard() {
 
       <div className="relative z-10 mt-auto flex flex-wrap items-center gap-3">
         <a
-          href="mailto:hello@example.in?subject=DOODLE%20stockist%20inquiry&body=Tell%20us%20about%20your%20store%20%E2%80%94%20name%2C%20city%2C%20website%2C%20what%20you%20stock%20today."
+          href="mailto:hello@doodlebycanvas.in?subject=DOODLE%20stockist%20inquiry&body=Tell%20us%20about%20your%20store%20%E2%80%94%20name%2C%20city%2C%20website%2C%20what%20you%20stock%20today."
           className="
             inline-flex items-center gap-3 h-12 px-6 rounded-full
             bg-doodle-stitch text-doodle-purple font-medium text-sm

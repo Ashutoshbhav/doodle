@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { motion, useInView } from "motion/react";
 import {
   TShirt,
@@ -11,14 +12,15 @@ import {
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
-import { PatchShape, type PatchKey } from "@/components/ui/PatchShape";
+import { PATCHES, PATCH_COUNT, patchByKey } from "@/lib/patches";
 import { howItWorks as content } from "@/content/home";
 
 // Icons are structural (not copy); label/title/body come from content.steps
 const STEP_ICONS = [TShirt, Stack, Sparkle] as const;
 
-// One signature patch per step — the tactile object the step is about.
-const STEP_PATCH: readonly PatchKey[] = ["star", "lightning", "heart"];
+// One signature patch per step — a REAL charm from the catalogue, so
+// everything on the page that looks like a patch is a patch you can buy.
+const STEP_PATCH = [patchByKey("star"), patchByKey("rainbow"), patchByKey("crown")];
 
 const STEPS = content.steps.map((s, i) => ({
   Icon: STEP_ICONS[i],
@@ -74,26 +76,23 @@ export function HowItWorks() {
           ))}
         </ol>
 
-        {/* Closing patch line — fills the space below the steps with the actual
-            tactile objects the steps are about. A row of silicone patches on a
-            soft cream rail, one orange "200+ patches" cap. */}
+        {/* Closing patch line — real catalogue charms, and the count comes
+            from the registry so it can never drift from reality. */}
         <div className="mt-14 flex flex-col items-center gap-5 rounded-[1rem] bg-doodle-stitch px-6 py-7 shadow-card sm:flex-row sm:justify-between sm:gap-8 sm:px-9">
           <div className="flex shrink-0 items-center">
-            {(["star", "lightning", "heart", "rocket", "moon", "sun"] as PatchKey[]).map(
-              (p, i) => (
-                <span
-                  key={p}
-                  className="-ml-3 inline-grid h-12 w-12 place-items-center rounded-full bg-doodle-canvas shadow-subtle ring-2 ring-doodle-stitch first:ml-0"
-                  style={{ zIndex: 10 - i }}
-                >
-                  <PatchShape patch={p} size={34} />
-                </span>
-              ),
-            )}
+            {PATCHES.slice(0, 6).map((p, i) => (
+              <span
+                key={p.key}
+                className="-ml-3 inline-grid h-12 w-12 place-items-center rounded-full bg-doodle-canvas p-1.5 shadow-subtle ring-2 ring-doodle-stitch first:ml-0"
+                style={{ zIndex: 10 - i }}
+              >
+                <Image src={p.src} alt={p.name} width={38} height={38} className="h-full w-full object-contain" />
+              </span>
+            ))}
           </div>
           <p className="text-center font-display text-lg leading-snug text-doodle-ink sm:text-right">
             Snap on any patch from the library.{" "}
-            <span className="italic text-doodle-orange">200+ and growing.</span>
+            <span className="italic text-doodle-orange">{PATCH_COUNT} and growing.</span>
           </p>
         </div>
       </div>
@@ -138,9 +137,9 @@ function Step({
         >
           <step.Icon weight="duotone" size={52} className={t.icon} />
 
-          {/* Signature patch peeking off the tile — the tactile object itself */}
-          <span className="absolute -bottom-3 left-1/2 inline-grid h-14 w-14 -translate-x-1/2 rotate-[-6deg] place-items-center rounded-full bg-doodle-stitch shadow-card ring-2 ring-doodle-canvas">
-            <PatchShape patch={patch} size={40} />
+          {/* Signature patch peeking off the tile — a real catalogue charm */}
+          <span className="absolute -bottom-3 left-1/2 inline-grid h-14 w-14 -translate-x-1/2 rotate-[-6deg] place-items-center rounded-full bg-doodle-stitch p-2 shadow-card ring-2 ring-doodle-canvas">
+            <Image src={patch.src} alt={patch.name} width={44} height={44} className="h-full w-full object-contain" />
           </span>
 
           {/* Step number — solid colour chip, clean sans, no dashed border */}

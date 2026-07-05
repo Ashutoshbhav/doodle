@@ -11,6 +11,7 @@ import {
   velcroSlots,
   type Patch,
 } from "@/lib/patches";
+import { isCommerceEnabled } from "@/lib/commerce";
 
 /* BuildYourTee — the real, interactive "build your own t-shirt" demo.
    Pick a colour, tap patches to drop them onto the chest (up to 5), tap a
@@ -207,14 +208,15 @@ export function BuildYourTee() {
               ))}
             </div>
 
+            {/* Honest price only — no invented MRP anchor. In waitlist mode
+                the CTA reserves a spot instead of promising a cart. */}
             <div className="mt-6 flex flex-wrap items-center gap-4">
               <span className="font-display text-2xl text-doodle-ink">₹999</span>
-              <span className="text-base text-doodle-ink/40 line-through">₹1499</span>
               <Link
-                href="/shop"
+                href={isCommerceEnabled ? "/shop" : "/#join"}
                 className="inline-flex h-11 items-center justify-center rounded-full bg-doodle-orange px-6 text-sm font-medium text-doodle-stitch shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
               >
-                Add this kit
+                {isCommerceEnabled ? "Add this kit" : "Reserve this kit"}
               </Link>
             </div>
             <p className="mt-3 text-[12px] text-doodle-ink/50">

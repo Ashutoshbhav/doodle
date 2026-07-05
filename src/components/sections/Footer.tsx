@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   InstagramLogo,
-  TiktokLogo,
   YoutubeLogo,
   EnvelopeSimple,
   HandCoins,
@@ -18,9 +17,9 @@ import { footer as content } from "@/content/home";
 
 const COLUMNS = content.columns;
 
+// TikTok is deliberately absent (banned in India since 2020) — do not re-add.
 const SOCIAL_ICONS = {
   InstagramLogo,
-  TiktokLogo,
   YoutubeLogo,
   EnvelopeSimple,
 } as const;
