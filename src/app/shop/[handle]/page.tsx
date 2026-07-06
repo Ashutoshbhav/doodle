@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { getIndiaRegionId } from "@/lib/medusa/cart"
 import { VariantPicker } from "@/components/shop/VariantPicker"
-import { PatchScrubber } from "@/components/ui/PatchScrubber"
+import { LazyPatchScrubber } from "@/components/ui/LazyPatchScrubber"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { Eyebrow } from "@/components/ui/Eyebrow"
@@ -215,7 +215,9 @@ export default async function PDPPage({
                 <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-doodle-ink/55">
                   Try the patch swap
                 </p>
-                <PatchScrubber />
+                {/* Loads its chunk only when scrolled near — keeps the PDP's
+                    first paint about the photos, not the toy. */}
+                <LazyPatchScrubber />
               </div>
             </div>
 

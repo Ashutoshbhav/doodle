@@ -6,6 +6,7 @@ import {
   Caveat,
   Bagel_Fat_One,
 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { Providers } from "@/components/Providers";
 import { ConsentBanner } from "@/components/ui/ConsentBanner";
 import { SmoothScroll } from "@/components/motion";
@@ -150,6 +151,12 @@ export default function RootLayout({
           <SmoothScroll>{children}</SmoothScroll>
           <ConsentBanner />
         </Providers>
+        {/* Cookieless aggregate pageviews (Vercel Web Analytics) — the
+            zero-consent measurement floor. PostHog/pixels stay consent-gated;
+            this counts sessions without identifying anyone, so funnel
+            denominators are real even when the banner is ignored.
+            No-ops until Web Analytics is enabled on the Vercel project. */}
+        <Analytics />
       </body>
     </html>
   );

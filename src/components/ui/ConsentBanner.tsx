@@ -1,5 +1,6 @@
 "use client"
 
+import * as React from "react"
 import Link from "next/link"
 import { useConsentChoiceMade, writeConsent } from "@/lib/consent"
 
@@ -7,9 +8,26 @@ import { useConsentChoiceMade, writeConsent } from "@/lib/consent"
  * DPDP-aligned consent banner. Shows once until the visitor chooses. No
  * pre-selected option, Accept and Reject given equal prominence, links to the
  * Privacy Policy. Until "Accept", analytics/marketing trackers stay off.
+ *
+ * A11y: receives initial focus so keyboard/screen-reader users meet it, and
+ * Escape moves focus on WITHOUT recording a choice (the banner persists —
+ * dismissal is not consent, and it must not be treated as rejection either).
  */
 export function ConsentBanner() {
   const choiceMade = useConsentChoiceMade()
+  const ref = React.useRef<HTMLDivElement | null>(null)
+
+  React.useEffect(() => {
+    if (choiceMade) return
+    ref.current?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && ref.current?.contains(document.activeElement)) {
+        ;(document.activeElement as HTMLElement | null)?.blur()
+      }
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [choiceMade])
 
   if (choiceMade) return null
 
@@ -19,9 +37,11 @@ export function ConsentBanner() {
 
   return (
     <div
+      ref={ref}
+      tabIndex={-1}
       role="dialog"
       aria-label="Cookie & analytics consent"
-      className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-2xl rounded-2xl border-2 border-dashed border-doodle-ink/25 bg-doodle-canvas p-5 shadow-[0_8px_40px_-12px_rgba(42,42,46,0.35)] sm:p-6"
+      className="fixed inset-x-3 bottom-3 z-[100] mx-auto max-w-2xl rounded-2xl border-2 border-dashed border-doodle-ink/25 bg-doodle-canvas p-5 shadow-[0_8px_40px_-12px_rgba(42,42,46,0.35)] outline-none sm:p-6"
     >
       <p className="text-sm leading-relaxed text-doodle-ink/80">
         We use essential cookies to run the site. With your okay, we&apos;d also use

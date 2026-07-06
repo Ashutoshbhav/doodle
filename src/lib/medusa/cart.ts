@@ -40,17 +40,34 @@ export async function getOrCreateCart(regionId: string): Promise<Cart> {
   return cart as Cart
 }
 
+// Module-level cache: the region id is effectively immutable config, but it
+// was being re-fetched on EVERY PLP/PDP/cart render — a serial Vercel→Railway
+// round-trip before first byte. Cache the resolved id; drop the promise on
+// failure so a transient outage doesn't poison the cache.
+let indiaRegionId: string | null = null
+let indiaRegionPromise: Promise<string> | null = null
+
 export async function getIndiaRegionId(): Promise<string> {
-  const { regions } = await medusa.store.region.list()
-  const india = regions.find((r) =>
-    r.countries?.some((c) => c.iso_2 === "in")
-  )
-  if (!india) {
-    throw new Error(
-      "India region is not configured in Medusa admin. Create one at Admin → Settings → Regions."
-    )
+  if (indiaRegionId) return indiaRegionId
+  if (!indiaRegionPromise) {
+    indiaRegionPromise = (async () => {
+      const { regions } = await medusa.store.region.list()
+      const india = regions.find((r) =>
+        r.countries?.some((c) => c.iso_2 === "in")
+      )
+      if (!india) {
+        throw new Error(
+          "India region is not configured in Medusa admin. Create one at Admin → Settings → Regions."
+        )
+      }
+      indiaRegionId = india.id
+      return india.id
+    })().catch((e) => {
+      indiaRegionPromise = null
+      throw e
+    })
   }
-  return india.id
+  return indiaRegionPromise
 }
 
 export async function getCartLineCount(): Promise<number> {
