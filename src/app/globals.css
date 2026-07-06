@@ -342,11 +342,15 @@
   .doodle-ring .dd-boil { animation-play-state: paused; }
   .group:hover .doodle-ring .dd-boil,
   .group:focus-visible .doodle-ring .dd-boil,
-  .group:focus-within .doodle-ring .dd-boil {
+  .group:focus-within .doodle-ring .dd-boil,
+  .group.doodle-live .doodle-ring .dd-boil {
     animation-play-state: running;
   }
-  /* Standalone marks (squiggles, arrows, stars, tee sketches): always alive */
-  .doodle-mark .dd-boil { animation-play-state: running; }
+  /* Standalone marks (squiggles, arrows, stars, tee sketches): alive on
+     hover-capable devices; on touch they stay calm (drawn + sway only) */
+  @media (hover: hover) {
+    .doodle-mark .dd-boil { animation-play-state: running; }
+  }
   /* Reduced motion: single steady frame, no boil */
   @media (prefers-reduced-motion: reduce) {
     .dd-boil { animation: none !important; }
@@ -368,7 +372,8 @@
   .doodle-ring path:nth-child(6) { transition-delay: 370ms; }
   .group:hover .doodle-ring path,
   .group:focus-visible .doodle-ring path,
-  .group:focus-within .doodle-ring path {
+  .group:focus-within .doodle-ring path,
+  .group.doodle-live .doodle-ring path {
     stroke-dashoffset: 0;
   }
   /* Filled accents (cookie crumbs, checker squares, twinkles) pop in
@@ -379,7 +384,8 @@
   }
   .group:hover .doodle-ring .doodle-dot,
   .group:focus-visible .doodle-ring .doodle-dot,
-  .group:focus-within .doodle-ring .doodle-dot {
+  .group:focus-within .doodle-ring .doodle-dot,
+  .group.doodle-live .doodle-ring .doodle-dot {
     opacity: 1;
     animation: dd-twinkle 1.1s ease-in-out 600ms infinite alternate;
   }
@@ -399,7 +405,8 @@
   }
   .group:hover .doodle-personal,
   .group:focus-visible .doodle-personal,
-  .group:focus-within .doodle-personal {
+  .group:focus-within .doodle-personal,
+  .group.doodle-live .doodle-personal {
     transform: scale(1.12) rotate(0deg);
     opacity: 1;
   }
@@ -416,7 +423,8 @@
   }
   .group:hover .doodle-anim,
   .group:focus-visible .doodle-anim,
-  .group:focus-within .doodle-anim {
+  .group:focus-within .doodle-anim,
+  .group.doodle-live .doodle-anim {
     animation-play-state: running;
   }
   .dd-beat { animation-name: dd-beat; animation-duration: 0.9s; }
@@ -479,6 +487,9 @@
      animations, so this costs nothing. The generic hover RINGS stay
      desktop-only (a tap already selects/navigates). */
   @media (hover: none) {
+    /* Touch: the doodle sits quietly DRAWN beside its patch. It comes to
+       life only when TAPPED (.doodle-live, set by PatchDoodle for ~2.6s)
+       — constant motion across a 40-tile wall was noise, not life. */
     .doodle-personal {
       transform: none;
       opacity: 1;
@@ -489,14 +500,6 @@
     }
     .doodle-personal .doodle-dot {
       opacity: 1;
-      animation: dd-twinkle 1.1s ease-in-out infinite alternate;
-    }
-    .doodle-personal .doodle-anim,
-    .doodle-personal.doodle-anim {
-      animation-play-state: running;
-    }
-    .doodle-personal .dd-boil {
-      animation-play-state: running;
     }
   }
 
