@@ -26,17 +26,19 @@ type Geometry = {
   dot?: { cx: number; cy: number; r: number };
 };
 
-const OPTS = {
+const BASE_OPTS = {
   roughness: 1.6,
   bowing: 1.4,
   strokeWidth: 2.2,
   disableMultiStroke: false,
 } as const;
 
-function buildGeometry(kind: Kind): Geometry {
+function buildGeometry(kind: Kind, seedOffset = 0): Geometry {
   const gen = rough.generator();
   const toDs = (drawables: ReturnType<typeof gen.curve>[]) =>
     drawables.flatMap((dr) => gen.toPaths(dr).map((p) => p.d));
+  // seedOffset shifts every seed so each boil frame wobbles differently
+  const o = (seed: number) => ({ ...BASE_OPTS, seed: seed + seedOffset * 7919 });
 
   if (kind === "squiggle") {
     // The wordmark's underline wave + end dot, redrawn by hand.
@@ -50,7 +52,7 @@ function buildGeometry(kind: Kind): Geometry {
         [84, 7],
         [96, 12],
       ],
-      { ...OPTS, seed: 11 },
+      o(11),
     );
     return {
       viewBox: "0 0 120 24",
@@ -68,10 +70,10 @@ function buildGeometry(kind: Kind): Geometry {
         [26, 38],
         [46, 46],
       ],
-      { ...OPTS, seed: 23 },
+      o(23),
     );
-    const headA = gen.line(46, 46, 32, 44, { ...OPTS, seed: 24 });
-    const headB = gen.line(46, 46, 42, 32, { ...OPTS, seed: 25 });
+    const headA = gen.line(46, 46, 32, 44, o(24));
+    const headB = gen.line(46, 46, 42, 32, o(25));
     return { viewBox: "0 0 56 52", strokes: toDs([shaft, headA, headB]) };
   }
 
@@ -90,7 +92,7 @@ function buildGeometry(kind: Kind): Geometry {
         [5.3, 24],
         [23.5, 23.1],
       ],
-      { ...OPTS, seed: 31 },
+      o(31),
     );
     return { viewBox: "0 0 60 60", strokes: toDs([star]) };
   }
@@ -98,11 +100,16 @@ function buildGeometry(kind: Kind): Geometry {
   // kind === "tee" — a child's t-shirt outline for empty states.
   const tee = gen.path(
     "M38 8 L14 24 L24 42 L34 36 L34 96 L86 96 L86 36 L96 42 L106 24 L82 8 Q60 22 38 8 Z",
-    { ...OPTS, seed: 42 },
+    o(42),
   );
   // The velcro panel, sketched as a little rectangle on the chest.
-  const panel = gen.rectangle(44, 40, 32, 14, { ...OPTS, seed: 43 });
+  const panel = gen.rectangle(44, 40, 32, 14, o(43));
   return { viewBox: "0 0 120 104", strokes: [...toDs([tee]), ...toDs([panel])] };
+}
+
+/* Three wobble-variants of the same mark — cycled by CSS for line boil */
+function buildFrames(kind: Kind): Geometry[] {
+  return [0, 1, 2].map((f) => buildGeometry(kind, f));
 }
 
 function usePrefersReducedMotion(): boolean {
@@ -135,7 +142,8 @@ export function DoodleMark({
   const [drawn, setDrawn] = React.useState(false);
   const ref = React.useRef<SVGSVGElement | null>(null);
 
-  const geo = React.useMemo(() => buildGeometry(kind), [kind]);
+  const frames = React.useMemo(() => buildFrames(kind), [kind]);
+  const geo = frames[0];
 
   React.useEffect(() => {
     if (drawn) return;
@@ -170,33 +178,40 @@ export function DoodleMark({
       viewBox={geo.viewBox}
       fill="none"
       aria-hidden
-      className={className}
+      className={`doodle-mark overflow-visible ${className}`}
       style={
         sway && showNow && !reduced
           ? { animation: "doodle-sway 6s ease-in-out infinite", transformOrigin: "50% 50%" }
           : undefined
       }
     >
-      {geo.strokes.map((d, i) => (
-        <path
-          key={i}
-          d={d}
-          stroke="currentColor"
-          strokeWidth={2.2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          pathLength={1}
-          suppressHydrationWarning
-          style={
-            reduced
-              ? undefined
-              : {
-                  strokeDasharray: 1,
-                  strokeDashoffset: showNow ? 0 : 1,
-                  transition: `stroke-dashoffset 700ms cubic-bezier(0.65, 0, 0.35, 1) ${i * 200}ms`,
-                }
-          }
-        />
+      {/* LINE BOIL: three wobble-variants cycle at ~7fps so the ink itself
+          shimmers. Each frame draws in with the same pencil-stroke timing,
+          so the boil is visible even mid-draw — extra hand-made. */}
+      {frames.map((frame, f) => (
+        <g key={f} className={reduced ? undefined : `dd-boil dd-boil-${f + 1}`}>
+          {frame.strokes.map((d, i) => (
+            <path
+              key={i}
+              d={d}
+              stroke="currentColor"
+              strokeWidth={2.2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              pathLength={1}
+              suppressHydrationWarning
+              style={
+                reduced
+                  ? undefined
+                  : {
+                      strokeDasharray: 1,
+                      strokeDashoffset: showNow ? 0 : 1,
+                      transition: `stroke-dashoffset 700ms cubic-bezier(0.65, 0, 0.35, 1) ${i * 200}ms`,
+                    }
+              }
+            />
+          ))}
+        </g>
       ))}
       {geo.dot && (
         <circle

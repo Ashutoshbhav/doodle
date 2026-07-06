@@ -32,10 +32,14 @@ export function DoodleHoverRing({
   /** "outside" overshoots the box; "inside" stays within clipped parents. */
   fit?: "outside" | "inside";
 }) {
-  const strokes = React.useMemo(() => {
+  // Three wobble-variants for line boil — the ring shimmers while held
+  const frames = React.useMemo(() => {
     const gen = rough.generator();
-    const ellipse = gen.ellipse(50, 50, 94, 90, { ...RING_OPTS, seed });
-    return gen.toPaths(ellipse).map((p) => p.d);
+    return [0, 1, 2].map((f) =>
+      gen
+        .toPaths(gen.ellipse(50, 50, 94, 90, { ...RING_OPTS, seed: seed + f * 7919 }))
+        .map((p) => p.d),
+    );
   }, [seed]);
 
   const fitClass =
@@ -50,18 +54,22 @@ export function DoodleHoverRing({
       aria-hidden
       className={`doodle-ring pointer-events-none absolute ${fitClass} ${className}`}
     >
-      {strokes.map((d, i) => (
-        <path
-          key={i}
-          d={d}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          vectorEffect="non-scaling-stroke"
-          pathLength={1}
-          suppressHydrationWarning
-        />
+      {frames.map((strokes, f) => (
+        <g key={f} className={`dd-boil dd-boil-${f + 1}`}>
+          {strokes.map((d, i) => (
+            <path
+              key={i}
+              d={d}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              vectorEffect="non-scaling-stroke"
+              pathLength={1}
+              suppressHydrationWarning
+            />
+          ))}
+        </g>
       ))}
     </svg>
   );

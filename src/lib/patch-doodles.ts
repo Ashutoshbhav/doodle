@@ -97,9 +97,9 @@ const SKETCH = { roughness: 1.3, bowing: 1.2, strokeWidth: 2, disableMultiStroke
 type Gen = ReturnType<typeof rough.generator>;
 type Drawable = ReturnType<Gen["line"]>;
 
-function makeSpecs(): Record<string, PatchDoodleSpec> {
+function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
   const gen = rough.generator();
-  let seedCounter = 100;
+  let seedCounter = seedBase;
   const s = () => ({ seed: seedCounter++ });
   const ds = (...drawables: Drawable[]) =>
     drawables.flatMap((d) => gen.toPaths(d).map((p) => p.d));
@@ -576,12 +576,22 @@ function makeSpecs(): Record<string, PatchDoodleSpec> {
   };
 }
 
-let cache: Record<string, PatchDoodleSpec> | null = null;
+/* LINE BOIL: the same doodle drawn 3 times with different wobble seeds.
+   Cycling the frames (~7fps, CSS steps) makes the ink itself shimmer —
+   the hand-drawn-animation trick that makes lines feel ALIVE rather
+   than a static path being slid around. */
+const BOIL_FRAMES = 3;
+
+let cache: Record<string, PatchDoodleSpec>[] | null = null;
 
 const FALLBACK: PatchDoodleSpec = { strokes: [], colorClass: INK };
 
-export function patchDoodleFor(key: string): PatchDoodleSpec {
-  if (!cache) cache = makeSpecs();
-  const spec = cache[key] ?? FALLBACK;
-  return { ...spec, anim: ANIMS[key] };
+export function patchDoodleFrames(key: string): PatchDoodleSpec[] {
+  if (!cache) {
+    cache = Array.from({ length: BOIL_FRAMES }, (_, f) => makeSpecs(100 + f * 7919));
+  }
+  return cache.map((frame) => {
+    const spec = frame[key] ?? FALLBACK;
+    return { ...spec, anim: ANIMS[key] };
+  });
 }

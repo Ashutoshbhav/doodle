@@ -316,6 +316,44 @@
     50% { transform: rotate(1deg); }
   }
 
+  /* LINE BOIL — the soul of the doodles. Three seed-variants of every
+     mark cycle at ~7fps (opacity flips, GPU-cheap), so the ink itself
+     shimmers like classic hand-drawn animation. Frames pause in hover
+     contexts until the group is held; DoodleMarks boil whenever visible;
+     touch devices keep patch doodles boiling always. */
+  .dd-boil { animation-duration: 0.42s; animation-iteration-count: infinite; }
+  .dd-boil-1 { animation-name: dd-boil-a; }
+  .dd-boil-2 { animation-name: dd-boil-b; opacity: 0; }
+  .dd-boil-3 { animation-name: dd-boil-c; opacity: 0; }
+  @keyframes dd-boil-a {
+    0%, 32% { opacity: 1; }
+    33%, 100% { opacity: 0; }
+  }
+  @keyframes dd-boil-b {
+    0%, 32% { opacity: 0; }
+    33%, 65% { opacity: 1; }
+    66%, 100% { opacity: 0; }
+  }
+  @keyframes dd-boil-c {
+    0%, 65% { opacity: 0; }
+    66%, 100% { opacity: 1; }
+  }
+  /* Hover-gated contexts (patch doodles, crayon rings): boil only while held */
+  .doodle-ring .dd-boil { animation-play-state: paused; }
+  .group:hover .doodle-ring .dd-boil,
+  .group:focus-visible .doodle-ring .dd-boil,
+  .group:focus-within .doodle-ring .dd-boil {
+    animation-play-state: running;
+  }
+  /* Standalone marks (squiggles, arrows, stars, tee sketches): always alive */
+  .doodle-mark .dd-boil { animation-play-state: running; }
+  /* Reduced motion: single steady frame, no boil */
+  @media (prefers-reduced-motion: reduce) {
+    .dd-boil { animation: none !important; }
+    .dd-boil-1 { opacity: 1 !important; }
+    .dd-boil-2, .dd-boil-3 { opacity: 0 !important; }
+  }
+
   /* DoodleHoverRing — the crayon circle draws in on hover/focus of the
      nearest `group`. Pure CSS; reduced-motion shows it instantly. */
   .doodle-ring path {
@@ -455,6 +493,9 @@
     }
     .doodle-personal .doodle-anim,
     .doodle-personal.doodle-anim {
+      animation-play-state: running;
+    }
+    .doodle-personal .dd-boil {
       animation-play-state: running;
     }
   }
