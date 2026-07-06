@@ -66,7 +66,7 @@ export default async function CartPage() {
                       <li key={s.handle} className="flex items-center gap-3">
                         <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-doodle-stitch">
                           {s.thumbnail && (
-                            <Image src={s.thumbnail} alt={s.title} fill sizes="48px" className="object-cover" />
+                            <Image src={s.thumbnail} alt={s.title} fill sizes="48px" className="object-contain p-1" />
                           )}
                         </span>
                         <span className="min-w-0 flex-1">
@@ -94,8 +94,9 @@ export default async function CartPage() {
               <div className="mt-8 rounded-[1rem] bg-doodle-canvas p-6 shadow-card">
                 <div className="flex justify-between text-sm text-doodle-ink/70">
                   <span>Subtotal</span>
+                  {/* item_subtotal: cart.subtotal includes shipping in Medusa v2 */}
                   <span className="font-medium text-doodle-ink">
-                    {formatINR(cart?.subtotal ?? 0)}
+                    {formatINR(cart?.item_subtotal ?? cart?.subtotal ?? 0)}
                   </span>
                 </div>
                 <div className="mt-2 flex justify-between text-sm text-doodle-ink/70">

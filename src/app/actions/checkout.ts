@@ -40,11 +40,45 @@ import type { CartLine } from "@/lib/medusa/types"
 function stockCapFor(line: CartLine): number {
   const v = line.variant
   if (v?.manage_inventory !== true || v?.allow_backorder === true) return 99
-  return Math.max(0, v.inventory_quantity ?? 0)
+  // Cart queries do NOT compute variant inventory (verified against the live
+  // API: manage_inventory arrives, inventory_quantity does not). Missing
+  // data means UNKNOWN, never zero — Medusa's own reservation at completion
+  // remains the hard backstop.
+  if (typeof v.inventory_quantity !== "number") return 99
+  return Math.max(0, v.inventory_quantity)
+}
+
+/** True inventory for a variant, from the products endpoint (the only store
+    query that computes it — needs the "+variants.inventory_quantity" PLUS
+    prefix). Returns null when unknown. */
+async function fetchVariantStock(
+  productId: string | null | undefined,
+  variantId: string,
+): Promise<{ qty: number; managed: boolean; backorder: boolean } | null> {
+  if (!productId) return null
+  try {
+    const regionId = await getIndiaRegionId()
+    const { products } = await medusa.store.product.list({
+      id: productId,
+      limit: 1,
+      fields: "+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder",
+      region_id: regionId,
+    })
+    const v = products?.[0]?.variants?.find((x) => x.id === variantId)
+    if (!v || typeof v.inventory_quantity !== "number") return null
+    return {
+      qty: v.inventory_quantity,
+      managed: v.manage_inventory === true,
+      backorder: v.allow_backorder === true,
+    }
+  } catch {
+    return null
+  }
 }
 
 /** Clamp a just-written line to available stock. `clamped` is true when we
-    had to reduce the line (or remove it entirely: finalQty null). */
+    had to reduce the line (or remove it entirely: finalQty null). Uses the
+    products endpoint for the real number; unknown stock never clamps. */
 async function clampLineToStock(
   cartId: string,
   variantId: string,
@@ -52,7 +86,11 @@ async function clampLineToStock(
   const fresh = await getCart()
   const line = fresh?.items?.find((i) => i.variant_id === variantId)
   if (!fresh || !line) return { finalQty: null, clamped: false }
-  const cap = stockCapFor(line)
+  const stock = await fetchVariantStock(line.product_id, variantId)
+  if (!stock || !stock.managed || stock.backorder) {
+    return { finalQty: line.quantity, clamped: false }
+  }
+  const cap = Math.max(0, stock.qty)
   if (line.quantity <= cap) return { finalQty: line.quantity, clamped: false }
   if (cap === 0) {
     await medusa.store.cart.deleteLineItem(fresh.id, line.id)

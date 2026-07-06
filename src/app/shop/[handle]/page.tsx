@@ -29,8 +29,15 @@ async function fetchProduct(handle: string): Promise<Product | null> {
     const { products } = await medusa.store.product.list({
       handle,
       limit: 1,
+      // Field-prefix traps (both verified against the live API):
+      // - "*options" AND "*options.values": asking only for the nested
+      //   relation strips the option's own id/title, which silently broke
+      //   variant matching (option buttons could never resolve a variant).
+      // - "+variants.inventory_quantity" (PLUS): inventory is a computed
+      //   field; with "*" Medusa returns undefined and every stock state
+      //   (sold out / only-N-left) runs on missing data.
       fields:
-        "*variants.calculated_price,*variants.options,*variants.inventory_quantity,*variants.manage_inventory,*variants.allow_backorder,*options.values,*images,thumbnail,handle,title,description,subtitle,origin_country,metadata",
+        "*variants.calculated_price,*variants.options,+variants.inventory_quantity,+variants.manage_inventory,+variants.allow_backorder,*options,*options.values,*images,thumbnail,handle,title,description,subtitle,origin_country,metadata",
       region_id: regionId,
     })
     return (products[0] as unknown as Product) ?? null

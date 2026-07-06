@@ -45,13 +45,15 @@ export function ProductGallery({
             key={src}
             className="relative aspect-[4/5] w-full shrink-0 snap-center bg-doodle-stitch"
           >
+            {/* contain, not cover — pack composites lose their outer patches
+                to any crop, and the sources are clean studio shots anyway */}
             <Image
               src={src}
               alt={`${alt} — photo ${i + 1} of ${images.length}`}
               fill
               priority={i === 0}
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
+              className="object-contain p-4"
             />
           </div>
         ))}

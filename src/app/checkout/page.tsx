@@ -56,7 +56,9 @@ export default async function CheckoutPage() {
               <div className="mt-5 space-y-2 border-t border-doodle-ink/10 pt-4 text-sm">
                 <div className="flex justify-between text-doodle-ink/70">
                   <span>Subtotal</span>
-                  <span className="font-medium text-doodle-ink">{formatINR(cart.subtotal ?? 0)}</span>
+                  {/* item_subtotal: Medusa's cart.subtotal INCLUDES shipping,
+                      which reads absurd next to a separate Shipping row */}
+                  <span className="font-medium text-doodle-ink">{formatINR(cart.item_subtotal ?? cart.subtotal ?? 0)}</span>
                 </div>
                 <div className="flex justify-between text-doodle-ink/70">
                   <span>Shipping</span>

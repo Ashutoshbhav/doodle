@@ -23,7 +23,10 @@ function stockState(variant: Variant | undefined): {
   if (!variant) return { inStock: true, remaining: null }
   if (variant.manage_inventory !== true) return { inStock: true, remaining: null }
   if (variant.allow_backorder === true) return { inStock: true, remaining: null }
-  const qty = variant.inventory_quantity ?? 0
+  // Missing number = the query didn't compute inventory — unknown, not zero.
+  // Never show "Sold out" off absent data.
+  if (typeof variant.inventory_quantity !== "number") return { inStock: true, remaining: null }
+  const qty = variant.inventory_quantity
   return { inStock: qty > 0, remaining: qty }
 }
 

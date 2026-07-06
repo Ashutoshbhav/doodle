@@ -26,14 +26,18 @@ export function ProductCard({ product }: { product: Product }) {
         transition-[box-shadow,transform] duration-200
       "
     >
-      <div className="relative aspect-[4/5] bg-doodle-stitch overflow-hidden">
+      {/* object-CONTAIN, not cover: the pack composites are edge-to-edge
+          patch grids and cover was amputating the outer patches. All source
+          images sit on light studio backgrounds, so containing on the card's
+          own surface reads clean for tees and packs alike. */}
+      <div className="relative aspect-[4/5] bg-doodle-stitch overflow-hidden p-3">
         {thumbnail ? (
           <Image
             src={thumbnail}
             alt={product.title ?? ""}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="grid place-items-center h-full">

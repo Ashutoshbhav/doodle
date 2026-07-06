@@ -122,7 +122,7 @@ export function CartDrawerProvider({
                         >
                           <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-doodle-canvas">
                             {s.thumbnail && (
-                              <Image src={s.thumbnail} alt={s.title} fill sizes="56px" className="object-cover" />
+                              <Image src={s.thumbnail} alt={s.title} fill sizes="56px" className="object-contain p-1" />
                             )}
                           </span>
                           <span className="min-w-0 flex-1">

@@ -16,12 +16,17 @@ export function CartLine({ line }: { line: CartLineT }) {
   const thumbnail =
     line.thumbnail ?? line.variant?.product?.thumbnail ?? null
 
-  // Available stock: only constrains when Medusa manages inventory and the
-  // variant isn't backorderable. Otherwise it's effectively unlimited.
+  // Available stock: only constrains when Medusa manages inventory, the
+  // variant isn't backorderable, AND the number actually arrived — cart
+  // queries don't compute inventory, so missing data means unknown, not
+  // zero (zero silently disabled the + stepper). The server action holds
+  // the authoritative clamp.
   const variant = line.variant
   const stockCap =
-    variant?.manage_inventory === true && variant?.allow_backorder !== true
-      ? variant.inventory_quantity ?? 0
+    variant?.manage_inventory === true &&
+    variant?.allow_backorder !== true &&
+    typeof variant.inventory_quantity === "number"
+      ? variant.inventory_quantity
       : HARD_MAX
   const maxQty = Math.min(HARD_MAX, stockCap)
   const atMax = line.quantity >= maxQty
@@ -48,7 +53,7 @@ export function CartLine({ line }: { line: CartLineT }) {
             alt={line.title ?? ""}
             fill
             sizes="80px"
-            className="object-cover"
+            className="object-contain p-1"
           />
         )}
       </div>

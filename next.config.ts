@@ -9,7 +9,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 // nonce-based CSP via proxy.ts in v1.1.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://checkout.razorpay.com https://*.posthog.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net https://www.googletagmanager.com https://checkout.razorpay.com https://*.posthog.com https://va.vercel-scripts.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://res.cloudinary.com https://api.doodlebycanvas.in https://*.doodlebycanvas.in https://*.up.railway.app https://www.facebook.com https://*.posthog.com https://*.razorpay.com",
   "font-src 'self' data:",
