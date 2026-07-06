@@ -9,7 +9,7 @@ const ITEMS = [
   "Free shipping over ₹999",
   "Cash on delivery available",
   "Easy 7-day exchanges",
-  "First drop — Bangalore",
+  "First drop is live",
 ];
 
 export function AnnouncementBar() {

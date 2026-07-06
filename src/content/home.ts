@@ -354,10 +354,10 @@ export const findUsOffline = {
 export const dualCTA = {
   consumer: {
     badge: "Be first",
-    // Headline rendered as: "First drop alerts. [One email, when it's ready.]"
-    headlineLead: "First drop alerts.",
-    headlineEmphasis: "One email, when it’s ready.",
-    body: "We’ll write once: when the first 200 base tees ship and the first patch library is live. No drip campaign. No noise.",
+    // Headline rendered as: "New drops, first dibs. [One email per drop. That's it.]"
+    headlineLead: "New drops, first dibs.",
+    headlineEmphasis: "One email per drop. That’s it.",
+    body: "Patches drop in waves — new characters, small runs, gone fast. The list hears before anyone else. No drip campaign. No noise.",
   },
   stockist: {
     badge: "For stockists",

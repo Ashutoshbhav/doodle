@@ -179,7 +179,7 @@ export function WaitlistForm({
       )}
 
       <p className="mt-3 px-2 text-xs text-doodle-ink/55">
-        No spam, ever. One email when the first drop is ready.
+        No spam, ever. One email when a drop lands.
       </p>
     </div>
   );

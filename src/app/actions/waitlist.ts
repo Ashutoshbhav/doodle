@@ -38,7 +38,7 @@ export async function joinWaitlist(
     return {
       ok: true,
       isNew: false,
-      message: "You're on the list. We'll write when the first drop is ready.",
+      message: "You're on the list. You'll hear the moment a drop lands.",
     };
   }
 
@@ -70,7 +70,7 @@ export async function joinWaitlist(
     return {
       ok: true,
       isNew: false,
-      message: "You're on the list. We'll write when the first drop is ready.",
+      message: "You're on the list. You'll hear the moment a drop lands.",
     };
   }
 
@@ -103,7 +103,7 @@ export async function joinWaitlist(
     return {
       ok: true,
       isNew: false,
-      message: "You're on the list. We'll write when the first drop is ready.",
+      message: "You're on the list. You'll hear the moment a drop lands.",
     };
   }
 
@@ -114,6 +114,6 @@ export async function joinWaitlist(
     ok: true,
     isNew,
     code,
-    message: "You're on the list. We'll write when the first drop is ready.",
+    message: "You're on the list. You'll hear the moment a drop lands.",
   };
 }

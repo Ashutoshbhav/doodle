@@ -1,11 +1,14 @@
+import Link from "next/link";
 import {
   ArrowDown,
   Sparkle,
   Lightning,
   ArrowUpRight,
+  ArrowRight,
 } from "@phosphor-icons/react/dist/ssr";
 import { HeroTee } from "@/components/sections/HeroTee";
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
+import { isCommerceEnabled } from "@/lib/commerce";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ScrollReveal, MagneticHover } from "@/components/motion";
@@ -49,7 +52,7 @@ export function Hero() {
           </div>
           <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-3 py-1 text-xs font-medium text-doodle-ink shadow-subtle">
             <span className="h-1.5 w-1.5 rounded-full bg-doodle-orange" />
-            {content.banner.liveWaitlist}
+            {isCommerceEnabled ? "Now live" : content.banner.liveWaitlist}
           </span>
         </div>
       </div>
@@ -108,10 +111,29 @@ export function Hero() {
             {content.body}
           </p>
 
-          {/* CTA */}
-          <div className="mt-9 max-w-md">
-            <WaitlistForm accent="orange" surface="canvas" />
-          </div>
+          {/* CTA — a live shop sells; a waitlist site collects emails.
+              The drops list stays reachable one step down (#join). */}
+          {isCommerceEnabled ? (
+            <div className="mt-9 flex flex-wrap items-center gap-4">
+              <Link
+                href="/shop"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-doodle-orange px-8 font-medium text-doodle-stitch shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
+              >
+                Shop the drop
+                <ArrowRight weight="bold" size={16} aria-hidden />
+              </Link>
+              <a
+                href="#join"
+                className="text-sm font-medium text-doodle-ink/65 underline underline-offset-4 transition-colors hover:text-doodle-ink"
+              >
+                or get drop alerts
+              </a>
+            </div>
+          ) : (
+            <div className="mt-9 max-w-md">
+              <WaitlistForm accent="orange" surface="canvas" />
+            </div>
+          )}
 
           {/* Microproof — clean sans pills on soft shadow (no mono, no dashed) */}
           <div className="mt-8 flex flex-wrap items-center gap-2.5">

@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     template: "%s · DOODLE",
   },
   description:
-    "Modular clothing, backpacks and accessories that kids design themselves. Swap patches, mix outfits, grow with the wardrobe. Pre-launch — join the waitlist.",
+    "Modular kids' clothing that kids design themselves. One tee, swappable velcro patches, infinite personalities. Made in India, ships across India.",
   applicationName: "DOODLE",
   authors: [{ name: "DOODLE by CANVAS" }],
   keywords: [
@@ -96,7 +96,7 @@ export const metadata: Metadata = {
     siteName: "DOODLE by CANVAS",
     title: "DOODLE — modular kids' clothing with interchangeable patches",
     description:
-      "Kids design their own clothes. Swap patches on tees, backpacks and accessories. Join the waitlist.",
+      "Kids design their own clothes. One tee, swappable patches, infinite personalities. Shop the first drop.",
     locale: "en_IN",
     // Dedicated 1200x630 card under 300 KB — WhatsApp (the real sharing
     // channel here) silently drops previews for oversized images.
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "DOODLE — modular kids' clothing with interchangeable patches",
     description:
-      "Kids design their own clothes. Swap patches on tees, backpacks and accessories. Join the waitlist.",
+      "Kids design their own clothes. One tee, swappable patches, infinite personalities. Shop the first drop.",
     images: ["/og.png"],
   },
   // Favicons come from the src/app/icon.png + apple-icon.png conventions.
