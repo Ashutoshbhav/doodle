@@ -8,6 +8,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { HeroTee } from "@/components/sections/HeroTee";
 import { WaitlistForm } from "@/components/ui/WaitlistForm";
+import { DoodleMark } from "@/components/ui/DoodleMark";
 import { isCommerceEnabled } from "@/lib/commerce";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -162,11 +163,19 @@ export function Hero() {
 
         {/* ---------- RIGHT — LIVE PATCH DEMO ---------- */}
         <div className="relative lg:col-span-5">
-          {/* Header row above the stage */}
+          {/* Header row above the stage — the hand-drawn arrow does the
+              pointing (a kid annotated the page); the old "↓" glyph retired */}
           <div className="mb-5 flex items-center justify-between">
-            <Eyebrow variant="marker" accent="orange">
-              {content.tryIt}
-            </Eyebrow>
+            <span className="flex items-end gap-2">
+              <Eyebrow variant="marker" accent="orange">
+                {content.tryIt}
+              </Eyebrow>
+              <DoodleMark
+                kind="arrow"
+                on="mount"
+                className="w-6 translate-y-2 text-doodle-ink/45"
+              />
+            </span>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-doodle-ink px-3 py-1.5 text-xs font-medium text-doodle-stitch shadow-subtle">
               <Lightning weight="fill" size={11} className="text-doodle-yellow" />
               {content.liveDemo}

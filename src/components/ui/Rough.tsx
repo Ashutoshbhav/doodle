@@ -103,6 +103,17 @@ function RoughBase({
 }: RoughProps) {
   const { show, ref } = useShowTrigger(on, externalShow);
 
+  // The header comment promised this; now it's true — reduced-motion users
+  // get the annotation instantly, no stroke animation.
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   return (
     <span ref={ref} className={className}>
       <RoughNotation
@@ -110,7 +121,7 @@ function RoughBase({
         show={show}
         color={color ?? "#1A1A1A"}
         strokeWidth={strokeWidth}
-        animationDuration={animationDuration}
+        animationDuration={reduced ? 0 : animationDuration}
         padding={padding}
         iterations={iterations}
         multiline

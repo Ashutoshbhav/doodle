@@ -301,6 +301,12 @@
   .wobble { animation: wobble 4.5s ease-in-out infinite; }
   .wobble-slow { animation: wobble 7s ease-in-out infinite; }
 
+  /* DoodleMark's paper-alive drift — deliberately tiny (±1deg) */
+  @keyframes doodle-sway {
+    0%, 100% { transform: rotate(-0.8deg); }
+    50% { transform: rotate(1deg); }
+  }
+
   /* Reduced-motion guard — DOODLE has bouncy springs everywhere */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {

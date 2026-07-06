@@ -7,6 +7,7 @@ import type { Icon } from "@phosphor-icons/react";
 import { MagneticHover } from "@/components/motion";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { DoodleMark } from "@/components/ui/DoodleMark";
 import { founders as content } from "@/content/home";
 
 /* ============================================================
@@ -69,6 +70,11 @@ export function Founders() {
       className="relative py-24 md:py-32 bg-doodle-canvas"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
+        {/* Same hand-drawn squiggle beat as Promise — the two brand-story
+            sections share the wordmark's mark */}
+        <div className="mb-10 flex justify-center md:mb-12">
+          <DoodleMark kind="squiggle" sway className="w-16 text-doodle-ink/25" />
+        </div>
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-7">
             <Eyebrow variant="rule" accent="orange">

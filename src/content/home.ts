@@ -34,8 +34,8 @@ export const hero = {
     sizes: "Sizes 3–10 yrs",
     price: "Tee ₹999 · patches from ₹100",
   },
-  // Right product stage
-  tryIt: "build yours ↓",
+  // Right product stage — the arrow next to this is a drawn DoodleMark
+  tryIt: "build yours",
   liveDemo: "Live demo",
   realProduct: "Tap to build",
   // Patch lanes strip — the six real collections in the catalogue, nothing

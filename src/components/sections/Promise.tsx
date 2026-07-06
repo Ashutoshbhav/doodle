@@ -6,6 +6,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { ScrollReveal, MagneticHover, ParallaxLayer } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { DoodleMark } from "@/components/ui/DoodleMark";
 import { PatchShape, type PatchKey } from "@/components/ui/PatchShape";
 import { promise as content } from "@/content/home";
 
@@ -69,6 +70,10 @@ export function Promise() {
       className="relative overflow-hidden py-20 md:py-24 bg-[color:var(--color-surface-blush)]"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
+        {/* The wordmark's squiggle, hand-drawn — marks the brand-story beat */}
+        <div className="mb-10 flex justify-center md:mb-12">
+          <DoodleMark kind="squiggle" sway className="w-16 text-doodle-ink/25" />
+        </div>
         <ScrollReveal direction="up">
           <div className="max-w-3xl">
             <Eyebrow variant="rule" accent="orange">

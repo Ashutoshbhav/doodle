@@ -5,6 +5,7 @@ import { Footer } from "@/components/sections/Footer"
 import { CartLine } from "@/components/shop/CartLine"
 import { QuickAdd } from "@/components/shop/QuickAdd"
 import { Eyebrow } from "@/components/ui/Eyebrow"
+import { DoodleMark } from "@/components/ui/DoodleMark"
 import { PillButton } from "@/components/ui/PillButton"
 import { getCart } from "@/lib/medusa/cart"
 import { fetchSuggestions } from "@/lib/medusa/suggestions"
@@ -39,7 +40,10 @@ export default async function CartPage() {
 
           {items.length === 0 ? (
             <div className="mt-10 grid place-items-center rounded-[1rem] bg-doodle-canvas px-6 py-16 text-center shadow-card">
-              <p className="max-w-sm text-lg leading-relaxed text-doodle-ink/75">
+              {/* An empty basket is an empty canvas — sketch the tee waiting
+                  to be filled. THE doodle moment of the funnel. */}
+              <DoodleMark kind="tee" className="w-24 text-doodle-ink/30" />
+              <p className="mt-6 max-w-sm text-lg leading-relaxed text-doodle-ink/75">
                 Nothing in the basket yet. Pick a tee, pick some patches.
               </p>
               <div className="mt-7">
