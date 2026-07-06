@@ -42,13 +42,15 @@ export const hero = {
   // aspirational (no licensed-fandom lanes, ever).
   patchLanesEyebrow: "Patch lanes",
   seeAll: "See the library",
+  // Candy pastel fills need INK text (white fails contrast on pastels);
+  // raspberry is the one deep fill that carries white.
   patchLanes: [
-    { label: "Originals", color: "bg-doodle-pink text-doodle-stitch" },
-    { label: "Space", color: "bg-doodle-blue text-doodle-stitch" },
+    { label: "Originals", color: "bg-doodle-pink text-doodle-ink" },
+    { label: "Space", color: "bg-doodle-blue text-doodle-ink" },
     { label: "Summer", color: "bg-doodle-yellow text-doodle-ink" },
     { label: "Gamer", color: "bg-doodle-red text-doodle-stitch" },
-    { label: "Unicorns", color: "bg-doodle-purple text-doodle-stitch" },
-    { label: "Cars", color: "bg-doodle-orange text-doodle-stitch" },
+    { label: "Unicorns", color: "bg-doodle-purple text-doodle-ink" },
+    { label: "Cars", color: "bg-doodle-orange text-doodle-ink" },
   ],
   keepScrolling: "keep scrolling",
 } as const;
@@ -401,7 +403,7 @@ export const footer = {
     {
       title: "Company",
       links: [
-        { href: "/#founders", label: "The makers" },
+        { href: "/about", label: "About us" },
         { href: "/#join", label: "Stockists" },
         { href: "/privacy", label: "Privacy" },
       ],

@@ -49,7 +49,7 @@ export function FindUsOffline() {
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               {content.headlineLead}{" "}
-              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              <span className="italic text-doodle-berry">{content.headlineEmphasis}</span>{" "}
               {content.headlineEnd}
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
@@ -103,7 +103,7 @@ function PopupCard({
         delay: index * 0.1,
       }}
       className={`
-        relative ${s.bg} rounded-[1rem] p-7 sm:p-8 shadow-card
+        relative ${s.bg} rounded-[1.25rem] p-7 sm:p-8 shadow-card
         flex flex-col gap-5 min-h-[280px]
       `}
     >

@@ -49,7 +49,7 @@ export function Footer() {
 
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         {/* Trust / support band */}
-        <div className="mb-14 grid grid-cols-2 gap-x-4 gap-y-6 rounded-[1rem] bg-doodle-canvas/[0.06] p-6 sm:p-7 lg:grid-cols-4">
+        <div className="mb-14 grid grid-cols-2 gap-x-4 gap-y-6 rounded-[1.25rem] bg-doodle-canvas/[0.06] p-6 sm:p-7 lg:grid-cols-4">
           {TRUST.map(({ Icon, title, note }) => (
             <div key={title} className="flex items-center gap-3">
               <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-doodle-canvas/10 text-doodle-orange">
@@ -93,7 +93,7 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Chat on WhatsApp"
-                  className="grid place-items-center h-10 w-10 rounded-full bg-doodle-canvas/10 text-doodle-canvas/80 hover:text-doodle-orange hover:bg-doodle-canvas/15 transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
+                  className="grid place-items-center h-10 w-10 rounded-full bg-doodle-canvas/10 text-doodle-canvas/80 hover:text-doodle-orange hover:bg-doodle-canvas/15 transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40"
                 >
                   <WhatsappLogo weight="duotone" size={18} />
                 </a>
@@ -103,7 +103,7 @@ export function Footer() {
                   key={label}
                   href={href}
                   aria-label={label}
-                  className="grid place-items-center h-10 w-10 rounded-full bg-doodle-canvas/10 text-doodle-canvas/80 hover:text-doodle-orange hover:bg-doodle-canvas/15 transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
+                  className="grid place-items-center h-10 w-10 rounded-full bg-doodle-canvas/10 text-doodle-canvas/80 hover:text-doodle-orange hover:bg-doodle-canvas/15 transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40"
                 >
                   <Icon weight="duotone" size={18} />
                 </a>

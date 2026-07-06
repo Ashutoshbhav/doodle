@@ -83,21 +83,21 @@ export function CartDrawerProvider({
             >
               <div className="flex items-center justify-between border-b border-doodle-ink/10 px-6 py-4">
                 <span className="inline-flex items-center gap-2 font-display text-lg text-doodle-ink">
-                  <CheckCircle weight="duotone" size={22} className="text-doodle-orange" />
+                  <CheckCircle weight="duotone" size={22} className="text-doodle-berry" />
                   In the basket
                 </span>
                 <button
                   type="button"
                   onClick={close}
                   aria-label="Close"
-                  className="grid h-11 w-11 place-items-center rounded-full text-doodle-ink/70 hover:bg-doodle-ink/5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30"
+                  className="grid h-11 w-11 place-items-center rounded-full text-doodle-ink/70 hover:bg-doodle-ink/5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/30"
                 >
                   <X weight="bold" size={20} aria-hidden />
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto px-6 py-5">
-                <div className="rounded-[1rem] bg-doodle-stitch p-4 shadow-subtle">
+                <div className="rounded-[1.25rem] bg-doodle-stitch p-4 shadow-subtle">
                   <div className="font-display text-base leading-tight text-doodle-ink">
                     {added.title}
                   </div>
@@ -118,7 +118,7 @@ export function CartDrawerProvider({
                       {suggestions.slice(0, 3).map((s) => (
                         <li
                           key={s.handle}
-                          className="flex items-center gap-3 rounded-[1rem] bg-doodle-stitch p-3 shadow-subtle"
+                          className="flex items-center gap-3 rounded-[1.25rem] bg-doodle-stitch p-3 shadow-subtle"
                         >
                           <span className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-doodle-canvas">
                             {s.thumbnail && (
@@ -154,7 +154,7 @@ export function CartDrawerProvider({
               <div className="space-y-2.5 border-t border-doodle-ink/10 px-6 py-5">
                 <Link
                   href="/checkout"
-                  className="flex h-12 items-center justify-center rounded-full bg-doodle-orange font-medium text-doodle-stitch shadow-card transition-transform active:scale-[0.98]"
+                  className="flex h-12 items-center justify-center rounded-full bg-doodle-orange font-medium text-doodle-ink shadow-card transition-transform active:scale-[0.98]"
                 >
                   Checkout
                 </Link>

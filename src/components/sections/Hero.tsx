@@ -43,7 +43,7 @@ export function Hero() {
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4 px-6 py-3 md:px-10">
           <div className="flex items-center gap-2.5 text-xs font-medium text-doodle-ink/70">
             <span className="inline-flex items-center gap-1.5 text-doodle-ink">
-              <Sparkle weight="fill" size={13} className="text-doodle-orange" />
+              <Sparkle weight="fill" size={13} className="text-doodle-berry" />
               {content.banner.firstDrop}
             </span>
             <span className="hidden text-doodle-ink/25 sm:inline">·</span>
@@ -104,7 +104,7 @@ export function Hero() {
           {/* Sub — display weight, one orange emphasis clause */}
           <p className="mt-7 max-w-xl font-display text-2xl leading-[1.15] tracking-[-0.01em] text-doodle-ink md:text-[1.6rem]">
             {content.subLead}{" "}
-            <span className="italic text-doodle-orange">{content.subEmphasis}</span>
+            <span className="italic text-doodle-berry">{content.subEmphasis}</span>
           </p>
 
           {/* Body */}
@@ -118,7 +118,7 @@ export function Hero() {
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Link
                 href="/shop"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-doodle-orange px-8 font-medium text-doodle-stitch shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-doodle-orange px-8 font-medium text-doodle-ink shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40"
               >
                 Shop the drop
                 <ArrowRight weight="bold" size={16} aria-hidden />
@@ -173,7 +173,7 @@ export function Hero() {
               <DoodleMark
                 kind="arrow"
                 on="mount"
-                className="w-6 translate-y-2 text-doodle-ink/45"
+                className="w-9 translate-y-2 text-doodle-berry/70"
               />
             </span>
             <span className="inline-flex items-center gap-1.5 rounded-full bg-doodle-ink px-3 py-1.5 text-xs font-medium text-doodle-stitch shadow-subtle">
@@ -188,19 +188,19 @@ export function Hero() {
                 no dashed. Reads as intentional depth, not decoration. */}
             <div
               aria-hidden
-              className="absolute -right-3 -top-3 h-32 w-32 rounded-[1rem] bg-doodle-yellow/35"
+              className="absolute -right-3 -top-3 h-32 w-32 rounded-[1.25rem] bg-doodle-yellow/35"
             />
             <div
               aria-hidden
-              className="absolute -bottom-4 -left-4 h-28 w-28 rounded-[1rem] bg-doodle-blue/15"
+              className="absolute -bottom-4 -left-4 h-28 w-28 rounded-[1.25rem] bg-doodle-blue/15"
             />
 
             {/* Frame — soft card shadow, NOT dashed stitch border */}
-            <div className="relative rounded-[1rem] bg-doodle-stitch p-5 shadow-card-hover sm:p-6">
+            <div className="relative rounded-[1.25rem] bg-doodle-stitch p-5 shadow-card-hover sm:p-6">
               <HeroTee />
 
               {/* Floating product chip — soft shadow, no dashed */}
-              <span className="absolute -right-3 -top-3 inline-flex rotate-[5deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3 py-1.5 text-xs font-semibold text-doodle-stitch shadow-card">
+              <span className="absolute -right-3 -top-3 inline-flex rotate-[5deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3 py-1.5 text-xs font-semibold text-doodle-ink shadow-card">
                 <Sparkle weight="fill" size={11} className="text-doodle-yellow" />
                 {content.realProduct}
               </span>
@@ -220,7 +220,7 @@ export function Hero() {
             </Eyebrow>
             <a
               href="#wall"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-doodle-ink/70 transition-colors hover:text-doodle-orange"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-doodle-ink/70 transition-colors hover:text-doodle-berry"
             >
               {content.seeAll}
               <ArrowUpRight weight="bold" size={13} />

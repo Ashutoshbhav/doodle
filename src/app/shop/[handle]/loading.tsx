@@ -6,7 +6,7 @@ export default function ProductLoading() {
         <div className="h-3 w-40 animate-pulse rounded-full bg-doodle-ink/10" />
         <div className="mt-8 grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="animate-pulse">
-            <div className="aspect-[4/5] w-full rounded-[1rem] bg-doodle-ink/8" />
+            <div className="aspect-[4/5] w-full rounded-[1.25rem] bg-doodle-ink/8" />
             <div className="mt-3 flex gap-2">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="h-16 w-14 rounded-lg bg-doodle-ink/8" />

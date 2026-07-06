@@ -13,7 +13,7 @@ export function CookieSettings() {
     <button
       type="button"
       onClick={() => clearConsent()}
-      className="hover:text-doodle-orange transition-colors"
+      className="hover:text-doodle-berry transition-colors"
     >
       Cookie settings
     </button>

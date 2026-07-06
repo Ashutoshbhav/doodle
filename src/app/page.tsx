@@ -2,9 +2,10 @@
  * DOODLE — Home (composition root)
  *
  * Tight editorial model (SKIMS-length, not Souled-Store-length): every
- * section has exactly one job and no two sections repeat a job.
- * announcement → hero (waitlist) → trust → build-your-tee (interactive) →
- * education → patch library → packs → brand promise → makers → CTA → footer.
+ * section has exactly one job and no two sections repeat a job. The
+ * homepage SELLS: announcement → hero → trust → build-your-tee →
+ * education → patch library → packs → CTA → footer. The brand story
+ * (Promise + Founders) lives on /about (Ash, 2026-07-07).
  *
  * Consolidated 2026-06-27: dropped TheRealThing + WhyDoodle (merged into the
  * single Promise brand-story) and CharacterStrip (placeholder smileys).
@@ -23,8 +24,6 @@ import { BuildYourTee } from "@/components/sections/BuildYourTee";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { PatchWall } from "@/components/sections/PatchWall";
 import { PacksShowcase } from "@/components/sections/PacksShowcase";
-import { Promise as PromiseSection } from "@/components/sections/Promise";
-import { Founders } from "@/components/sections/Founders";
 import { DualCTA } from "@/components/sections/DualCTA";
 import { Footer } from "@/components/sections/Footer";
 
@@ -44,8 +43,6 @@ export default function Home() {
         <HowItWorks />
         <PatchWall />
         <PacksShowcase />
-        <PromiseSection />
-        <Founders />
         <DualCTA />
       </main>
       <Footer />

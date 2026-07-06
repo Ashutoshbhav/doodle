@@ -32,7 +32,7 @@ type Accent = "orange" | "blue" | "yellow" | "ink";
 type Tone = "ink" | "stitch";
 
 const ACCENT_TEXT: Record<Accent, string> = {
-  orange: "text-doodle-orange",
+  orange: "text-doodle-berry",
   blue: "text-doodle-blue",
   yellow: "text-doodle-yellow",
   ink: "text-doodle-ink/55",

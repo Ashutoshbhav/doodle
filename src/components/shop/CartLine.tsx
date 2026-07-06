@@ -73,7 +73,7 @@ export function CartLine({ line }: { line: CartLineT }) {
               onClick={() => setQty(line.quantity - 1)}
               disabled={pending}
               aria-label="Decrease quantity"
-              className="grid h-11 w-11 place-items-center text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
+              className="grid h-11 w-11 place-items-center text-doodle-ink hover:text-doodle-berry transition-colors disabled:opacity-50"
             >
               −
             </button>
@@ -85,7 +85,7 @@ export function CartLine({ line }: { line: CartLineT }) {
               onClick={() => setQty(line.quantity + 1)}
               disabled={pending || atMax}
               aria-label="Increase quantity"
-              className="grid h-11 w-11 place-items-center text-doodle-ink hover:text-doodle-orange transition-colors disabled:opacity-50"
+              className="grid h-11 w-11 place-items-center text-doodle-ink hover:text-doodle-berry transition-colors disabled:opacity-50"
             >
               +
             </button>

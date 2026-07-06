@@ -29,7 +29,7 @@ export default function SizeGuidePage() {
           </p>
 
           {/* The chart — real production-spec numbers, measured flat */}
-          <div className="mt-10 overflow-x-auto rounded-[1rem] bg-doodle-canvas shadow-card">
+          <div className="mt-10 overflow-x-auto rounded-[1.25rem] bg-doodle-canvas shadow-card">
             <table className="w-full min-w-[560px] text-left text-sm">
               <thead>
                 <tr className="border-b border-doodle-ink/10 text-[11px] font-semibold uppercase tracking-[0.1em] text-doodle-ink/55">
@@ -58,7 +58,7 @@ export default function SizeGuidePage() {
                     <td className="px-5 py-4 text-doodle-ink/75">{row.age}</td>
                     <td colSpan={4} className="px-5 py-4 text-doodle-ink/55 italic">
                       measurements on request —{" "}
-                      <a href="mailto:hello@doodlebycanvas.in" className="not-italic font-medium text-doodle-orange hover:underline">
+                      <a href="mailto:hello@doodlebycanvas.in" className="not-italic font-medium text-doodle-berry hover:underline">
                         write to us
                       </a>
                     </td>
@@ -79,7 +79,7 @@ export default function SizeGuidePage() {
             <ol className="mt-5 space-y-3">
               {sizeGuide.howToMeasure.steps.map((step, i) => (
                 <li key={step} className="flex gap-4 text-sm leading-relaxed text-doodle-ink/75">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-doodle-orange/10 font-display text-sm text-doodle-orange">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-doodle-orange/10 font-display text-sm text-doodle-berry">
                     {i + 1}
                   </span>
                   <span className="pt-1">{step}</span>
@@ -89,11 +89,11 @@ export default function SizeGuidePage() {
           </div>
 
           <div className="mt-10 space-y-4">
-            <div className="rounded-[1rem] bg-doodle-canvas p-6 shadow-subtle">
+            <div className="rounded-[1.25rem] bg-doodle-canvas p-6 shadow-subtle">
               <h3 className="font-display text-lg text-doodle-ink">Between sizes?</h3>
               <p className="mt-2 text-sm leading-relaxed text-doodle-ink/75">{sizeGuide.betweenSizes}</p>
             </div>
-            <div className="rounded-[1rem] bg-doodle-canvas p-6 shadow-subtle">
+            <div className="rounded-[1.25rem] bg-doodle-canvas p-6 shadow-subtle">
               <h3 className="font-display text-lg text-doodle-ink">Fabric</h3>
               <p className="mt-2 text-sm leading-relaxed text-doodle-ink/75">{sizeGuide.fabricNote}</p>
             </div>
@@ -101,7 +101,7 @@ export default function SizeGuidePage() {
 
           <p className="mt-10 text-sm leading-relaxed text-doodle-ink/65">
             {sizeGuide.requestNote} Wrong size anyway? There&rsquo;s a{" "}
-            <Link href="/refunds" className="font-medium text-doodle-orange hover:underline">
+            <Link href="/refunds" className="font-medium text-doodle-berry hover:underline">
               7-day exchange
             </Link>
             .

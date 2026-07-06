@@ -1,5 +1,33 @@
 # Design
 
+> ## ⚠️ 2026-07-07 — CANDY PASTEL redesign (Ash's direction)
+>
+> Ash redirected the web design from "premium muted cream" to a
+> **kid-first candy pastel** system. Where this addendum and the body of
+> this document disagree, THE ADDENDUM WINS. The deck palette below stays
+> canon for print/deck; the web now wears the tees' own colours.
+>
+> **Palette (all in globals.css `@theme`):** paper `#FFFBF2` (bg), ink
+> `#3B3358` (storybook navy-plum, replaces near-black), coral `#FF8A7A`
+> (CTA FILLS only, always with ink text — white on coral fails AA),
+> berry `#D23359` (the TEXT accent: eyebrows, prices, links, errors —
+> 4.6:1 on paper), sunshine `#FFD34E`, bubblegum `#F9B8C8`, sky
+> `#A8DCF0`, grape `#B9A6F2`, mint `#9FE6C0`.
+> **Hard rules:** pastel fills (pink/sky/grape/sunshine/coral/mint) take
+> INK text, never white. Raspberry is the only deep fill that carries
+> white. `text-doodle-orange` is BANNED as a text utility — use
+> `text-doodle-berry`.
+> **Surfaces:** sections sit on pastel colour fields (`--color-surface-
+> blush/sky/mint/parchment`), not uniform cream. **Radius:** the 16px
+> card cap is retired; `--radius` is 1.25rem and arbitrary card radii
+> moved one step up (blobbier = kid-first). **Fonts:** Baloo 2 display
+> (chubby rounded, Ek Type Mumbai) + Nunito body replace Bricolage +
+> Figtree; Geist Mono retired (font-mono falls back to the sans); Caveat
+> and the single-word Bagel "Create." stamp survive. **Doodles:**
+> `DoodleMark` (rough.js) draws pencil marks — annotations in margins
+> only, still never borders. Motion rules, accent scarcity (one accent
+> per viewport), and the no-dashed-container rule all still apply.
+
 DOODLE visual system. Locked 2026-05-29 via the `/sauce` design pass
 (design-supervisor anchor → impeccable anti-patterns → emil motion).
 Source of truth for every future design decision. When this and the code

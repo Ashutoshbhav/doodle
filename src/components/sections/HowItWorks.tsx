@@ -33,16 +33,16 @@ const STEPS = content.steps.map((s, i) => ({
 // Tinted soft tiles (no dashed rings). Icon takes the colour; the tile is a
 // quiet tint of it; the step number sits on a soft colour chip.
 const TILE = {
-  blue: { tile: "bg-doodle-blue/10", icon: "text-doodle-blue", chip: "bg-doodle-blue" },
-  yellow: { tile: "bg-doodle-yellow/15", icon: "text-doodle-yellow", chip: "bg-doodle-yellow" },
-  pink: { tile: "bg-doodle-pink/12", icon: "text-doodle-pink", chip: "bg-doodle-pink" },
+  blue: { tile: "bg-doodle-blue/10", icon: "text-doodle-ink/70", chip: "bg-doodle-blue" },
+  yellow: { tile: "bg-doodle-yellow/15", icon: "text-doodle-ink/70", chip: "bg-doodle-yellow" },
+  pink: { tile: "bg-doodle-pink/12", icon: "text-doodle-ink/70", chip: "bg-doodle-pink" },
 } as const;
 
 export function HowItWorks() {
   return (
     <section
       id="how"
-      className="relative overflow-hidden py-20 md:py-24 bg-doodle-canvas"
+      className="relative overflow-hidden py-20 md:py-24 bg-[color:var(--color-surface-sky)]"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
@@ -52,7 +52,7 @@ export function HowItWorks() {
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               {content.headlineLead}{" "}
-              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              <span className="italic text-doodle-berry">{content.headlineEmphasis}</span>{" "}
               {content.headlineAnd}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
                 {content.headlineHighlight}
@@ -78,7 +78,7 @@ export function HowItWorks() {
 
         {/* Closing patch line — real catalogue charms, and the count comes
             from the registry so it can never drift from reality. */}
-        <div className="mt-14 flex flex-col items-center gap-5 rounded-[1rem] bg-doodle-stitch px-6 py-7 shadow-card sm:flex-row sm:justify-between sm:gap-8 sm:px-9">
+        <div className="mt-14 flex flex-col items-center gap-5 rounded-[1.25rem] bg-doodle-stitch px-6 py-7 shadow-card sm:flex-row sm:justify-between sm:gap-8 sm:px-9">
           <div className="flex shrink-0 items-center">
             {PATCHES.slice(0, 6).map((p, i) => (
               <span
@@ -92,7 +92,7 @@ export function HowItWorks() {
           </div>
           <p className="text-center font-display text-lg leading-snug text-doodle-ink sm:text-right">
             Snap on any patch from the library.{" "}
-            <span className="italic text-doodle-orange">{PATCH_COUNT} and growing.</span>
+            <span className="italic text-doodle-berry">{PATCH_COUNT} and growing.</span>
           </p>
         </div>
       </div>
@@ -131,7 +131,7 @@ function Step({
         <div
           aria-hidden
           className={`
-            relative grid h-40 w-40 place-items-center rounded-[1rem]
+            relative grid h-40 w-40 place-items-center rounded-[1.25rem]
             ${t.tile} shadow-card
           `}
         >
@@ -146,7 +146,7 @@ function Step({
           <span
             className={`
               absolute -right-2 -top-2 grid h-9 w-9 place-items-center
-              rounded-full ${t.chip} text-sm font-semibold text-doodle-stitch
+              rounded-full ${t.chip} text-sm font-semibold text-doodle-ink
               shadow-subtle ring-4 ring-doodle-canvas
             `}
           >

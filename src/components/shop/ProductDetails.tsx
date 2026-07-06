@@ -49,13 +49,13 @@ export function ProductDetails() {
               <button
                 type="button"
                 onClick={() => setShowGuide((s) => !s)}
-                className="text-sm font-medium text-doodle-orange hover:underline"
+                className="text-sm font-medium text-doodle-berry hover:underline"
               >
                 Quick fit note
               </button>
               <Link
                 href="/size-guide"
-                className="text-sm font-medium text-doodle-orange hover:underline"
+                className="text-sm font-medium text-doodle-berry hover:underline"
               >
                 Full size guide
               </Link>
@@ -69,7 +69,7 @@ export function ProductDetails() {
                 type="button"
                 onClick={() => setSize(s.key)}
                 aria-pressed={size === s.key}
-                className={`flex flex-1 flex-col items-center rounded-[0.9rem] border-2 px-4 py-3 transition-colors ${
+                className={`flex flex-1 flex-col items-center rounded-[1.1rem] border-2 px-4 py-3 transition-colors ${
                   size === s.key
                     ? "border-doodle-orange bg-doodle-orange/5"
                     : "border-doodle-ink/15 hover:border-doodle-ink/30"
@@ -91,7 +91,7 @@ export function ProductDetails() {
             </p>
           )}
 
-          <dl className="mt-8 divide-y divide-doodle-ink/10 rounded-[1rem] bg-doodle-canvas px-5 shadow-subtle">
+          <dl className="mt-8 divide-y divide-doodle-ink/10 rounded-[1.25rem] bg-doodle-canvas px-5 shadow-subtle">
             {DETAILS.map(([k, v]) => (
               <div key={k} className="flex items-center justify-between py-3.5 text-sm">
                 <dt className="text-doodle-ink/60">{k}</dt>
@@ -101,12 +101,12 @@ export function ProductDetails() {
           </dl>
         </div>
 
-        <div className="rounded-[1.25rem] bg-doodle-stitch p-7 shadow-card">
+        <div className="rounded-[1.5rem] bg-doodle-stitch p-7 shadow-card">
           <h3 className="font-display text-lg text-doodle-ink">Shop with zero worry</h3>
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {TRUST.map(({ Icon, title, note }) => (
               <div key={title} className="flex items-center gap-3">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-doodle-canvas text-doodle-orange shadow-subtle">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-doodle-canvas text-doodle-berry shadow-subtle">
                   <Icon weight="duotone" size={20} aria-hidden />
                 </span>
                 <div className="leading-tight">

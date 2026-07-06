@@ -46,7 +46,7 @@ export function PolicyPage({
           {/* Draft notice */}
           <div className="mt-6 rounded-lg bg-doodle-canvas border-2 border-dashed border-doodle-orange/60 p-4">
             <p className="text-sm leading-relaxed text-doodle-ink/80">
-              <span className="font-semibold text-doodle-orange">Draft — </span>
+              <span className="font-semibold text-doodle-berry">Draft — </span>
               {legalCommon.draftNotice}
             </p>
           </div>

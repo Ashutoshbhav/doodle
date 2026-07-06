@@ -54,7 +54,7 @@ export function EarlyVoices() {
             </Eyebrow>
             <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               {content.headlineLead}{" "}
-              <span className="italic text-doodle-orange">{content.headlineCount}</span>{" "}
+              <span className="italic text-doodle-berry">{content.headlineCount}</span>{" "}
               {content.headlineMid}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
                 {content.headlineHighlight}
@@ -104,19 +104,19 @@ function VoiceCard({
           damping: 24,
           delay: index * 0.1,
         }}
-        className="relative rounded-[1rem] bg-doodle-stitch p-7 shadow-card transition-shadow hover:shadow-card-hover flex flex-col gap-5 min-h-[320px] sm:p-8"
+        className="relative rounded-[1.25rem] bg-doodle-stitch p-7 shadow-card transition-shadow hover:shadow-card-hover flex flex-col gap-5 min-h-[320px] sm:p-8"
       >
         <Quotes
           weight="fill"
           size={48}
-          className="text-doodle-orange/25 absolute top-5 right-5"
+          className="text-doodle-berry/25 absolute top-5 right-5"
           aria-hidden
         />
 
         <div className="flex items-center gap-4">
           {/* Monogram tile — designed identity chip, no smiley */}
           <div
-            className={`grid place-items-center h-14 w-14 rounded-[0.75rem] shrink-0 shadow-subtle ${AVATAR_BG[voice.avatarColor]}`}
+            className={`grid place-items-center h-14 w-14 rounded-[0.95rem] shrink-0 shadow-subtle ${AVATAR_BG[voice.avatarColor]}`}
           >
             <span
               className={`font-display text-xl leading-none ${AVATAR_TEXT[voice.avatarColor]}`}
@@ -140,7 +140,7 @@ function VoiceCard({
 
         <div className="mt-auto flex items-center gap-1">
           {Array.from({ length: voice.rating }).map((_, i) => (
-            <Star key={i} weight="fill" size={16} className="text-doodle-orange" />
+            <Star key={i} weight="fill" size={16} className="text-doodle-berry" />
           ))}
         </div>
       </motion.article>

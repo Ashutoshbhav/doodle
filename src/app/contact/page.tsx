@@ -42,7 +42,7 @@ export default function ContactPage() {
                     href={whatsappHref()!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1.5 inline-block font-display text-lg text-doodle-ink hover:text-doodle-orange transition-colors"
+                    className="mt-1.5 inline-block font-display text-lg text-doodle-ink hover:text-doodle-berry transition-colors"
                   >
                     +{whatsappNumber}
                   </a>
@@ -62,7 +62,7 @@ export default function ContactPage() {
                   </div>
                   <a
                     href={`mailto:${item.value}`}
-                    className="mt-1.5 inline-block font-display text-lg text-doodle-ink hover:text-doodle-orange transition-colors"
+                    className="mt-1.5 inline-block font-display text-lg text-doodle-ink hover:text-doodle-berry transition-colors"
                   >
                     {item.value}
                   </a>

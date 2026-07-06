@@ -513,7 +513,7 @@ export function PatchScrubber() {
                 transition-[box-shadow,background-color,transform] duration-200
                 ${
                   i === index
-                    ? "bg-doodle-orange text-doodle-stitch shadow-card scale-110"
+                    ? "bg-doodle-orange text-doodle-ink shadow-card scale-110"
                     : "bg-doodle-stitch text-doodle-ink/60 shadow-subtle hover:shadow-card hover:text-doodle-ink"
                 }
               `}

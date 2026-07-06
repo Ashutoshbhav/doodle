@@ -70,7 +70,7 @@ export function ConsentBanner() {
           onClick={() => choose("granted")}
           className="
             inline-flex h-10 items-center justify-center rounded-full px-6
-            bg-doodle-orange text-doodle-stitch text-sm font-medium
+            bg-doodle-orange text-doodle-ink text-sm font-medium
             border-2 border-dashed border-doodle-stitch
             transition-transform hover:scale-[1.02] active:scale-[0.98]
           "

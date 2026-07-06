@@ -21,7 +21,7 @@ const BASE_CONTROL =
   "mt-1.5 block w-full h-11 px-3 rounded-lg bg-doodle-stitch text-doodle-ink " +
   "font-sans text-base border transition-[border-color,box-shadow] duration-200 " +
   "focus:outline-none focus-visible:outline-none " +
-  "focus:ring-4 focus:ring-doodle-orange/30 focus:border-doodle-orange"
+  "focus:ring-4 focus:ring-doodle-berry/30 focus:border-doodle-orange"
 
 function controlBorder(error?: boolean) {
   return error ? "border-doodle-red" : "border-doodle-ink/15 hover:border-doodle-ink/30"

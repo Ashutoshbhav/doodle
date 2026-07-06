@@ -44,34 +44,42 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  /* DOODLE wordmark palette — exact hexes from the brand-spec deck (slide 4)
-     and Brand Guidelines.xlsx. Do not drift these. */
-  --color-doodle-red: #c8312a;
-  --color-doodle-orange: #e8650a;
-  --color-doodle-blue: #1a56c4;
-  --color-doodle-purple: #8b80e0;
-  --color-doodle-yellow: #d4a800; /* mustard, not bright */
-  --color-doodle-pink: #d4607a;
-  --color-doodle-canvas: #f5f0e8;
-  --color-doodle-ink: #1a1a1a;
+  /* CANDY PASTEL palette — Ash's 2026-07-07 kid-first redesign, chosen
+     over the deck's muted premium hexes (deck palette stays canon for
+     print/deck; the WEB now wears the tees' own colours, brightened).
+     Contrast maths (AA on paper #FFFBF2): ink 10.6:1, berry text 4.6:1,
+     ink-on-coral CTA 5.1:1, ink-on-sunshine 8.1:1, muted 5.3:1. */
+  --color-doodle-red: #d23359; /* raspberry — also the danger/error red */
+  --color-doodle-berry: #d23359; /* TEXT accent (eyebrows, prices, links) */
+  --color-doodle-orange: #ff8a7a; /* coral — CTA FILLS, always with ink text */
+  --color-doodle-blue: #a8dcf0; /* sky pastel */
+  --color-doodle-purple: #b9a6f2; /* grape */
+  --color-doodle-yellow: #ffd34e; /* sunshine — bright, buttery */
+  --color-doodle-pink: #f9b8c8; /* bubblegum */
+  --color-doodle-mint: #9fe6c0; /* soft green */
+  --color-doodle-canvas: #fffbf2; /* warm white paper */
+  --color-doodle-ink: #3b3358; /* storybook navy-plum, not black */
   --color-doodle-stitch: #ffffff;
-  /* First-run production tee colours (spec sheet 27-04-2026) */
+  /* First-run production tee colours (spec sheet 27-04-2026) — unchanged,
+     these are the physical product. */
   --color-doodle-tee-pink: #f4a7b9; /* Bubblegum Pink, Pantone 183C */
   --color-doodle-tee-blue: #a8d8ea; /* Powder Blue, Pantone 290C */
 
-  /* Surface tone ladder — alternating warm tints for section banding.
-     These are *application-only* tints derived from palette colors at
-     low opacity. Not new brand colors — surface-level rhythm only.
-     Anchored to Refero: mymind (Canvas/Blush/Parchment surface ladder)
-     and Family (canvas-warm + parchment-card surface levels). */
-  --color-surface-canvas: #f5f0e8;       /* base = doodle-canvas */
-  --color-surface-blush: #f8efe9;        /* canvas + orange whisper */
-  --color-surface-parchment: #f0eadc;    /* canvas + mustard whisper */
+  /* Surface tone ladder — pastel colour fields per section (the "ice-cream
+     shop" banding). Tints of the candy palette, never full-saturation. */
+  --color-surface-canvas: #fffbf2;       /* base = paper */
+  --color-surface-blush: #fdeff3;        /* bubblegum whisper */
+  --color-surface-parchment: #fff6de;    /* sunshine whisper */
+  --color-surface-sky: #eaf6fc;          /* sky whisper */
+  --color-surface-mint: #effaf3;         /* mint whisper */
 
-  /* Fonts (wired in layout.tsx via next/font/google) */
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  /* Fonts (wired in layout.tsx via next/font/google) — candy pairing:
+     Baloo 2 display (chubby, Ek Type Mumbai) + Nunito body (rounded,
+     readable). Geist Mono retired; font-mono falls back to the sans so
+     legacy mono labels harmonise instead of dropping to system mono. */
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-baloo), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-display);
   --font-bubble: var(--font-bagel), Impact, sans-serif; /* 90s bubble */
   --font-marker: var(--font-caveat), "Comic Sans MS", cursive; /* handwritten */
@@ -90,14 +98,14 @@
      everything pattern. Hover deepens to --shadow-card-hover.
      Two stacked layers each: tight contact + soft ambient. */
   --shadow-subtle:
-    0 1px 2px rgba(26, 26, 26, 0.04),
-    0 1px 3px rgba(26, 26, 26, 0.06);
+    0 1px 2px rgba(59, 51, 88, 0.04),
+    0 1px 3px rgba(59, 51, 88, 0.06);
   --shadow-card:
-    0 2px 4px rgba(26, 26, 26, 0.05),
-    0 6px 16px -4px rgba(26, 26, 26, 0.10);
+    0 2px 4px rgba(59, 51, 88, 0.05),
+    0 6px 16px -4px rgba(59, 51, 88, 0.10);
   --shadow-card-hover:
-    0 4px 8px rgba(26, 26, 26, 0.06),
-    0 12px 28px -6px rgba(26, 26, 26, 0.16);
+    0 4px 8px rgba(59, 51, 88, 0.06),
+    0 12px 28px -6px rgba(59, 51, 88, 0.16);
 
   /* Radius scale — DOODLE leans large + organic */
   --radius-sm: calc(var(--radius) * 0.6);
@@ -116,42 +124,41 @@
    ============================================================ */
 
 :root {
-  /* Role tokens bound to the LOCKED deck hexes (slide 4 + Brand
-     Guidelines.xlsx). Reconciled 2026-05-29: these had drifted lighter
-     (orange #e87a3d, ink #2a2a2e, yellow #f2c84a "bright") and rendered the
-     whole site off-spec. Every value below now matches a --color-doodle-* token. */
-  --background: #f5f0e8; /* doodle-canvas */
-  --foreground: #1a1a1a; /* doodle-ink */
-  --card: #fbf9f4;
-  --card-foreground: #1a1a1a;
+  /* Role tokens bound to the CANDY PASTEL palette (Ash, 2026-07-07).
+     CTA = coral fill with INK text (white-on-coral fails AA; ink passes
+     5.1:1 and reads more kid-brand anyway). */
+  --background: #fffbf2; /* paper */
+  --foreground: #3b3358; /* storybook ink */
+  --card: #ffffff;
+  --card-foreground: #3b3358;
   --popover: #ffffff;
-  --popover-foreground: #1a1a1a;
-  --primary: #e8650a; /* doodle-orange (CTA) */
-  --primary-foreground: #ffffff;
-  --secondary: #d4a800; /* doodle-yellow — mustard, NOT bright */
-  --secondary-foreground: #1a1a1a;
-  --muted: #ede7d8;
-  --muted-foreground: #57534a; /* darkened for ≥4.5:1 body contrast on cream */
-  --accent: #1a56c4; /* doodle-blue (tile fills) */
-  --accent-foreground: #ffffff;
-  --destructive: #c8312a; /* doodle-red doubles as destructive */
-  --border: #e1dccf;
-  --input: #e1dccf;
-  --ring: #e8650a;
-  --chart-1: #c8312a; /* red */
-  --chart-2: #e8650a; /* orange */
-  --chart-3: #1a56c4; /* blue */
-  --chart-4: #8b80e0; /* purple */
-  --chart-5: #d4a800; /* mustard */
-  --radius: 1rem; /* DOODLE leans organic — bigger than shadcn default */
-  --sidebar: #fbf9f4;
-  --sidebar-foreground: #1a1a1a;
-  --sidebar-primary: #e8650a;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #ede7d8;
-  --sidebar-accent-foreground: #1a1a1a;
-  --sidebar-border: #e1dccf;
-  --sidebar-ring: #e8650a;
+  --popover-foreground: #3b3358;
+  --primary: #ff8a7a; /* coral (CTA fill) */
+  --primary-foreground: #3b3358; /* ink on coral — AA */
+  --secondary: #ffd34e; /* sunshine */
+  --secondary-foreground: #3b3358;
+  --muted: #f6efe3;
+  --muted-foreground: #6b6386; /* plum-grey, ≥4.5:1 on paper */
+  --accent: #a8dcf0; /* sky */
+  --accent-foreground: #3b3358;
+  --destructive: #d23359; /* raspberry */
+  --border: #ece4d9;
+  --input: #ece4d9;
+  --ring: #ff8a7a;
+  --chart-1: #d23359; /* raspberry */
+  --chart-2: #ff8a7a; /* coral */
+  --chart-3: #a8dcf0; /* sky */
+  --chart-4: #b9a6f2; /* grape */
+  --chart-5: #ffd34e; /* sunshine */
+  --radius: 1.25rem; /* kid-first: blobbier everywhere the scale is used */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #3b3358;
+  --sidebar-primary: #ff8a7a;
+  --sidebar-primary-foreground: #3b3358;
+  --sidebar-accent: #f6efe3;
+  --sidebar-accent-foreground: #3b3358;
+  --sidebar-border: #ece4d9;
+  --sidebar-ring: #ff8a7a;
 }
 
 /* Dark mode intentionally omitted for v1 (warm-cream brand identity).
@@ -174,7 +181,9 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-feature-settings: "ss01", "cv11";
+    /* Baloo 2 at regular reads thin for display — the chubby weight IS
+       the kid-first voice */
+    font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.015em;
   }
@@ -232,14 +241,14 @@
     background-size: 100% 60%;
     background-position: 0 75%;
     padding: 0 0.15em;
-    color: var(--color-doodle-stitch);
+    color: var(--color-doodle-ink);
   }
 
   /* Display-italic emphasis word — paired with primary color */
   .word-emphasis {
     font-family: var(--font-display);
     font-style: italic;
-    color: var(--color-doodle-orange);
+    color: var(--color-doodle-berry);
   }
 
   /* Sticker peel — corner lifts on hover (use on a wrapper, child is the
@@ -305,6 +314,126 @@
   @keyframes doodle-sway {
     0%, 100% { transform: rotate(-0.8deg); }
     50% { transform: rotate(1deg); }
+  }
+
+  /* DoodleHoverRing — the crayon circle draws in on hover/focus of the
+     nearest `group`. Pure CSS; reduced-motion shows it instantly. */
+  .doodle-ring path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 340ms var(--ease-out);
+  }
+  .doodle-ring path:nth-child(2) { transition-delay: 90ms; }
+  .doodle-ring path:nth-child(3) { transition-delay: 160ms; }
+  .doodle-ring path:nth-child(4) { transition-delay: 230ms; }
+  .doodle-ring path:nth-child(5) { transition-delay: 300ms; }
+  .doodle-ring path:nth-child(6) { transition-delay: 370ms; }
+  .group:hover .doodle-ring path,
+  .group:focus-visible .doodle-ring path,
+  .group:focus-within .doodle-ring path {
+    stroke-dashoffset: 0;
+  }
+  /* Filled accents (cookie crumbs, checker squares, twinkles) pop in
+     after the strokes finish drawing, then twinkle while hovered */
+  .doodle-ring .doodle-dot {
+    opacity: 0;
+    transition: opacity 200ms ease 380ms;
+  }
+  .group:hover .doodle-ring .doodle-dot,
+  .group:focus-visible .doodle-ring .doodle-dot,
+  .group:focus-within .doodle-ring .doodle-dot {
+    opacity: 1;
+    animation: dd-twinkle 1.1s ease-in-out 600ms infinite alternate;
+  }
+  .group:hover .doodle-ring .doodle-dot:nth-of-type(2) { animation-delay: 850ms; }
+  .group:hover .doodle-ring .doodle-dot:nth-of-type(3) { animation-delay: 1100ms; }
+
+  /* Character animations — every patch doodle LIVES while hovered.
+     Paused by default (zero cost), runs on group hover, starts after
+     the draw-in. transform-box makes SVG group origins sane. */
+  .doodle-anim {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-delay: 550ms;
+    animation-play-state: paused;
+  }
+  .group:hover .doodle-anim,
+  .group:focus-visible .doodle-anim,
+  .group:focus-within .doodle-anim {
+    animation-play-state: running;
+  }
+  .dd-beat { animation-name: dd-beat; animation-duration: 1.1s; }
+  .dd-float { animation-name: dd-float; animation-duration: 2.2s; }
+  .dd-fall { animation-name: dd-fall; animation-duration: 1.6s; }
+  .dd-flicker { animation-name: dd-flicker; animation-duration: 0.9s; transform-origin: 50% 100%; }
+  .dd-wiggle { animation-name: dd-wiggle; animation-duration: 1.6s; }
+  .dd-roll { animation-name: dd-roll; animation-duration: 2s; }
+  .dd-shoot { animation-name: dd-shoot; animation-duration: 1s; animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1); }
+  .dd-bounce { animation-name: dd-bounce; animation-duration: 1.2s; }
+
+  @keyframes dd-twinkle {
+    from { opacity: 0.35; }
+    to { opacity: 1; }
+  }
+  @keyframes dd-beat {
+    0%, 60%, 100% { transform: scale(1); }
+    14% { transform: scale(1.14); }
+    28% { transform: scale(1.02); }
+    42% { transform: scale(1.1); }
+  }
+  @keyframes dd-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2.5px); }
+  }
+  @keyframes dd-fall {
+    0%, 100% { transform: translateY(-1.5px); }
+    50% { transform: translateY(1.5px); }
+  }
+  @keyframes dd-flicker {
+    0%, 100% { transform: scaleY(1) scaleX(1); }
+    30% { transform: scaleY(0.93) scaleX(1.04); }
+    60% { transform: scaleY(1.06) scaleX(0.97); }
+    80% { transform: scaleY(0.98) scaleX(1.01); }
+  }
+  @keyframes dd-wiggle {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(5deg); }
+  }
+  @keyframes dd-roll {
+    0%, 100% { transform: translateX(-1.5px) rotate(-2deg); }
+    50% { transform: translateX(1.5px) rotate(2deg); }
+  }
+  @keyframes dd-shoot {
+    0%, 100% { transform: translateX(0); opacity: 1; }
+    45% { transform: translateX(3.5px); opacity: 0.75; }
+  }
+  @keyframes dd-bounce {
+    0%, 100% { transform: translateY(0) scaleY(1); }
+    40% { transform: translateY(-3px) scaleY(1.04); }
+    55% { transform: translateY(0.5px) scaleY(0.94); }
+  }
+
+  /* TOUCH DEVICES: no hover exists (and iOS never focuses buttons on tap),
+     so the PERSONAL patch doodles are simply always drawn and always alive
+     — the sticker book comes pre-annotated. Compositors skip offscreen
+     animations, so this costs nothing. The generic hover RINGS stay
+     desktop-only (a tap already selects/navigates). */
+  @media (hover: none) {
+    .doodle-personal path {
+      stroke-dashoffset: 0 !important;
+      transition: none;
+    }
+    .doodle-personal .doodle-dot {
+      opacity: 1;
+      animation: dd-twinkle 1.1s ease-in-out infinite alternate;
+    }
+    .doodle-personal .doodle-anim,
+    .doodle-personal.doodle-anim {
+      animation-play-state: running;
+    }
   }
 
   /* Reduced-motion guard — DOODLE has bouncy springs everywhere */

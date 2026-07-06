@@ -7,7 +7,7 @@ export default function CartLoading() {
         <div className="mt-6 h-10 w-52 animate-pulse rounded-2xl bg-doodle-ink/10" />
         <div className="mt-10 space-y-4">
           {Array.from({ length: 2 }).map((_, i) => (
-            <div key={i} className="flex animate-pulse gap-4 rounded-[1rem] bg-doodle-canvas p-5 shadow-card">
+            <div key={i} className="flex animate-pulse gap-4 rounded-[1.25rem] bg-doodle-canvas p-5 shadow-card">
               <div className="h-24 w-20 rounded-lg bg-doodle-ink/8" />
               <div className="flex-1">
                 <div className="h-5 w-1/2 rounded-full bg-doodle-ink/10" />

@@ -73,21 +73,21 @@ export function WhyDoodle() {
             {/* Big yellow block — slowest, deepest */}
             <ParallaxLayer
               speed={0.15}
-              className="absolute left-4 top-6 h-44 w-44 rounded-[1rem] bg-doodle-yellow shadow-card"
+              className="absolute left-4 top-6 h-44 w-44 rounded-[1.25rem] bg-doodle-yellow shadow-card"
             >
               <span className="sr-only">decorative</span>
             </ParallaxLayer>
             {/* Blue tile — middle layer */}
             <ParallaxLayer
               speed={0.3}
-              className="absolute right-2 top-2 grid h-28 w-28 place-items-center rounded-[1rem] bg-doodle-blue shadow-card"
+              className="absolute right-2 top-2 grid h-28 w-28 place-items-center rounded-[1.25rem] bg-doodle-blue shadow-card"
             >
               <Recycle weight="duotone" size={42} className="text-doodle-stitch" />
             </ParallaxLayer>
             {/* Pink tile — closest, fastest */}
             <ParallaxLayer
               speed={0.45}
-              className="absolute left-12 bottom-4 grid h-32 w-44 place-items-center rounded-[1rem] bg-doodle-pink shadow-card-hover"
+              className="absolute left-12 bottom-4 grid h-32 w-44 place-items-center rounded-[1.25rem] bg-doodle-pink shadow-card-hover"
             >
               <Plant weight="duotone" size={48} className="text-doodle-stitch" />
             </ParallaxLayer>
@@ -98,7 +98,7 @@ export function WhyDoodle() {
 
         {/* Right accordion — one soft card on cream, hairline dividers */}
         <div className="lg:col-span-7">
-          <ul className="rounded-[1rem] bg-doodle-canvas p-3 shadow-card-hover divide-y divide-doodle-ink/10 sm:p-4">
+          <ul className="rounded-[1.25rem] bg-doodle-canvas p-3 shadow-card-hover divide-y divide-doodle-ink/10 sm:p-4">
             {ITEMS.map((item, i) => {
               const isOpen = open === i;
               return (
@@ -120,7 +120,7 @@ export function WhyDoodle() {
                         transition-colors
                         ${
                           isOpen
-                            ? "bg-doodle-orange text-doodle-stitch shadow-subtle"
+                            ? "bg-doodle-orange text-doodle-ink shadow-subtle"
                             : "bg-doodle-ink/[0.06] text-doodle-ink"
                         }
                       `}

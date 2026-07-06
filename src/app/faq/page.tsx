@@ -57,13 +57,13 @@ export default function FaqPage() {
                 {group.items.map((item) => (
                   <details
                     key={item.q}
-                    className="group rounded-[1rem] bg-doodle-canvas px-5 py-4 shadow-subtle open:shadow-card"
+                    className="group rounded-[1.25rem] bg-doodle-canvas px-5 py-4 shadow-subtle open:shadow-card"
                   >
                     <summary className="cursor-pointer list-none font-medium text-doodle-ink marker:content-none [&::-webkit-details-marker]:hidden flex items-center justify-between gap-4">
                       <span>{item.q}</span>
                       <span
                         aria-hidden
-                        className="shrink-0 text-doodle-orange transition-transform group-open:rotate-45 text-xl leading-none"
+                        className="shrink-0 text-doodle-berry transition-transform group-open:rotate-45 text-xl leading-none"
                       >
                         +
                       </span>
@@ -77,16 +77,16 @@ export default function FaqPage() {
             </div>
           ))}
 
-          <div className="mt-14 rounded-[1rem] bg-doodle-canvas p-6 shadow-card">
+          <div className="mt-14 rounded-[1.25rem] bg-doodle-canvas p-6 shadow-card">
             <p className="text-sm leading-relaxed text-doodle-ink/75">
               Sizing question? The full centimetre chart is on the{" "}
-              <Link href="/size-guide" className="font-medium text-doodle-orange hover:underline">
+              <Link href="/size-guide" className="font-medium text-doodle-berry hover:underline">
                 size guide
               </Link>
               . Anything else:{" "}
               <a
                 href="mailto:hello@doodlebycanvas.in"
-                className="font-medium text-doodle-orange hover:underline"
+                className="font-medium text-doodle-berry hover:underline"
               >
                 hello@doodlebycanvas.in
               </a>

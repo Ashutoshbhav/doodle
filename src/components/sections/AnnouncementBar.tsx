@@ -19,7 +19,7 @@ export function AnnouncementBar() {
         {ITEMS.map((t, i) => (
           <React.Fragment key={t}>
             {i > 0 && (
-              <span className="text-doodle-orange" aria-hidden>
+              <span className="text-doodle-berry" aria-hidden>
                 •
               </span>
             )}

@@ -12,6 +12,8 @@ import {
   type Patch,
 } from "@/lib/patches";
 import { isCommerceEnabled } from "@/lib/commerce";
+import { DoodleHoverRing } from "@/components/ui/DoodleHoverRing";
+import { PatchDoodle } from "@/components/ui/PatchDoodle";
 
 /* BuildYourTee — the real, interactive "build your own t-shirt" demo.
    Pick a colour, tap patches to drop them onto the chest (up to 5), tap a
@@ -113,7 +115,7 @@ export function BuildYourTee() {
 
             {/* colour picker */}
             <div className="mt-7 flex items-center justify-center gap-3">
-              {TEES.map((t) => (
+              {TEES.map((t, i) => (
                 <button
                   key={t.key}
                   type="button"
@@ -121,13 +123,16 @@ export function BuildYourTee() {
                   aria-label={t.name}
                   aria-pressed={t.key === teeKey}
                   title={t.name}
-                  className={`h-10 w-10 rounded-full shadow-subtle transition-transform duration-200 ${
+                  className={`group relative h-10 w-10 rounded-full shadow-subtle transition-transform duration-200 ${
                     t.key === teeKey
                       ? "scale-110 ring-2 ring-doodle-ink ring-offset-2 ring-offset-doodle-canvas"
                       : "hover:scale-105"
                   }`}
                   style={{ backgroundColor: t.swatch }}
-                />
+                >
+                  {/* Crayon circle on hover — a kid circling the colour they want */}
+                  <DoodleHoverRing seed={29 + i} className="text-doodle-ink/50" />
+                </button>
               ))}
             </div>
 
@@ -141,11 +146,11 @@ export function BuildYourTee() {
 
           {/* ---------- CONTROLS ---------- */}
           <div>
-            <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-doodle-orange">
+            <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-doodle-berry">
               Build your tee
             </span>
             <h2 className="mt-3 font-display text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] tracking-[-0.02em] text-doodle-ink">
-              Tap a patch. <span className="italic text-doodle-orange">Watch it land.</span>
+              Tap a patch. <span className="italic text-doodle-berry">Watch it land.</span>
             </h2>
             <p className="mt-3 max-w-md text-base leading-relaxed text-doodle-ink/70">
               Pick a colour, drop up to six patches onto the tee, and swap them
@@ -193,7 +198,7 @@ export function BuildYourTee() {
             </div>
 
             {/* patch tray */}
-            <div className="mt-3 grid max-h-[230px] grid-cols-5 gap-2 overflow-y-auto rounded-[1rem] bg-doodle-stitch p-3 shadow-subtle sm:grid-cols-6">
+            <div className="mt-3 grid max-h-[230px] grid-cols-5 gap-2 overflow-y-auto rounded-[1.25rem] bg-doodle-stitch p-3 shadow-subtle sm:grid-cols-6">
               {tray.map((p) => (
                 <button
                   key={p.key}
@@ -201,8 +206,10 @@ export function BuildYourTee() {
                   onClick={() => add(p)}
                   disabled={full}
                   title={p.name}
-                  className="grid aspect-square place-items-center rounded-lg bg-doodle-canvas p-1.5 shadow-subtle transition hover:-translate-y-0.5 hover:shadow-card disabled:cursor-not-allowed disabled:opacity-40"
+                  className="group relative grid aspect-square place-items-center rounded-lg bg-doodle-canvas p-1.5 shadow-subtle transition hover:-translate-y-0.5 hover:shadow-card disabled:cursor-not-allowed disabled:opacity-40"
                 >
+                  {/* The patch's personal doodle, tiny, on hover */}
+                  <PatchDoodle patchKey={p.key} className="w-[44%]" />
                   <Image src={p.src} alt={p.name} width={60} height={60} className="h-full w-full object-contain" />
                 </button>
               ))}
@@ -214,7 +221,7 @@ export function BuildYourTee() {
               <span className="font-display text-2xl text-doodle-ink">₹999</span>
               <Link
                 href={isCommerceEnabled ? "/shop" : "/#join"}
-                className="inline-flex h-11 items-center justify-center rounded-full bg-doodle-orange px-6 text-sm font-medium text-doodle-stitch shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-doodle-orange px-6 text-sm font-medium text-doodle-ink shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40"
               >
                 {isCommerceEnabled ? "Add this kit" : "Reserve this kit"}
               </Link>

@@ -65,8 +65,23 @@ function useShowTrigger(on: Trigger, externalShow?: boolean) {
     }
 
     if (on === "mount") {
-      const t = setTimeout(() => setShow(true), 120);
-      return () => clearTimeout(t);
+      // Draw ONLY after (a) webfonts have loaded — Baloo's metrics differ
+      // enough from the fallback that early measures land offset — and
+      // (b) the section's entrance animation (ScrollReveal translate) has
+      // settled: rough-notation caches coordinates at draw time, so
+      // measuring mid-transform paints the swipe on the wrong line.
+      let t: ReturnType<typeof setTimeout> | undefined;
+      const arm = () => {
+        t = setTimeout(() => setShow(true), 850);
+      };
+      if (typeof document !== "undefined" && document.fonts?.ready) {
+        document.fonts.ready.then(arm).catch(arm);
+      } else {
+        arm();
+      }
+      return () => {
+        if (t) clearTimeout(t);
+      };
     }
 
     // on === "view"
@@ -119,7 +134,7 @@ function RoughBase({
       <RoughNotation
         type={type}
         show={show}
-        color={color ?? "#1A1A1A"}
+        color={color ?? "#3B3358"}
         strokeWidth={strokeWidth}
         animationDuration={reduced ? 0 : animationDuration}
         padding={padding}
@@ -140,7 +155,7 @@ export function RoughHighlight(props: Omit<RoughProps, "type">) {
   return (
     <RoughBase
       type="highlight"
-      color="#D4A800"
+      color="#FFD34E"
       strokeWidth={26}
       animationDuration={900}
       iterations={2}
@@ -154,7 +169,7 @@ export function RoughUnderline(props: Omit<RoughProps, "type">) {
   return (
     <RoughBase
       type="underline"
-      color="#E8650A"
+      color="#D23359"
       strokeWidth={3}
       animationDuration={650}
       iterations={2}
@@ -169,7 +184,7 @@ export function RoughBox(props: Omit<RoughProps, "type">) {
   return (
     <RoughBase
       type="box"
-      color="#1A1A1A"
+      color="#3B3358"
       strokeWidth={2.5}
       animationDuration={1100}
       iterations={2}
@@ -184,7 +199,7 @@ export function RoughCircle(props: Omit<RoughProps, "type">) {
   return (
     <RoughBase
       type="circle"
-      color="#1A56C4"
+      color="#7CC5EA"
       strokeWidth={3}
       animationDuration={900}
       iterations={2}

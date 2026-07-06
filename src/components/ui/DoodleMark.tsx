@@ -18,7 +18,7 @@ import rough from "roughjs";
    - Geometry is seeded → deterministic → SSR/hydration-safe.
    ============================================================ */
 
-type Kind = "squiggle" | "arrow" | "tee";
+type Kind = "squiggle" | "arrow" | "tee" | "star";
 
 type Geometry = {
   viewBox: string;
@@ -73,6 +73,26 @@ function buildGeometry(kind: Kind): Geometry {
     const headA = gen.line(46, 46, 32, 44, { ...OPTS, seed: 24 });
     const headB = gen.line(46, 46, 42, 32, { ...OPTS, seed: 25 });
     return { viewBox: "0 0 56 52", strokes: toDs([shaft, headA, headB]) };
+  }
+
+  if (kind === "star") {
+    // A five-point star, drawn the way a six-year-old draws one.
+    const star = gen.polygon(
+      [
+        [30, 6],
+        [36.5, 23.1],
+        [54.7, 24],
+        [40.5, 35.4],
+        [45.3, 53],
+        [30, 43],
+        [14.7, 53],
+        [19.5, 35.4],
+        [5.3, 24],
+        [23.5, 23.1],
+      ],
+      { ...OPTS, seed: 31 },
+    );
+    return { viewBox: "0 0 60 60", strokes: toDs([star]) };
   }
 
   // kind === "tee" — a child's t-shirt outline for empty states.
@@ -166,6 +186,7 @@ export function DoodleMark({
           strokeLinecap="round"
           strokeLinejoin="round"
           pathLength={1}
+          suppressHydrationWarning
           style={
             reduced
               ? undefined

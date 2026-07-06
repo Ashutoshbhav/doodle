@@ -20,7 +20,7 @@ const TONE: Record<Tone, string> = {
   // quiet default — reads as metadata
   neutral: "bg-doodle-ink/[0.06] text-doodle-ink/70",
   // the ONE accent — low-stock urgency
-  accent: "bg-doodle-orange/12 text-doodle-orange",
+  accent: "bg-doodle-orange/12 text-doodle-berry",
   // softest — "max in stock" style ambient note
   muted: "bg-doodle-ink/[0.04] text-doodle-ink/50",
   // sold-out / error
@@ -41,7 +41,7 @@ export function Tag({
   const ring =
     outline
       ? tone === "accent"
-        ? "ring-1 ring-doodle-orange/25"
+        ? "ring-1 ring-doodle-berry/25"
         : tone === "danger"
           ? "ring-1 ring-doodle-red/25"
           : "ring-1 ring-doodle-ink/12"

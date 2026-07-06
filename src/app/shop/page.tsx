@@ -54,7 +54,7 @@ export default async function ShopPage() {
               </h1>
               <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
                 Pick a tee. Pick patches. Or grab a kit —{" "}
-                <span className="italic text-doodle-orange">same idea, less thinking.</span>
+                <span className="italic text-doodle-berry">same idea, less thinking.</span>
               </p>
             </div>
 

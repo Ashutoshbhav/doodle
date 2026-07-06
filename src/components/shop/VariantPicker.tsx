@@ -150,7 +150,7 @@ export function VariantPicker({ product }: { product: Product }) {
                   className={[
                     "px-4 py-2 rounded-full border text-sm font-medium transition-[background-color,border-color,box-shadow,transform] duration-200 active:scale-[0.97]",
                     active
-                      ? "bg-doodle-orange text-doodle-stitch border-doodle-orange shadow-subtle"
+                      ? "bg-doodle-orange text-doodle-ink border-doodle-orange shadow-subtle"
                       : "bg-doodle-canvas text-doodle-ink border-doodle-ink/15 hover:border-doodle-ink/35",
                   ].join(" ")}
                 >

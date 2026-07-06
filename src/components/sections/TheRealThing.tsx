@@ -62,7 +62,7 @@ export function TheRealThing() {
             </Eyebrow>
             <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               {content.headlineLead}{" "}
-              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              <span className="italic text-doodle-berry">{content.headlineEmphasis}</span>{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
                 {content.headlineHighlight}
               </RoughHighlight>
@@ -74,7 +74,7 @@ export function TheRealThing() {
 
           <div className="md:col-span-4 md:text-right">
             <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch px-3.5 py-2 text-xs font-medium text-doodle-ink/75 shadow-subtle">
-              <ArrowsLeftRight weight="bold" size={14} className="text-doodle-orange" />
+              <ArrowsLeftRight weight="bold" size={14} className="text-doodle-berry" />
               {content.swapVisualised}
             </span>
           </div>
@@ -83,8 +83,8 @@ export function TheRealThing() {
         {/* The constant — the same eight silicone patches that ride BOTH bases.
             A shared rail under the header gives the headline a literal anchor
             and fills the space above the photos. Soft cream card, no dashed. */}
-        <div className="mt-10 flex flex-col gap-4 rounded-[1rem] bg-doodle-stitch px-5 py-5 shadow-card sm:flex-row sm:items-center sm:gap-6 sm:px-7">
-          <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-doodle-orange/12 px-3 py-1.5 text-xs font-semibold text-doodle-orange">
+        <div className="mt-10 flex flex-col gap-4 rounded-[1.25rem] bg-doodle-stitch px-5 py-5 shadow-card sm:flex-row sm:items-center sm:gap-6 sm:px-7">
+          <span className="inline-flex shrink-0 items-center gap-2 rounded-full bg-doodle-orange/12 px-3 py-1.5 text-xs font-semibold text-doodle-berry">
             <Sparkle weight="fill" size={12} />
             The eight, unchanged
           </span>
@@ -121,12 +121,12 @@ export function TheRealThing() {
                   aria-hidden
                   className={`absolute ${
                     i === 0 ? "-left-4 -top-4" : "-right-4 -top-4"
-                  } h-24 w-24 rounded-[1rem] ${shot.blockColor}`}
+                  } h-24 w-24 rounded-[1.25rem] ${shot.blockColor}`}
                 />
 
                 {/* Photo card — soft card shadow replaces dashed stitch border */}
-                <div className="relative overflow-hidden rounded-[1rem] bg-doodle-stitch p-4 shadow-card transition-shadow sm:p-5">
-                  <div className="relative aspect-square w-full overflow-hidden rounded-[0.75rem] bg-doodle-canvas">
+                <div className="relative overflow-hidden rounded-[1.25rem] bg-doodle-stitch p-4 shadow-card transition-shadow sm:p-5">
+                  <div className="relative aspect-square w-full overflow-hidden rounded-[0.95rem] bg-doodle-canvas">
                     <Image
                       src={shot.src}
                       alt={shot.alt}
@@ -152,7 +152,7 @@ export function TheRealThing() {
                 <span
                   className={`absolute -top-3 ${
                     i === 0 ? "-left-3" : "-right-3"
-                  } inline-flex rotate-[-4deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3 py-1.5 text-xs font-semibold text-doodle-stitch shadow-card`}
+                  } inline-flex rotate-[-4deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3 py-1.5 text-xs font-semibold text-doodle-ink shadow-card`}
                 >
                   <Sparkle weight="fill" size={11} className="text-doodle-yellow" />
                   {content.realProduct}

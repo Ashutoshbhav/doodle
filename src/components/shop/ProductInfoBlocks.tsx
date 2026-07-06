@@ -40,12 +40,12 @@ export function ProductInfoBlocks({ kind }: { kind: "garment" | "patches" }) {
   return (
     <div className="mt-10 space-y-6">
       {kind === "garment" && (
-        <div className="rounded-[1rem] bg-doodle-canvas p-5 shadow-subtle">
+        <div className="rounded-[1.25rem] bg-doodle-canvas p-5 shadow-subtle">
           <div className="flex items-center justify-between gap-4">
             <h3 className="font-display text-lg text-doodle-ink">Sizing</h3>
             <Link
               href="/size-guide"
-              className="text-sm font-medium text-doodle-orange hover:underline"
+              className="text-sm font-medium text-doodle-berry hover:underline"
             >
               Full size guide
             </Link>
@@ -59,7 +59,7 @@ export function ProductInfoBlocks({ kind }: { kind: "garment" | "patches" }) {
         </div>
       )}
 
-      <dl className="divide-y divide-doodle-ink/10 rounded-[1rem] bg-doodle-canvas px-5 shadow-subtle">
+      <dl className="divide-y divide-doodle-ink/10 rounded-[1.25rem] bg-doodle-canvas px-5 shadow-subtle">
         {details.map(([k, v]) => (
           <div key={k} className="flex items-center justify-between gap-6 py-3.5 text-sm">
             <dt className="shrink-0 text-doodle-ink/60">{k}</dt>
@@ -68,11 +68,11 @@ export function ProductInfoBlocks({ kind }: { kind: "garment" | "patches" }) {
         ))}
       </dl>
 
-      <div className="rounded-[1rem] bg-doodle-stitch p-5 shadow-subtle">
+      <div className="rounded-[1.25rem] bg-doodle-stitch p-5 shadow-subtle">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {TRUST.map(({ Icon, title, note }) => (
             <div key={title} className="flex items-center gap-3">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-doodle-canvas text-doodle-orange shadow-subtle">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-doodle-canvas text-doodle-berry shadow-subtle">
                 <Icon weight="duotone" size={20} aria-hidden />
               </span>
               <div className="leading-tight">
@@ -84,7 +84,7 @@ export function ProductInfoBlocks({ kind }: { kind: "garment" | "patches" }) {
         </div>
         <p className="mt-4 text-[12px] leading-relaxed text-doodle-ink/55">
           Questions before you buy? The{" "}
-          <Link href="/faq" className="font-medium text-doodle-orange hover:underline">
+          <Link href="/faq" className="font-medium text-doodle-berry hover:underline">
             FAQ
           </Link>{" "}
           covers washing, safety and exchanges.

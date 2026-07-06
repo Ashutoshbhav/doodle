@@ -21,7 +21,7 @@ export function TrustStrip() {
       <div className="mx-auto grid max-w-7xl grid-cols-2 gap-x-4 gap-y-6 px-6 py-7 md:grid-cols-4 md:px-10">
         {ITEMS.map(({ icon: Icon, title, note }) => (
           <div key={title} className="flex items-center gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-doodle-stitch text-doodle-orange shadow-subtle">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-doodle-stitch text-doodle-berry shadow-subtle">
               <Icon weight="duotone" size={20} aria-hidden />
             </span>
             <div className="leading-tight">

@@ -42,7 +42,7 @@ type Variant = "soft" | "stitch";
 
 const TONE: Record<Tone, string> = {
   card: "bg-card text-doodle-ink",
-  orange: "bg-doodle-orange text-doodle-stitch",
+  orange: "bg-doodle-orange text-doodle-ink",
   blue: "bg-doodle-blue text-doodle-stitch",
   purple: "bg-doodle-purple text-doodle-stitch",
   yellow: "bg-doodle-yellow text-doodle-ink",

@@ -121,7 +121,7 @@ export function CharacterStrip() {
         </Eyebrow>
         <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink max-w-3xl">
           {content.headlineLead}{" "}
-          <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+          <span className="italic text-doodle-berry">{content.headlineEmphasis}</span>{" "}
           {content.headlineEnd}
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-doodle-ink/70">
@@ -195,13 +195,13 @@ function CharacterCard({ c }: { c: Character }) {
   const initial = c.name.replace(/[^A-Za-z]/g, "").charAt(0).toUpperCase();
 
   return (
-    <li className="relative shrink-0 w-[260px] md:w-[300px] rounded-[1rem] bg-doodle-stitch p-6 shadow-card flex flex-col items-center text-center">
+    <li className="relative shrink-0 w-[260px] md:w-[300px] rounded-[1.25rem] bg-doodle-stitch p-6 shadow-card flex flex-col items-center text-center">
       {/* Designed "portrait" — soft tinted stage + monogram tile (no smiley) */}
       <div
-        className={`relative grid h-32 w-full place-items-center rounded-[0.75rem] ${STAGE[c.bg]}`}
+        className={`relative grid h-32 w-full place-items-center rounded-[0.95rem] ${STAGE[c.bg]}`}
       >
         <div
-          className={`grid h-20 w-20 place-items-center rounded-[0.75rem] ${MONO[c.bg]} shadow-subtle`}
+          className={`grid h-20 w-20 place-items-center rounded-[0.95rem] ${MONO[c.bg]} shadow-subtle`}
         >
           <span className={`font-display text-3xl leading-none ${MONO_TEXT[c.bg]}`}>
             {initial}
@@ -245,7 +245,7 @@ function CharacterCard({ c }: { c: Character }) {
           {c.name}
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center rounded-full bg-doodle-orange/12 px-2.5 py-0.5 text-xs font-semibold text-doodle-orange">
+          <span className="inline-flex items-center rounded-full bg-doodle-orange/12 px-2.5 py-0.5 text-xs font-semibold text-doodle-berry">
             Age {c.age}
           </span>
           <span className="text-xs font-medium text-doodle-ink/55">{c.mood}</span>

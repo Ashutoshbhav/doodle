@@ -36,7 +36,7 @@ export default async function CheckoutPage() {
           </div>
 
           <aside className="self-start lg:sticky lg:top-24">
-            <div className="rounded-[1rem] bg-doodle-canvas p-6 shadow-card">
+            <div className="rounded-[1.25rem] bg-doodle-canvas p-6 shadow-card">
               <h2 className="font-display text-lg text-doodle-ink">Order summary</h2>
               <ul className="mt-4 space-y-3">
                 {cart.items?.map((line) => (

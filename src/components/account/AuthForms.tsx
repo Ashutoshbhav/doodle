@@ -100,7 +100,7 @@ export function AuthForms({ initialMode = "login" }: { initialMode?: Mode }) {
           className="
             inline-flex items-center justify-center w-full sm:w-auto
             h-12 px-6 rounded-full
-            bg-doodle-orange text-doodle-stitch font-medium text-base
+            bg-doodle-orange text-doodle-ink font-medium text-base
             border-2 border-dashed border-doodle-stitch
             hover:scale-[1.02] active:scale-[0.98] transition-transform
             disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100

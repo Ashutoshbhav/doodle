@@ -18,7 +18,7 @@ const NAV_LINKS = [
   { href: "/#shop", label: "Build your tee" },
   { href: "/#how", label: "How it works" },
   { href: "/#wall", label: "Patch library" },
-  { href: "/#packs", label: "Patch packs" },
+  { href: "/about", label: "About" },
 ] as const;
 
 const CTA = isCommerceEnabled
@@ -88,7 +88,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
                   font-sans text-[0.9375rem] font-medium tracking-[-0.005em] text-doodle-ink/70
                   transition-[color,background-color] duration-200
                   hover:text-doodle-ink hover:bg-doodle-ink/[0.05]
-                  focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30
+                  focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/30
                 "
               >
                 {label}
@@ -107,7 +107,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
                   grid place-items-center h-11 w-11 rounded-full
                   text-doodle-ink/80 transition-[color,background-color] duration-200
                   hover:text-doodle-ink hover:bg-doodle-ink/5
-                  focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30
+                  focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/30
                 "
               >
                 <User weight="duotone" size={22} aria-hidden />
@@ -120,11 +120,11 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
             className="
               hidden sm:inline-flex items-center justify-center
               h-9 px-5 rounded-full gap-2
-              bg-doodle-orange text-doodle-stitch font-medium text-sm
+              bg-doodle-orange text-doodle-ink font-medium text-sm
               shadow-card hover:bg-doodle-orange/95 hover:shadow-card-hover
               hover:-translate-y-0.5 active:scale-[0.97]
               transition-[box-shadow,background-color,transform] duration-200
-              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40
+              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40
             "
           >
             {CTA.label}
@@ -141,7 +141,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
               grid lg:hidden place-items-center h-11 w-11 rounded-full
               text-doodle-ink/80 transition-[color,background-color] duration-200
               hover:text-doodle-ink hover:bg-doodle-ink/5
-              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30
+              focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/30
             "
           >
             <List weight="bold" size={24} aria-hidden />
@@ -177,7 +177,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
                 type="button"
                 onClick={() => setMenuOpen(false)}
                 aria-label="Close menu"
-                className="grid place-items-center h-11 w-11 rounded-full text-doodle-ink/80 hover:bg-doodle-ink/5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/30"
+                className="grid place-items-center h-11 w-11 rounded-full text-doodle-ink/80 hover:bg-doodle-ink/5 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/30"
               >
                 <X weight="bold" size={24} aria-hidden />
               </button>
@@ -190,7 +190,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
                     <Link
                       href={href}
                       onClick={() => setMenuOpen(false)}
-                      className="block py-2 font-display text-3xl tracking-[-0.02em] text-doodle-ink transition-colors hover:text-doodle-orange"
+                      className="block py-2 font-display text-3xl tracking-[-0.02em] text-doodle-ink transition-colors hover:text-doodle-berry"
                     >
                       {label}
                     </Link>
@@ -201,7 +201,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
                     <Link
                       href="/account"
                       onClick={() => setMenuOpen(false)}
-                      className="block py-2 font-display text-3xl tracking-[-0.02em] text-doodle-ink transition-colors hover:text-doodle-orange"
+                      className="block py-2 font-display text-3xl tracking-[-0.02em] text-doodle-ink transition-colors hover:text-doodle-berry"
                     >
                       Your account
                     </Link>
@@ -213,7 +213,7 @@ export function Nav({ cartCount = 0 }: { cartCount?: number }) {
                 <Link
                   href={CTA.href}
                   onClick={() => setMenuOpen(false)}
-                  className="inline-flex h-12 items-center justify-center rounded-full bg-doodle-orange px-7 font-medium text-doodle-stitch shadow-card active:scale-[0.97] transition-transform"
+                  className="inline-flex h-12 items-center justify-center rounded-full bg-doodle-orange px-7 font-medium text-doodle-ink shadow-card active:scale-[0.97] transition-transform"
                 >
                   {CTA.label}
                 </Link>

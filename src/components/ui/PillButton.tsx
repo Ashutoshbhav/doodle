@@ -20,7 +20,7 @@ type Props = {
 // shadow (the lift) while motion handles the y-translate.
 const SURFACES: Record<Variant, string> = {
   primary:
-    "bg-doodle-orange text-doodle-stitch shadow-card hover:bg-doodle-orange/95 hover:shadow-card-hover",
+    "bg-doodle-orange text-doodle-ink shadow-card hover:bg-doodle-orange/95 hover:shadow-card-hover",
   secondary:
     "bg-doodle-canvas text-doodle-ink border border-doodle-ink/15 shadow-subtle hover:border-doodle-ink/25 hover:shadow-card",
   ghost:
@@ -34,7 +34,7 @@ const SIZES: Record<Size, string> = {
 };
 
 const ARROW_WRAP: Record<Variant, string> = {
-  primary: "bg-doodle-stitch text-doodle-orange",
+  primary: "bg-doodle-stitch text-doodle-berry",
   secondary: "bg-doodle-ink text-doodle-canvas",
   ghost: "bg-doodle-ink text-doodle-canvas",
 };
@@ -55,7 +55,7 @@ export function PillButton({
       className={`
         inline-flex items-center justify-center rounded-full font-sans font-medium
         cursor-pointer select-none transition-[box-shadow,background-color,border-color] duration-200
-        focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40
+        focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40
         ${SURFACES[variant]} ${SIZES[size]} ${className}
       `}
       {...rest}

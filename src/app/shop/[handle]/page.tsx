@@ -218,7 +218,7 @@ export default async function PDPPage({
             <div className="relative">
               <ProductGallery images={images} alt={product.title ?? "DOODLE product"} />
 
-              <div className="relative mt-5 overflow-hidden rounded-[1rem] bg-doodle-stitch p-5 shadow-card sm:p-6">
+              <div className="relative mt-5 overflow-hidden rounded-[1.25rem] bg-doodle-stitch p-5 shadow-card sm:p-6">
                 <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-doodle-ink/55">
                   Try the patch swap
                 </p>
@@ -252,7 +252,7 @@ export default async function PDPPage({
 
               {/* Origin / shipping — clean sans rows on a soft card, not mono.
                   Country of origin satisfies the E-Commerce Rules 2020 mandate. */}
-              <dl className="mt-10 divide-y divide-doodle-ink/10 rounded-[1rem] bg-doodle-canvas px-5 shadow-subtle">
+              <dl className="mt-10 divide-y divide-doodle-ink/10 rounded-[1.25rem] bg-doodle-canvas px-5 shadow-subtle">
                 <div className="flex items-center justify-between py-3.5 text-sm">
                   <dt className="text-doodle-ink/60">Country of origin</dt>
                   <dd className="font-medium text-doodle-ink">{countryOfOrigin}</dd>

@@ -98,9 +98,9 @@ export function WaitlistForm({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ type: "spring", stiffness: 240, damping: 22 }}
-            className="flex items-start gap-3 rounded-[1rem] bg-doodle-stitch px-5 py-4 shadow-card"
+            className="flex items-start gap-3 rounded-[1.25rem] bg-doodle-stitch px-5 py-4 shadow-card"
           >
-            <CheckCircle weight="duotone" size={28} className="text-doodle-orange shrink-0 mt-0.5" />
+            <CheckCircle weight="duotone" size={28} className="text-doodle-berry shrink-0 mt-0.5" />
             <div className="min-w-0 flex-1">
               <div className="font-display text-lg leading-tight text-doodle-ink">
                 You&rsquo;re in.
@@ -139,7 +139,7 @@ export function WaitlistForm({
                 suppressHydrationWarning
                 className={`
                   block w-full rounded-full pl-10 pr-3 h-11 text-sm font-sans
-                  outline-none transition focus:ring-4 focus:ring-doodle-orange/30
+                  outline-none transition focus:ring-4 focus:ring-doodle-berry/30
                   ${inputColor}
                 `}
               />
@@ -205,7 +205,7 @@ function ShareRow({ code }: { code: string }) {
           href={waShare}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-doodle-orange px-4 text-xs font-semibold text-doodle-stitch shadow-subtle transition-transform active:scale-[0.97]"
+          className="inline-flex h-9 items-center gap-1.5 rounded-full bg-doodle-orange px-4 text-xs font-semibold text-doodle-ink shadow-subtle transition-transform active:scale-[0.97]"
         >
           <WhatsappLogo weight="fill" size={14} aria-hidden />
           Share on WhatsApp

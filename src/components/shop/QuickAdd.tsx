@@ -38,7 +38,7 @@ export function QuickAdd({
       type="button"
       onClick={add}
       disabled={state === "busy"}
-      className={`inline-flex h-9 items-center justify-center rounded-full bg-doodle-orange px-4 text-xs font-semibold text-doodle-stitch shadow-subtle transition-[transform,background-color] duration-200 hover:bg-doodle-orange/95 active:scale-[0.97] disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40 ${className}`}
+      className={`inline-flex h-9 items-center justify-center rounded-full bg-doodle-orange px-4 text-xs font-semibold text-doodle-ink shadow-subtle transition-[transform,background-color] duration-200 hover:bg-doodle-orange/95 active:scale-[0.97] disabled:opacity-60 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40 ${className}`}
     >
       {state === "busy" ? "Adding…" : state === "added" ? "Added ✓" : state === "error" ? "Try again" : "Add"}
     </button>

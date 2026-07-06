@@ -1,8 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import {
-  Figtree,
-  Geist_Mono,
-  Bricolage_Grotesque,
+  Nunito,
+  Baloo_2,
   Caveat,
   Bagel_Fat_One,
 } from "next/font/google";
@@ -13,31 +12,24 @@ import { SmoothScroll } from "@/components/motion";
 import { env } from "@/env";
 import "./globals.css";
 
-// Body + commerce voice. Warm humanist-geometric sans — friendly without
-// being childish, high legibility at small commerce sizes, deliberate
-// contrast against Bricolage's quirk. Chosen 2026-05-29 over Plus Jakarta
-// Sans (impeccable reflex-reject) per /sauce design pass.
-const figtree = Figtree({
-  variable: "--font-figtree",
+// CANDY PASTEL type pairing (Ash, 2026-07-07): rounded and kid-first.
+// Body + commerce voice: Nunito — rounded terminals, hugely readable at
+// small commerce sizes, friendly without tipping into toy-store.
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
   display: "swap",
 });
 
-// Mono is the current label/eyebrow voice across the site. Kept wired to
-// avoid regressing every label to system mono. NOTE (2026-05-29): the
-// "font-mono uppercase tracking" eyebrow-on-every-section pattern is on
-// impeccable's ban list — to be reworked during the per-section pass.
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Display voice: Baloo 2 — chubby, rounded, warm; drawn by Ek Type
+// (Mumbai), which suits a made-in-India kids brand down to the metadata.
+// Replaces Bricolage Grotesque's editorial quirk. Geist Mono is retired
+// with this pass (one fewer family to download); font-mono now falls
+// back to the sans stack.
+const baloo = Baloo_2({
+  variable: "--font-baloo",
   subsets: ["latin"],
   display: "swap",
-});
-
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
-  subsets: ["latin"],
-  display: "swap",
-  axes: ["opsz", "wdth"],
 });
 
 // Caveat kept as a single accent voice for handwritten micro-moments
@@ -117,7 +109,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5f0e8",
+  themeColor: "#fffbf2",
   colorScheme: "light",
   width: "device-width",
   initialScale: 1,
@@ -131,7 +123,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${figtree.variable} ${geistMono.variable} ${bricolage.variable} ${caveat.variable} ${bagel.variable} h-full antialiased`}
+      className={`${nunito.variable} ${baloo.variable} ${caveat.variable} ${bagel.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
         {/* Skip link — visible only on keyboard focus */}

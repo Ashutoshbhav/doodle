@@ -56,7 +56,7 @@ const STAGE = {
 
 // Monogram tile fill + readable text (dark ink on the yellow tile for AA).
 const MONO = {
-  orange: "bg-doodle-orange text-doodle-stitch",
+  orange: "bg-doodle-orange text-doodle-ink",
   blue: "bg-doodle-blue text-doodle-stitch",
   purple: "bg-doodle-purple text-doodle-stitch",
   pink: "bg-doodle-pink text-doodle-stitch",
@@ -73,7 +73,7 @@ export function Founders() {
         {/* Same hand-drawn squiggle beat as Promise — the two brand-story
             sections share the wordmark's mark */}
         <div className="mb-10 flex justify-center md:mb-12">
-          <DoodleMark kind="squiggle" sway className="w-16 text-doodle-ink/25" />
+          <DoodleMark kind="squiggle" sway className="w-24 text-doodle-berry/60" />
         </div>
         <div className="grid gap-6 md:grid-cols-12 md:items-end">
           <div className="md:col-span-7">
@@ -82,7 +82,7 @@ export function Founders() {
             </Eyebrow>
             <h2 className="mt-5 font-display text-[clamp(2rem,5vw,3.4rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               {content.headlineLead}{" "}
-              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              <span className="italic text-doodle-berry">{content.headlineEmphasis}</span>{" "}
               {content.headlineMid}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
                 {content.headlineHighlight}
@@ -130,14 +130,14 @@ function FounderCard({
           damping: 22,
           delay: index * 0.1,
         }}
-        className="relative rounded-[1rem] bg-doodle-stitch p-7 shadow-card transition-shadow hover:shadow-card-hover flex flex-col gap-5 sm:p-8"
+        className="relative rounded-[1.25rem] bg-doodle-stitch p-7 shadow-card transition-shadow hover:shadow-card-hover flex flex-col gap-5 sm:p-8"
       >
         {/* Portrait placeholder — soft tinted stage + monogram (no smiley) */}
         <div
-          className={`relative grid h-44 w-full place-items-center rounded-[0.75rem] ${STAGE[f.tint]}`}
+          className={`relative grid h-44 w-full place-items-center rounded-[0.95rem] ${STAGE[f.tint]}`}
         >
           <div
-            className={`grid h-24 w-24 place-items-center rounded-[0.75rem] shadow-subtle ${MONO[f.tint]}`}
+            className={`grid h-24 w-24 place-items-center rounded-[0.95rem] shadow-subtle ${MONO[f.tint]}`}
           >
             <span className="font-display text-4xl leading-none">{initial}</span>
           </div>
@@ -146,7 +146,7 @@ function FounderCard({
             className="absolute bottom-3 right-3 grid h-11 w-11 place-items-center rounded-full bg-doodle-stitch shadow-card"
             aria-label={`Favourite patch: ${f.favPatch.label}`}
           >
-            <FavIcon weight="duotone" size={20} className="text-doodle-orange" />
+            <FavIcon weight="duotone" size={20} className="text-doodle-berry" />
           </div>
         </div>
 

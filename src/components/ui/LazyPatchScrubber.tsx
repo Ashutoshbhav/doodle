@@ -12,7 +12,7 @@ const PatchScrubber = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="aspect-square w-full animate-pulse rounded-[1rem] bg-doodle-ink/8" aria-hidden />
+      <div className="aspect-square w-full animate-pulse rounded-[1.25rem] bg-doodle-ink/8" aria-hidden />
     ),
   },
 )
@@ -46,7 +46,7 @@ export function LazyPatchScrubber() {
       {near ? (
         <PatchScrubber />
       ) : (
-        <div className="aspect-square w-full rounded-[1rem] bg-doodle-ink/8" aria-hidden />
+        <div className="aspect-square w-full rounded-[1.25rem] bg-doodle-ink/8" aria-hidden />
       )}
     </div>
   )

@@ -6,6 +6,8 @@ import { motion } from "motion/react";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { RoughHighlight } from "@/components/ui/Rough";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { DoodleMark } from "@/components/ui/DoodleMark";
+import { PatchDoodle } from "@/components/ui/PatchDoodle";
 import { PATCHES, EMBROIDERED_PATCHES, PATCH_COUNT, type Patch } from "@/lib/patches";
 import { patchWall as content } from "@/content/home";
 
@@ -26,7 +28,7 @@ export function PatchWall() {
               {content.eyebrow}
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
-              <span className="italic text-doodle-orange">{PATCH_COUNT}</span> {content.headlineMid}{" "}
+              <span className="italic text-doodle-berry">{PATCH_COUNT}</span> {content.headlineMid}{" "}
               <RoughHighlight on="view" strokeWidth={18} padding={2}>
                 {content.headlineHighlight}
               </RoughHighlight>{" "}
@@ -38,9 +40,14 @@ export function PatchWall() {
           </div>
 
           <div className="md:col-span-4 md:text-right">
+            {/* A kid's star scribble hovering over the library — sunshine,
+                drawn on scroll, gently alive */}
+            <div className="mb-4 hidden justify-end md:flex">
+              <DoodleMark kind="star" sway className="w-14 rotate-12 text-doodle-yellow" />
+            </div>
             <a
               href="#join"
-              className="inline-flex items-center gap-1.5 text-sm font-semibold text-doodle-ink/70 transition-colors hover:text-doodle-orange"
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-doodle-ink/70 transition-colors hover:text-doodle-berry"
             >
               {content.seeAll}
               <ArrowUpRight weight="bold" size={14} />
@@ -86,7 +93,7 @@ function CollectionTray({
   className?: string;
 }) {
   return (
-    <div className={`rounded-[1rem] bg-doodle-stitch p-5 shadow-card sm:p-7 ${className}`}>
+    <div className={`rounded-[1.25rem] bg-doodle-stitch p-5 shadow-card sm:p-7 ${className}`}>
       <div className="mb-5 flex items-baseline justify-between gap-3">
         <h3 className="font-display text-lg text-doodle-ink sm:text-xl">{label}</h3>
         <span className="text-xs italic text-doodle-ink/55 sm:text-sm">{note} · ₹{price} each</span>
@@ -119,11 +126,14 @@ function PatchTile({ patch, index, price }: { patch: Patch; index: number; price
       }}
       className="
         group flex flex-col items-center gap-2.5
-        rounded-[0.9rem] bg-doodle-canvas p-3 sm:p-4
+        rounded-[1.1rem] bg-doodle-canvas p-3 sm:p-4
         shadow-subtle transition-shadow hover:shadow-card
       "
     >
-      <span className="grid aspect-square w-full place-items-center">
+      <span className="relative grid aspect-square w-full place-items-center">
+        {/* Each patch's PERSONAL doodle (hearts for huggers, zzz for
+            nappers, zoom for racers…) sketches in on hover */}
+        <PatchDoodle patchKey={patch.key} />
         <Image
           src={patch.src}
           alt={patch.name}

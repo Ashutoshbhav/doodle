@@ -12,7 +12,7 @@ export default function CheckoutLoading() {
             ))}
           </div>
         </div>
-        <div className="h-72 animate-pulse rounded-[1rem] bg-doodle-canvas shadow-card lg:sticky lg:top-24" />
+        <div className="h-72 animate-pulse rounded-[1.25rem] bg-doodle-canvas shadow-card lg:sticky lg:top-24" />
       </section>
     </main>
   )

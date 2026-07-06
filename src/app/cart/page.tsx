@@ -39,10 +39,10 @@ export default async function CartPage() {
           </h1>
 
           {items.length === 0 ? (
-            <div className="mt-10 grid place-items-center rounded-[1rem] bg-doodle-canvas px-6 py-16 text-center shadow-card">
+            <div className="mt-10 grid place-items-center rounded-[1.25rem] bg-doodle-canvas px-6 py-16 text-center shadow-card">
               {/* An empty basket is an empty canvas — sketch the tee waiting
                   to be filled. THE doodle moment of the funnel. */}
-              <DoodleMark kind="tee" className="w-24 text-doodle-ink/30" />
+              <DoodleMark kind="tee" className="w-28 text-doodle-ink/45" />
               <p className="mt-6 max-w-sm text-lg leading-relaxed text-doodle-ink/75">
                 Nothing in the basket yet. Pick a tee, pick some patches.
               </p>
@@ -54,14 +54,14 @@ export default async function CartPage() {
             </div>
           ) : (
             <>
-              <div className="mt-10 rounded-[1rem] bg-doodle-canvas px-6 py-2 shadow-card">
+              <div className="mt-10 rounded-[1.25rem] bg-doodle-canvas px-6 py-2 shadow-card">
                 {items.map((line) => (
                   <CartLine key={line.id} line={line} />
                 ))}
               </div>
 
               {suggestions.length > 0 && (
-                <div className="mt-6 rounded-[1rem] bg-doodle-canvas p-5 shadow-card">
+                <div className="mt-6 rounded-[1.25rem] bg-doodle-canvas p-5 shadow-card">
                   <h2 className="text-[11px] font-semibold uppercase tracking-[0.12em] text-doodle-ink/55">
                     Goes on the same tee
                   </h2>
@@ -95,7 +95,7 @@ export default async function CartPage() {
                 </div>
               )}
 
-              <div className="mt-8 rounded-[1rem] bg-doodle-canvas p-6 shadow-card">
+              <div className="mt-8 rounded-[1.25rem] bg-doodle-canvas p-6 shadow-card">
                 <div className="flex justify-between text-sm text-doodle-ink/70">
                   <span>Subtotal</span>
                   {/* item_subtotal: cart.subtotal includes shipping in Medusa v2 */}

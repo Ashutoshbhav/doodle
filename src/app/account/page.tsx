@@ -62,7 +62,7 @@ export default async function AccountPage() {
                   href="/shop"
                   className="
                     mt-5 inline-flex items-center justify-center h-11 px-6 rounded-full
-                    bg-doodle-orange text-doodle-stitch font-medium
+                    bg-doodle-orange text-doodle-ink font-medium
                     border-2 border-dashed border-doodle-stitch
                     hover:scale-[1.02] active:scale-[0.98] transition-transform
                   "

@@ -223,7 +223,7 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
         email,
         contact: phone,
       },
-      theme: { color: "#E8650A" },
+      theme: { color: "#FF8A7A" },
       handler: async (response) => {
         // The handler's signature fields go to the server, which verifies the
         // HMAC (with the key secret) before completing the cart. The backend
@@ -307,7 +307,7 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
                 maxLength={200}
                 rows={2}
                 placeholder="Happy birthday, Aarav! Pick your favourite patch first."
-                className="mt-1.5 block w-full rounded-lg border border-doodle-ink/15 bg-card px-3.5 py-2.5 text-sm text-doodle-ink placeholder:text-doodle-ink/35 outline-none transition focus:ring-4 focus:ring-doodle-orange/25"
+                className="mt-1.5 block w-full rounded-lg border border-doodle-ink/15 bg-card px-3.5 py-2.5 text-sm text-doodle-ink placeholder:text-doodle-ink/35 outline-none transition focus:ring-4 focus:ring-doodle-berry/25"
               />
             </div>
           </div>

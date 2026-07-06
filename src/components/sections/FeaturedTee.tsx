@@ -18,7 +18,7 @@ export function FeaturedTee() {
   return (
     <section id="shop" className="relative py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
-        <div className="grid items-center gap-8 rounded-[1.25rem] bg-doodle-stitch p-6 shadow-card md:grid-cols-2 md:gap-12 md:p-12">
+        <div className="grid items-center gap-8 rounded-[1.5rem] bg-doodle-stitch p-6 shadow-card md:grid-cols-2 md:gap-12 md:p-12">
           {/* Left — product stage (photography-ready image slot) */}
           <div className="relative mx-auto aspect-square w-full max-w-[440px]">
             <div className="absolute inset-8 rounded-[42%] bg-doodle-yellow/25 blur-2xl" aria-hidden />
@@ -34,12 +34,12 @@ export function FeaturedTee() {
 
           {/* Right — copy, price, kit, CTAs */}
           <div>
-            <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-doodle-orange">
+            <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-doodle-berry">
               The Starter Kit
             </span>
             <h2 className="mt-3 font-display text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] tracking-[-0.02em] text-doodle-ink">
               Build a tee that&apos;s{" "}
-              <span className="italic text-doodle-orange">all theirs</span>.
+              <span className="italic text-doodle-berry">all theirs</span>.
             </h2>
             <p className="mt-4 max-w-md text-base leading-relaxed text-doodle-ink/70">
               One soft 100% combed-cotton tee and five swappable velcro patches.
@@ -73,7 +73,7 @@ export function FeaturedTee() {
             <div className="mt-6 flex flex-wrap items-center gap-3">
               <Link
                 href="/shop"
-                className="inline-flex h-11 items-center justify-center rounded-full bg-doodle-orange px-6 text-sm font-medium text-doodle-stitch shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-orange/40"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-doodle-orange px-6 text-sm font-medium text-doodle-ink shadow-card transition-[box-shadow,background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-doodle-orange/95 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40"
               >
                 Shop the drop
               </Link>

@@ -44,7 +44,7 @@ export function RestockCapture({ sku }: { sku: string }) {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email"
         disabled={state === "busy"}
-        className="h-10 flex-1 rounded-full border border-doodle-ink/15 bg-card px-4 text-sm text-doodle-ink placeholder:text-doodle-ink/35 outline-none transition focus:ring-4 focus:ring-doodle-orange/25"
+        className="h-10 flex-1 rounded-full border border-doodle-ink/15 bg-card px-4 text-sm text-doodle-ink placeholder:text-doodle-ink/35 outline-none transition focus:ring-4 focus:ring-doodle-berry/25"
       />
       <button
         type="submit"

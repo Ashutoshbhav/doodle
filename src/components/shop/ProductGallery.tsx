@@ -37,7 +37,7 @@ export function ProductGallery({
       <div
         ref={trackRef}
         onScroll={onScroll}
-        className="flex snap-x snap-mandatory overflow-x-auto rounded-[1rem] shadow-card [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory overflow-x-auto rounded-[1.25rem] shadow-card [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label={`${alt} photos`}
       >
         {images.map((src, i) => (
@@ -70,7 +70,7 @@ export function ProductGallery({
               aria-current={active === i}
               className={`relative h-16 w-14 shrink-0 overflow-hidden rounded-lg transition-[box-shadow,opacity] ${
                 active === i
-                  ? "ring-2 ring-doodle-orange opacity-100"
+                  ? "ring-2 ring-doodle-berry opacity-100"
                   : "opacity-65 hover:opacity-100"
               }`}
             >

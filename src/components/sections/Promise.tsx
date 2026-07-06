@@ -46,8 +46,8 @@ const ACCENT = {
   orange: {
     block: "bg-doodle-orange/15",
     iconBg: "bg-doodle-orange/12",
-    iconText: "text-doodle-orange",
-    link: "group-hover:text-doodle-orange",
+    iconText: "text-doodle-berry",
+    link: "group-hover:text-doodle-berry",
   },
   blue: {
     block: "bg-doodle-blue/15",
@@ -72,7 +72,7 @@ export function Promise() {
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         {/* The wordmark's squiggle, hand-drawn — marks the brand-story beat */}
         <div className="mb-10 flex justify-center md:mb-12">
-          <DoodleMark kind="squiggle" sway className="w-16 text-doodle-ink/25" />
+          <DoodleMark kind="squiggle" sway className="w-24 text-doodle-berry/60" />
         </div>
         <ScrollReveal direction="up">
           <div className="max-w-3xl">
@@ -81,7 +81,7 @@ export function Promise() {
             </Eyebrow>
             <h2 className="mt-4 font-display text-[clamp(2rem,5vw,3.5rem)] leading-[1.05] tracking-[-0.02em] text-doodle-ink">
               {content.headlineLead}{" "}
-              <span className="italic text-doodle-orange">{content.headlineEmphasis}</span>{" "}
+              <span className="italic text-doodle-berry">{content.headlineEmphasis}</span>{" "}
               {content.headlineMid}{" "}
               <span className="relative inline-block">
                 <span className="relative z-10">{content.headlineUnderline}</span>
@@ -110,11 +110,11 @@ export function Promise() {
                         intentional composition, not a saturated fill. */}
                     <div
                       aria-hidden
-                      className={`absolute -right-3 -top-3 h-20 w-20 rounded-[1rem] ${a.block}`}
+                      className={`absolute -right-3 -top-3 h-20 w-20 rounded-[1.25rem] ${a.block}`}
                     />
 
                     <article
-                      className="relative isolate flex min-h-[360px] flex-col gap-5 overflow-hidden rounded-[1rem] bg-card p-7 shadow-card transition-shadow duration-200 hover:shadow-card-hover sm:p-8"
+                      className="relative isolate flex min-h-[360px] flex-col gap-5 overflow-hidden rounded-[1.25rem] bg-card p-7 shadow-card transition-shadow duration-200 hover:shadow-card-hover sm:p-8"
                     >
                       {/* Quiet step index — clean sans, not mono */}
                       <span className="absolute right-6 top-6 font-display text-sm font-semibold text-doodle-ink/25">

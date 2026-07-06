@@ -12,6 +12,7 @@ import { WaitlistForm } from "@/components/ui/WaitlistForm";
 import { MagneticHover } from "@/components/motion";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { PatchShape, type PatchKey } from "@/components/ui/PatchShape";
+import { DoodleMark } from "@/components/ui/DoodleMark";
 import { dualCTA as content } from "@/content/home";
 
 export function DualCTA() {
@@ -41,7 +42,7 @@ function ConsumerCard() {
       animate={inView ? { opacity: 1, y: 0 } : undefined}
       transition={{ type: "spring", stiffness: 220, damping: 24 }}
       className="
-        relative isolate overflow-hidden rounded-[1rem] bg-doodle-blue
+        relative isolate overflow-hidden rounded-[1.25rem] bg-doodle-blue
         p-8 sm:p-10 lg:p-12 shadow-card
         flex flex-col gap-7 min-h-[460px]
       "
@@ -49,20 +50,20 @@ function ConsumerCard() {
       <DecorScene tone="blue" />
 
       <div className="relative z-10">
-        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
+        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-ink/8 px-3 py-1 text-doodle-ink">
           <Sparkle weight="fill" size={10} />
-          <Eyebrow variant="rule" tone="stitch">{content.consumer.badge}</Eyebrow>
+          <Eyebrow variant="rule">{content.consumer.badge}</Eyebrow>
         </span>
       </div>
 
       <div className="relative z-10">
-        <h2 className="font-display text-[clamp(1.85rem,3.5vw,2.85rem)] leading-[1.0] tracking-[-0.02em] text-doodle-stitch">
+        <h2 className="font-display text-[clamp(1.85rem,3.5vw,2.85rem)] leading-[1.0] tracking-[-0.02em] text-doodle-ink">
           {content.consumer.headlineLead}{" "}
           <span className="italic block opacity-90">
             {content.consumer.headlineEmphasis}
           </span>
         </h2>
-        <p className="mt-4 text-sm sm:text-base text-doodle-stitch/85 max-w-md">
+        <p className="mt-4 text-sm sm:text-base text-doodle-ink/85 max-w-md">
           {content.consumer.body}
         </p>
       </div>
@@ -89,7 +90,7 @@ function StockistCard() {
       animate={inView ? { opacity: 1, y: 0 } : undefined}
       transition={{ type: "spring", stiffness: 220, damping: 24, delay: 0.08 }}
       className="
-        relative isolate overflow-hidden rounded-[1rem] bg-doodle-purple
+        relative isolate overflow-hidden rounded-[1.25rem] bg-doodle-purple
         p-8 sm:p-10 lg:p-12 shadow-card
         flex flex-col gap-7 min-h-[460px]
       "
@@ -97,23 +98,23 @@ function StockistCard() {
       <DecorScene tone="purple" />
 
       <div className="relative z-10 flex items-center gap-3">
-        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-stitch/15 px-3 py-1 text-doodle-stitch">
+        <span className="inline-flex items-center gap-2 rounded-full bg-doodle-ink/8 px-3 py-1 text-doodle-ink">
           <Storefront weight="fill" size={10} />
-          <Eyebrow variant="rule" tone="stitch">{content.stockist.badge}</Eyebrow>
+          <Eyebrow variant="rule">{content.stockist.badge}</Eyebrow>
         </span>
-        <span className="text-[11px] font-medium text-doodle-stitch/65">
+        <span className="text-[11px] font-medium text-doodle-ink/65">
           {content.stockist.badgeNote}
         </span>
       </div>
 
       <div className="relative z-10">
-        <h2 className="font-display text-[clamp(1.85rem,3.5vw,2.85rem)] leading-[1.0] tracking-[-0.02em] text-doodle-stitch">
+        <h2 className="font-display text-[clamp(1.85rem,3.5vw,2.85rem)] leading-[1.0] tracking-[-0.02em] text-doodle-ink">
           {content.stockist.headlineLead}{" "}
           <span className="italic block opacity-90">
             {content.stockist.headlineEmphasis}
           </span>
         </h2>
-        <p className="mt-4 text-sm sm:text-base text-doodle-stitch/85 max-w-md">
+        <p className="mt-4 text-sm sm:text-base text-doodle-ink/85 max-w-md">
           {content.stockist.body}
         </p>
       </div>
@@ -126,17 +127,17 @@ function StockistCard() {
           href="mailto:hello@doodlebycanvas.in?subject=DOODLE%20stockist%20inquiry&body=Tell%20us%20about%20your%20store%20%E2%80%94%20name%2C%20city%2C%20website%2C%20what%20you%20stock%20today."
           className="
             inline-flex items-center gap-3 h-12 px-6 rounded-full
-            bg-doodle-stitch text-doodle-purple font-medium text-sm
+            bg-doodle-stitch text-doodle-ink font-medium text-sm
             shadow-card hover:shadow-card-hover hover:-translate-y-0.5 active:scale-[0.97]
             transition-[box-shadow,transform] duration-200
-            focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-stitch/40
+            focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-ink/30
           "
         >
           <PaperPlaneTilt weight="duotone" size={18} />
           <span>{content.stockist.ctaLabel}</span>
           <ArrowRight weight="bold" size={14} />
         </a>
-        <span className="text-xs font-medium text-doodle-stitch/65">
+        <span className="text-xs font-medium text-doodle-ink/65">
           {content.stockist.emailNote}
         </span>
       </div>
@@ -149,7 +150,7 @@ function StockistCard() {
    fills the previously-empty mid-card space with on-brand product. */
 function PatchCluster({ patches }: { patches: PatchKey[] }) {
   return (
-    <div className="relative z-10 flex w-fit items-center gap-1 rounded-full bg-doodle-stitch/15 px-3 py-2 backdrop-blur-sm">
+    <div className="relative z-10 flex w-fit items-center gap-1 rounded-full bg-doodle-ink/8 px-3 py-2 backdrop-blur-sm">
       {patches.map((key, i) => (
         <span
           key={key}
@@ -164,31 +165,27 @@ function PatchCluster({ patches }: { patches: PatchKey[] }) {
 }
 
 function DecorScene({ tone }: { tone: "blue" | "purple" }) {
-  const accent = tone === "blue" ? "var(--color-doodle-yellow)" : "var(--color-doodle-pink)";
   return (
     <>
       {/* Big circle */}
       <div
         aria-hidden
-        className="absolute -top-12 -right-12 h-44 w-44 rounded-full border-2 border-doodle-stitch/25"
+        className="absolute -top-12 -right-12 h-44 w-44 rounded-full border-2 border-doodle-ink/15"
       />
-      {/* Squiggle */}
-      <svg
-        aria-hidden
-        className="absolute right-6 bottom-6 w-32 h-12 opacity-50"
-        viewBox="0 0 120 40"
-      >
-        <path
-          d="M 5 25 Q 20 5, 35 25 T 65 25 T 95 25 T 120 25"
-          fill="none"
-          stroke={accent}
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-      </svg>
-      {/* Small dots */}
-      <div className="absolute top-10 right-12 h-3 w-3 rounded-full bg-doodle-stitch/45" aria-hidden />
-      <div className="absolute top-20 right-32 h-2 w-2 rounded-full bg-doodle-stitch/60" aria-hidden />
+      {/* Real rough.js doodles instead of the old flat SVG squiggle —
+          they sketch themselves in when the card scrolls into view */}
+      <DoodleMark
+        kind="squiggle"
+        sway
+        className="absolute bottom-6 right-6 w-28 text-doodle-ink/30"
+      />
+      <DoodleMark
+        kind="star"
+        sway
+        className={`absolute right-14 top-9 w-10 -rotate-12 ${
+          tone === "blue" ? "text-doodle-yellow" : "text-doodle-pink"
+        }`}
+      />
     </>
   );
 }
