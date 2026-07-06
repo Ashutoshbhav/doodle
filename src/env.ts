@@ -1,6 +1,12 @@
 import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
+// Values piped into `vercel env add` on Windows can arrive with a trailing
+// \r that no dashboard view reveals — it fails strict regexes at build time
+// and would silently corrupt an HMAC secret. Trim before validating.
+const trimmed = <T extends z.ZodTypeAny>(schema: T) =>
+  z.preprocess((v) => (typeof v === "string" ? v.trim() : v), schema);
+
 export const env = createEnv({
   server: {
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -16,7 +22,7 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
     // Razorpay key SECRET (server-only, same key pair as NEXT_PUBLIC_RAZORPAY_KEY_ID).
     // Enables checkout-handler signature verification before cart completion.
-    RAZORPAY_KEY_SECRET: z.string().min(1).optional(),
+    RAZORPAY_KEY_SECRET: trimmed(z.string().min(1).optional()),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
@@ -36,7 +42,7 @@ export const env = createEnv({
     NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1).optional(),
     // WhatsApp click-to-chat number in international format WITHOUT "+",
     // e.g. "919876543210". Links render only when this is set.
-    NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().regex(/^\d{10,15}$/).optional(),
+    NEXT_PUBLIC_WHATSAPP_NUMBER: trimmed(z.string().regex(/^\d{10,15}$/).optional()),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
