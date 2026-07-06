@@ -6,6 +6,8 @@ import { formatINR } from "@/lib/medusa/types"
 import { PillButton } from "@/components/ui/PillButton"
 import { Tag } from "@/components/ui/Tag"
 import { addToCart } from "@/app/actions/checkout"
+import { useCartDrawer } from "@/components/shop/CartDrawer"
+import { RestockCapture } from "@/components/shop/RestockCapture"
 
 type Selection = Record<string, string>
 
@@ -25,8 +27,15 @@ function stockState(variant: Variant | undefined): {
   return { inStock: qty > 0, remaining: qty }
 }
 
+/** "3-4Y" → "3–4 yrs" — variant values are age bands; speak parent. */
+function prettySize(value: string): string {
+  const m = /^(\d+)\s*-\s*(\d+)\s*Y$/i.exec(value.trim())
+  return m ? `${m[1]}–${m[2]} yrs` : value
+}
+
 export function VariantPicker({ product }: { product: Product }) {
   const options = product.options ?? []
+  const drawer = useCartDrawer()
   const [selection, setSelection] = React.useState<Selection>(() =>
     Object.fromEntries((options).map((o) => [o.id ?? "", ""]))
   )
@@ -51,16 +60,35 @@ export function VariantPicker({ product }: { product: Product }) {
     remaining != null &&
     remaining <= LOW_STOCK_THRESHOLD
 
-  async function onAdd() {
-    if (!selected) return
+  /** Shared add handler — reports server-side stock clamps honestly and
+      opens the mini-cart drawer (falls back to inline text without one). */
+  async function addVariant(variant: Variant) {
     setBusy(true)
     setMsg(null)
-    const result = await addToCart({
-      variantId: selected.id,
-      quantity: 1,
-    })
+    const result = await addToCart({ variantId: variant.id, quantity: 1 })
     setBusy(false)
-    setMsg(result.ok ? "Added to cart." : result.error ?? "Something went wrong.")
+    if (!result.ok) {
+      setMsg(result.error ?? "Something went wrong.")
+      return
+    }
+    const adjusted = result.data.adjustedTo
+    if (adjusted === null) {
+      setMsg("That one just sold out — nothing was added.")
+      return
+    }
+    const note =
+      adjusted != null
+        ? `Stock is tight — your basket holds the max (${adjusted}).`
+        : undefined
+    if (drawer) {
+      drawer.notifyAdded({
+        title: product.title ?? "Added",
+        variant: variant.title ?? undefined,
+        note,
+      })
+    } else {
+      setMsg(note ?? "Added to cart.")
+    }
   }
 
   if (options.length === 0) {
@@ -81,31 +109,17 @@ export function VariantPicker({ product }: { product: Product }) {
         {!only.inStock && (
           <div className="space-y-2">
             <Tag tone="danger">Sold out</Tag>
-            <p className="text-sm text-doodle-ink/60">
-              Want us to text you when it&apos;s back?
-            </p>
+            <RestockCapture sku={onlyVariant?.sku ?? product.handle ?? "item"} />
           </div>
         )}
         {onlyLow && <Tag tone="accent">Only {only.remaining} left</Tag>}
-        <PillButton
-          variant="primary"
-          size="lg"
+        <StickyAddBar
+          price={onlyVariant?.calculated_price?.calculated_amount ?? null}
           disabled={!onlyVariant || !only.inStock || busy}
-          onClick={async () => {
-            if (!onlyVariant) return
-            setBusy(true)
-            setMsg(null)
-            const r = await addToCart({
-              variantId: onlyVariant.id,
-              quantity: 1,
-            })
-            setBusy(false)
-            setMsg(r.ok ? "Added to cart." : r.error ?? "Error")
-          }}
-        >
-          {busy ? "Adding…" : !only.inStock ? "Sold out" : "Add to cart"}
-        </PillButton>
-        {msg && <p className="text-sm text-doodle-ink/70">{msg}</p>}
+          label={busy ? "Adding…" : !only.inStock ? "Sold out" : "Add to cart"}
+          onAdd={() => onlyVariant && addVariant(onlyVariant)}
+        />
+        {msg && <p className="text-sm text-doodle-ink/70" role="status">{msg}</p>}
       </div>
     )
   }
@@ -137,7 +151,7 @@ export function VariantPicker({ product }: { product: Product }) {
                       : "bg-doodle-canvas text-doodle-ink border-doodle-ink/15 hover:border-doodle-ink/35",
                   ].join(" ")}
                 >
-                  {val.value}
+                  {prettySize(val.value ?? "")}
                 </button>
               )
             })}
@@ -152,9 +166,7 @@ export function VariantPicker({ product }: { product: Product }) {
         {selected && !inStock && (
           <div className="mt-2 space-y-2">
             <Tag tone="danger">Sold out</Tag>
-            <p className="text-sm text-doodle-ink/60">
-              Want us to text you when it&apos;s back?
-            </p>
+            <RestockCapture sku={selected.sku ?? selected.id} />
           </div>
         )}
         {lowStock && (
@@ -164,16 +176,57 @@ export function VariantPicker({ product }: { product: Product }) {
         )}
       </div>
 
-      <PillButton
-        variant="primary"
-        size="lg"
-        onClick={onAdd}
+      <StickyAddBar
+        price={price ?? null}
         disabled={!selected || !inStock || busy}
-      >
-        {busy ? "Adding…" : selected && !inStock ? "Sold out" : "Add to cart"}
-      </PillButton>
+        label={busy ? "Adding…" : selected && !inStock ? "Sold out" : selected ? "Add to cart" : "Pick your options"}
+        onAdd={() => selected && addVariant(selected)}
+      />
 
-      {msg && <p className="text-sm text-doodle-ink/70">{msg}</p>}
+      {msg && <p className="text-sm text-doodle-ink/70" role="status">{msg}</p>}
     </div>
+  )
+}
+
+/* Desktop: a normal in-flow button. Mobile (<lg): the same action pinned to
+   the bottom of the viewport with the price, so "buy" never scrolls away.
+   The spacer stops the pinned bar from covering the page's tail. */
+function StickyAddBar({
+  price,
+  disabled,
+  label,
+  onAdd,
+}: {
+  price: number | null
+  disabled: boolean
+  label: string
+  onAdd: () => void
+}) {
+  return (
+    <>
+      <div className="hidden lg:block">
+        <PillButton variant="primary" size="lg" onClick={onAdd} disabled={disabled}>
+          {label}
+        </PillButton>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-doodle-ink/10 bg-doodle-canvas/95 px-5 py-3 backdrop-blur lg:hidden">
+        <div className="mx-auto flex max-w-md items-center gap-4">
+          <span className="shrink-0 font-display text-xl text-doodle-ink">
+            {price != null ? formatINR(price) : ""}
+          </span>
+          <PillButton
+            variant="primary"
+            size="lg"
+            onClick={onAdd}
+            disabled={disabled}
+            className="flex-1"
+            showArrow={false}
+          >
+            {label}
+          </PillButton>
+        </div>
+      </div>
+      <div className="h-16 lg:hidden" aria-hidden />
+    </>
   )
 }

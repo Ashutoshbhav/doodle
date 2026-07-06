@@ -1,5 +1,6 @@
 "use server"
 
+import { createHmac, timingSafeEqual } from "node:crypto"
 import { revalidatePath } from "next/cache"
 import { getCart, getOrCreateCart, getIndiaRegionId } from "@/lib/medusa/cart"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
@@ -30,12 +31,46 @@ const PIN_RE = /^\d{6}$/
 const cap = (s: string | undefined, n: number): string => (s ?? "").trim().slice(0, n)
 const validQty = (q: number): boolean => Number.isInteger(q) && q > 0 && q <= 99
 
+// ---- Inventory guard -------------------------------------------------------
+// The client clamps quantities for UX, but server actions are public POST
+// endpoints — the authoritative clamp lives here. A line may exceed available
+// stock only when Medusa doesn't manage inventory for it or backorder is on.
+import type { CartLine } from "@/lib/medusa/types"
+
+function stockCapFor(line: CartLine): number {
+  const v = line.variant
+  if (v?.manage_inventory !== true || v?.allow_backorder === true) return 99
+  return Math.max(0, v.inventory_quantity ?? 0)
+}
+
+/** Clamp a just-written line to available stock. `clamped` is true when we
+    had to reduce the line (or remove it entirely: finalQty null). */
+async function clampLineToStock(
+  cartId: string,
+  variantId: string,
+): Promise<{ finalQty: number | null; clamped: boolean }> {
+  const fresh = await getCart()
+  const line = fresh?.items?.find((i) => i.variant_id === variantId)
+  if (!fresh || !line) return { finalQty: null, clamped: false }
+  const cap = stockCapFor(line)
+  if (line.quantity <= cap) return { finalQty: line.quantity, clamped: false }
+  if (cap === 0) {
+    await medusa.store.cart.deleteLineItem(fresh.id, line.id)
+    return { finalQty: null, clamped: true }
+  }
+  await medusa.store.cart.updateLineItem(fresh.id, line.id, { quantity: cap })
+  return { finalQty: cap, clamped: true }
+}
+
+export type AddResult = { adjustedTo?: number | null }
+
 export async function addToCart(input: {
   variantId: string
   quantity: number
-}): Promise<Result> {
-  if (!isCommerceConfigured) return notConfigured()
-  if (!input.variantId || !validQty(input.quantity)) return fail("Invalid item or quantity.")
+}): Promise<Result<AddResult>> {
+  if (!isCommerceConfigured) return notConfigured() as Result<AddResult>
+  if (!input.variantId || !validQty(input.quantity))
+    return fail("Invalid item or quantity.") as Result<AddResult>
   try {
     const regionId = await getIndiaRegionId()
     const cart = await getOrCreateCart(regionId)
@@ -43,11 +78,13 @@ export async function addToCart(input: {
       variant_id: input.variantId,
       quantity: input.quantity,
     })
+    // Overselling guard: repeated adds must never exceed inventory.
+    const { finalQty, clamped } = await clampLineToStock(cart.id, input.variantId)
     revalidatePath("/cart")
     revalidatePath("/", "layout")
-    return ok(undefined)
+    return ok({ adjustedTo: clamped ? finalQty : undefined })
   } catch (e: unknown) {
-    return fail(e instanceof Error ? e.message : "Unknown error")
+    return fail(e instanceof Error ? e.message : "Unknown error") as Result<AddResult>
   }
 }
 
@@ -60,8 +97,12 @@ export async function updateLine(input: {
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared. Add items again.")
+    const line = cart.items?.find((i) => i.id === input.lineId)
+    if (!line) return fail("That item is no longer in your cart.")
+    // Server-side stock clamp — the UI stepper is advisory only.
+    const quantity = Math.min(input.quantity, Math.max(1, stockCapFor(line)))
     await medusa.store.cart.updateLineItem(cart.id, input.lineId, {
-      quantity: input.quantity,
+      quantity,
     })
     revalidatePath("/cart")
     revalidatePath("/", "layout")
@@ -163,6 +204,81 @@ export async function setShippingAddress(input: {
   }
 }
 
+/** Optional gift note — kidswear is a gifting category. Stored as cart
+    metadata so it lands on the order for the packing slip. */
+export async function setGiftNote(input: { note: string }): Promise<Result> {
+  if (!isCommerceConfigured) return notConfigured()
+  const note = cap(input.note, 200)
+  try {
+    const cart = await getCart()
+    if (!cart) return fail("Your cart was cleared.")
+    await medusa.store.cart.update(cart.id, {
+      metadata: { ...(cart.metadata ?? {}), gift_note: note || null },
+    })
+    revalidatePath("/checkout")
+    return ok(undefined)
+  } catch (e: unknown) {
+    return fail(e instanceof Error ? e.message : "Unknown error")
+  }
+}
+
+// ---- Shipping method -------------------------------------------------------
+// Medusa v2 will not reliably complete a shippable cart without a shipping
+// method, and "shipping: Free" as a hardcoded label is a lie waiting to be
+// noticed. The flow: address saved → list the cart's real options → pick one
+// (auto-picked when there's exactly one) → totals update everywhere.
+
+export type ShippingOptionLite = { id: string; name: string; amount: number }
+
+export async function listShippingOptions(): Promise<Result<ShippingOptionLite[]>> {
+  if (!isCommerceConfigured) return notConfigured() as Result<ShippingOptionLite[]>
+  try {
+    const cart = await getCart()
+    if (!cart) return fail("Your cart was cleared.") as Result<ShippingOptionLite[]>
+    const { shipping_options } = await medusa.store.fulfillment.listCartOptions({
+      cart_id: cart.id,
+    })
+    const options = (shipping_options ?? []).map((o) => {
+      const priced = o as { calculated_price?: { calculated_amount?: number | null }; amount?: number | null }
+      return {
+        id: o.id,
+        name: o.name ?? "Standard delivery",
+        amount: priced.calculated_price?.calculated_amount ?? priced.amount ?? 0,
+      }
+    })
+    return ok(options)
+  } catch (e: unknown) {
+    return fail(e instanceof Error ? e.message : "Unknown error") as Result<ShippingOptionLite[]>
+  }
+}
+
+export async function setShippingMethod(input: {
+  optionId: string
+}): Promise<Result<{ shippingTotal: number; total: number }>> {
+  if (!isCommerceConfigured)
+    return notConfigured() as Result<{ shippingTotal: number; total: number }>
+  if (!input.optionId)
+    return fail("Pick a delivery option.") as Result<{ shippingTotal: number; total: number }>
+  try {
+    const cart = await getCart()
+    if (!cart) return fail("Your cart was cleared.") as Result<{ shippingTotal: number; total: number }>
+    const { cart: updated } = await medusa.store.cart.addShippingMethod(cart.id, {
+      option_id: input.optionId,
+    })
+    revalidatePath("/checkout")
+    revalidatePath("/cart")
+    return ok({
+      shippingTotal: updated.shipping_total ?? 0,
+      total: updated.total ?? 0,
+    })
+  } catch (e: unknown) {
+    return fail(e instanceof Error ? e.message : "Unknown error") as Result<{
+      shippingTotal: number
+      total: number
+    }>
+  }
+}
+
 export async function placeCodOrder(): Promise<Result<{ orderId: string }>> {
   if (!isCommerceConfigured) return notConfigured() as Result<{ orderId: string }>
   if (!(await rateLimit("checkout"))) {
@@ -173,6 +289,11 @@ export async function placeCodOrder(): Promise<Result<{ orderId: string }>> {
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.") as Result<{ orderId: string }>
+    // A shippable cart must carry a shipping method before completion —
+    // otherwise Medusa can hard-fail here or create an unfulfillable order.
+    if (!cart.shipping_methods?.length) {
+      return fail("Pick a delivery option first.") as Result<{ orderId: string }>
+    }
 
     await medusa.store.payment.initiatePaymentSession(cart, {
       provider_id: "pp_cod_cod",
@@ -211,6 +332,9 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.") as Result<RazorpayInit>
+    if (!cart.shipping_methods?.length) {
+      return fail("Pick a delivery option first.") as Result<RazorpayInit>
+    }
 
     const session = await medusa.store.payment.initiatePaymentSession(cart, {
       provider_id: "pp_razorpay_razorpay",
@@ -257,7 +381,11 @@ export async function initiateRazorpayPayment(): Promise<Result<RazorpayInit>> {
   }
 }
 
-export async function completeRazorpayOrder(): Promise<Result<{ orderId: string }>> {
+export async function completeRazorpayOrder(input: {
+  paymentId: string
+  rzpOrderId: string
+  signature: string
+}): Promise<Result<{ orderId: string }>> {
   if (!isCommerceConfigured)
     return notConfigured() as Result<{ orderId: string }>
   if (!(await rateLimit("checkout"))) {
@@ -269,12 +397,30 @@ export async function completeRazorpayOrder(): Promise<Result<{ orderId: string 
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared.") as Result<{ orderId: string }>
 
-    // medusa-plugin-razorpay-v2 verifies payment authenticity server-side via
-    // the Razorpay WEBHOOK (HMAC over the raw body, validated with the webhook
-    // secret) at {backend}/razorpay/hooks — NOT a storefront endpoint. So the
-    // client signature fields aren't trusted here; we simply complete the cart,
-    // and the webhook confirms/captures the payment. This matches the plugin's
-    // reference storefront button (handler → placeOrder()).
+    // Defence in depth. The Razorpay webhook on the backend remains the
+    // authority for capture, but this public action must not mint orders for
+    // browsers that never paid:
+    // 1. The Checkout handler's fields are required — no fields, no order.
+    // 2. With RAZORPAY_KEY_SECRET set (server-only env), we verify the
+    //    handler signature: HMAC-SHA256(order_id|payment_id, key_secret).
+    const paymentId = cap(input.paymentId, 64)
+    const rzpOrderId = cap(input.rzpOrderId, 64)
+    const signature = cap(input.signature, 128)
+    if (!paymentId || !rzpOrderId || !signature) {
+      return fail("Payment confirmation is missing. If you were charged, write to hello@doodlebycanvas.in.") as Result<{ orderId: string }>
+    }
+    const secret = env.RAZORPAY_KEY_SECRET
+    if (secret) {
+      const expected = createHmac("sha256", secret)
+        .update(`${rzpOrderId}|${paymentId}`)
+        .digest("hex")
+      const a = Buffer.from(expected, "utf8")
+      const b = Buffer.from(signature, "utf8")
+      if (a.length !== b.length || !timingSafeEqual(a, b)) {
+        return fail("Payment could not be verified. If you were charged, write to hello@doodlebycanvas.in.") as Result<{ orderId: string }>
+      }
+    }
+
     const result = await medusa.store.cart.complete(cart.id)
     if (result.type === "order") {
       await rememberPlacedOrder(result.order.id)

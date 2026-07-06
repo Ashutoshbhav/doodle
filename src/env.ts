@@ -14,6 +14,9 @@ export const env = createEnv({
     // Upstash Redis — powers rate limiting. Optional: limiting no-ops until set.
     UPSTASH_REDIS_REST_URL: z.string().url().optional(),
     UPSTASH_REDIS_REST_TOKEN: z.string().min(1).optional(),
+    // Razorpay key SECRET (server-only, same key pair as NEXT_PUBLIC_RAZORPAY_KEY_ID).
+    // Enables checkout-handler signature verification before cart completion.
+    RAZORPAY_KEY_SECRET: z.string().min(1).optional(),
   },
   client: {
     NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),

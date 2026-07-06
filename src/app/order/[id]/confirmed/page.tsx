@@ -142,8 +142,10 @@ export default async function OrderConfirmedPage({
               <p className="mt-1 text-sm text-doodle-ink/70">
                 Next order is two clicks instead of seven.
               </p>
+              {/* /account/claim doesn't exist yet — login handles both sign-in
+                  and first-time account creation until a claim flow ships. */}
               <Link
-                href={`/account/claim?order=${order.id}`}
+                href="/account/login"
                 className="
                   mt-3 inline-flex items-center gap-2 text-sm font-medium text-doodle-ink
                   underline underline-offset-4 hover:text-doodle-ink/70
@@ -157,7 +159,7 @@ export default async function OrderConfirmedPage({
                 Tell a friend
               </div>
               <p className="mt-1 text-sm text-doodle-ink/70">
-                Some parent you know is also looking at three Avengers tees.
+                Some parent you know is about to buy character tee number five.
               </p>
               <Link
                 href="/shop"

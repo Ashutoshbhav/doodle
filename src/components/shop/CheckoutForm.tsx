@@ -10,12 +10,16 @@ import { PillButton } from "@/components/ui/PillButton"
 import {
   setCustomerContact,
   setShippingAddress,
+  setGiftNote,
+  listShippingOptions,
+  setShippingMethod,
   placeCodOrder,
   initiateRazorpayPayment,
   completeRazorpayOrder,
+  type ShippingOptionLite,
 } from "@/app/actions/checkout"
 
-type Step = "contact" | "shipping" | "payment"
+type Step = "contact" | "shipping" | "delivery" | "payment"
 
 type RazorpayCheckoutOptions = {
   key: string
@@ -69,9 +73,31 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
   const [city, setCity] = React.useState(cart.shipping_address?.city ?? "")
   const [state, setState] = React.useState(cart.shipping_address?.province ?? "")
   const [postalCode, setPostalCode] = React.useState(cart.shipping_address?.postal_code ?? "")
+  const [giftNote, setGiftNoteText] = React.useState(
+    typeof cart.metadata?.gift_note === "string" ? cart.metadata.gift_note : "",
+  )
 
-  // Step 3 — Payment
+  // Step 3 — Delivery (real shipping options from Medusa, never a fake "Free")
+  const [options, setOptions] = React.useState<ShippingOptionLite[]>([])
+  const [optionId, setOptionId] = React.useState<string>("")
+  const [chosenShipping, setChosenShipping] = React.useState<ShippingOptionLite | null>(null)
+
+  // Step 4 — Payment
   const [payment, setPayment] = React.useState<"razorpay" | "cod">("razorpay")
+
+  /** Attach the picked option to the cart and advance. */
+  async function applyShippingOption(opt: ShippingOptionLite) {
+    const r = await setShippingMethod({ optionId: opt.id })
+    if (!r.ok) {
+      setErr(r.error)
+      return false
+    }
+    setChosenShipping({ ...opt, amount: r.data.shippingTotal })
+    // The order summary aside is server-rendered — refresh so shipping + total update.
+    router.refresh()
+    setStep("payment")
+    return true
+  }
 
   async function submitContact() {
     setErr(null)
@@ -110,12 +136,52 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
       province: state,
       postal_code: postalCode,
     })
-    setBusy(false)
     if (!r.ok) {
+      setBusy(false)
       setErr(r.error)
       return
     }
-    setStep("payment")
+    if (giftNote.trim()) {
+      // Best-effort — a failed gift note must never block checkout.
+      await setGiftNote({ note: giftNote })
+    }
+
+    // Address is in — fetch the real delivery options for this cart.
+    const opts = await listShippingOptions()
+    if (!opts.ok) {
+      setBusy(false)
+      setErr(opts.error)
+      return
+    }
+    if (opts.data.length === 0) {
+      setBusy(false)
+      setErr(
+        "We can't arrange delivery to this address yet. Double-check the pincode, or write to hello@doodlebycanvas.in.",
+      )
+      return
+    }
+    if (opts.data.length === 1) {
+      // One option — pick it silently, no extra step for the shopper.
+      await applyShippingOption(opts.data[0])
+      setBusy(false)
+      return
+    }
+    setOptions(opts.data)
+    setOptionId(opts.data[0].id)
+    setBusy(false)
+    setStep("delivery")
+  }
+
+  async function submitDelivery() {
+    setErr(null)
+    const opt = options.find((o) => o.id === optionId)
+    if (!opt) {
+      setErr("Pick a delivery option.")
+      return
+    }
+    setBusy(true)
+    await applyShippingOption(opt)
+    setBusy(false)
   }
 
   async function submitPayment() {
@@ -158,11 +224,15 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
         contact: phone,
       },
       theme: { color: "#E8650A" },
-      handler: async () => {
-        // Payment authenticity is verified server-side by the Razorpay webhook
-        // (HMAC), so the client signature fields aren't trusted here — we just
-        // complete the cart and let the webhook confirm/capture.
-        const r = await completeRazorpayOrder()
+      handler: async (response) => {
+        // The handler's signature fields go to the server, which verifies the
+        // HMAC (with the key secret) before completing the cart. The backend
+        // webhook remains the authority for capture.
+        const r = await completeRazorpayOrder({
+          paymentId: response.razorpay_payment_id,
+          rzpOrderId: response.razorpay_order_id,
+          signature: response.razorpay_signature,
+        })
         if (!r.ok) {
           setErr(r.error)
           setBusy(false)
@@ -209,10 +279,10 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
         <Section
           title="2. Shipping"
           open={step === "shipping"}
-          done={step === "payment"}
+          done={step === "delivery" || step === "payment"}
           onEdit={() => setStep("shipping")}
           summary={
-            step === "payment"
+            step === "delivery" || step === "payment"
               ? `${address1}, ${city}, ${state} ${postalCode}`
               : null
           }
@@ -225,14 +295,72 @@ export function CheckoutForm({ cart }: { cart: Cart }) {
               <SelectField label="State *" value={state} onChange={setState} options={INDIA_STATES} />
               <Field label="Pincode *" value={postalCode} onChange={setPostalCode} maxLength={6} inputMode="numeric" autoComplete="postal-code" />
             </div>
+            {/* Gifting is half of kidswear — one optional field, no upsell */}
+            <div>
+              <label htmlFor="gift-note" className="block text-sm font-medium text-doodle-ink/70">
+                Gift note <span className="text-doodle-ink/45">(optional — we&rsquo;ll tuck it in)</span>
+              </label>
+              <textarea
+                id="gift-note"
+                value={giftNote}
+                onChange={(e) => setGiftNoteText(e.target.value)}
+                maxLength={200}
+                rows={2}
+                placeholder="Happy birthday, Aarav! Pick your favourite patch first."
+                className="mt-1.5 block w-full rounded-lg border border-doodle-ink/15 bg-card px-3.5 py-2.5 text-sm text-doodle-ink placeholder:text-doodle-ink/35 outline-none transition focus:ring-4 focus:ring-doodle-orange/25"
+              />
+            </div>
           </div>
           <PillButton type="button" onClick={submitShipping} disabled={busy} showArrow={false}>
+            {busy ? "Saving…" : "Continue to delivery"}
+          </PillButton>
+        </Section>
+
+        <Section
+          title="3. Delivery"
+          open={step === "delivery"}
+          done={step === "payment" && chosenShipping != null}
+          onEdit={() => setStep("delivery")}
+          summary={
+            step === "payment" && chosenShipping
+              ? `${chosenShipping.name} · ${chosenShipping.amount > 0 ? formatINR(chosenShipping.amount) : "Free"}`
+              : null
+          }
+        >
+          <fieldset className="space-y-3">
+            {options.map((opt) => (
+              <label
+                key={opt.id}
+                className={[
+                  "flex items-center justify-between gap-3 p-4 rounded-lg border cursor-pointer transition-[border-color,box-shadow] duration-200",
+                  optionId === opt.id
+                    ? "border-doodle-orange bg-card shadow-subtle"
+                    : "border-doodle-ink/15 hover:border-doodle-ink/30",
+                ].join(" ")}
+              >
+                <span className="flex items-center gap-3">
+                  <input
+                    type="radio"
+                    name="shipping-option"
+                    value={opt.id}
+                    checked={optionId === opt.id}
+                    onChange={() => setOptionId(opt.id)}
+                  />
+                  <span className="font-medium text-doodle-ink">{opt.name}</span>
+                </span>
+                <span className="font-display text-doodle-ink">
+                  {opt.amount > 0 ? formatINR(opt.amount) : "Free"}
+                </span>
+              </label>
+            ))}
+          </fieldset>
+          <PillButton type="button" onClick={submitDelivery} disabled={busy} showArrow={false}>
             {busy ? "Saving…" : "Continue to payment"}
           </PillButton>
         </Section>
 
         <Section
-          title="3. Payment"
+          title="4. Payment"
           open={step === "payment"}
           done={false}
           onEdit={() => setStep("payment")}

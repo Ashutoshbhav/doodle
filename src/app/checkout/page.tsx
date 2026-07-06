@@ -28,7 +28,7 @@ export default async function CheckoutPage() {
               Almost there.
             </h1>
             <p className="mt-3 max-w-md text-doodle-ink/70">
-              Three quick steps. We&apos;ll write once the courier&apos;s on the way.
+              Four quick steps. We&apos;ll write once the courier&apos;s on the way.
             </p>
             <div className="mt-10">
               <CheckoutForm cart={cart} />
@@ -61,9 +61,13 @@ export default async function CheckoutPage() {
                 <div className="flex justify-between text-doodle-ink/70">
                   <span>Shipping</span>
                   <span className="font-medium text-doodle-ink">
-                    {(cart.shipping_total ?? 0) > 0
-                      ? formatINR(cart.shipping_total ?? 0)
-                      : "Free"}
+                    {/* "Free" only once a real method is attached — before
+                        that it's not free, it's just not chosen yet. */}
+                    {cart.shipping_methods?.length
+                      ? (cart.shipping_total ?? 0) > 0
+                        ? formatINR(cart.shipping_total ?? 0)
+                        : "Free"
+                      : "At delivery step"}
                   </span>
                 </div>
                 <div className="flex justify-between text-doodle-ink/70">

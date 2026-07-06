@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import type { Metadata } from "next"
@@ -11,6 +10,10 @@ import { Footer } from "@/components/sections/Footer"
 import { Eyebrow } from "@/components/ui/Eyebrow"
 import { BuildYourTee } from "@/components/sections/BuildYourTee"
 import { ProductDetails } from "@/components/shop/ProductDetails"
+import { ProductGallery } from "@/components/shop/ProductGallery"
+import { ProductInfoBlocks } from "@/components/shop/ProductInfoBlocks"
+import { CartDrawerProvider } from "@/components/shop/CartDrawer"
+import { fetchSuggestions } from "@/lib/medusa/suggestions"
 import { PatchWall } from "@/components/sections/PatchWall"
 import type { Product } from "@/lib/medusa/types"
 
@@ -95,7 +98,11 @@ export default async function PDPPage({
     )
   }
 
-  const hero = product.images?.[0]?.url ?? product.thumbnail ?? null
+  const suggestions = await fetchSuggestions([handle])
+  // Garment products get sizing/fabric/care blocks; patch products get
+  // patch-specific material and care facts.
+  const infoKind: "garment" | "patches" =
+    handle === "modular-tee" || handle === "starter-kit" ? "garment" : "patches"
 
   // Country of origin — India Consumer Protection (E-Commerce) Rules 2020.
   // Source: Medusa product `origin_country`, else `metadata.country_of_origin`,
@@ -187,6 +194,7 @@ export default async function PDPPage({
       />
       <NavWithCart />
       <main className="bg-[color:var(--color-surface-blush)] min-h-screen">
+        <CartDrawerProvider suggestions={suggestions}>
         <section className="mx-auto max-w-7xl px-6 md:px-10 py-12 md:py-20">
           {/* Breadcrumb — quiet clean-sans wayfinding */}
           <nav className="flex items-center gap-2 text-xs font-medium text-doodle-ink/50">
@@ -198,27 +206,17 @@ export default async function PDPPage({
           </nav>
 
           <div className="mt-8 grid gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* MEDIA — large product area. The signature PatchScrubber IS the
-                PDP hero (DESIGN.md mandate): the live "build the look" interaction
-                that masks onto the real product photos. Falls back to the static
-                hero image only if the product carries its own art. */}
+            {/* MEDIA — accurate product photos FIRST (the converting asset),
+                then the PatchScrubber as the interactive toy below. */}
             <div className="relative">
-              <div className="relative overflow-hidden rounded-[1rem] bg-doodle-stitch p-5 shadow-card-hover sm:p-6">
+              <ProductGallery images={images} alt={product.title ?? "DOODLE product"} />
+
+              <div className="relative mt-5 overflow-hidden rounded-[1rem] bg-doodle-stitch p-5 shadow-card sm:p-6">
+                <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-doodle-ink/55">
+                  Try the patch swap
+                </p>
                 <PatchScrubber />
               </div>
-
-              {hero && (
-                <div className="relative mt-5 aspect-[4/5] overflow-hidden rounded-[1rem] bg-doodle-stitch shadow-card">
-                  <Image
-                    src={hero}
-                    alt={product.title ?? ""}
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
-              )}
             </div>
 
             {/* INFO COLUMN — clean composition. One orange accent lives in the
@@ -255,9 +253,14 @@ export default async function PDPPage({
                   <dd className="font-medium text-doodle-ink">Free over ₹999</dd>
                 </div>
               </dl>
+
+              {/* Sizing, fabric/care, and the trust panel — the buy-decision
+                  blocks that used to render only on the fallback page. */}
+              <ProductInfoBlocks kind={infoKind} />
             </div>
           </div>
         </section>
+        </CartDrawerProvider>
       </main>
       <Footer />
     </>
