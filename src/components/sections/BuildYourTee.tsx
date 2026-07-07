@@ -45,15 +45,15 @@ export function BuildYourTee() {
   };
 
   return (
-    <section id="shop" className="relative py-16 md:py-24">
+    <section id="shop" className="relative py-10 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
-        <div className="grid items-center gap-6 md:grid-cols-2 md:gap-14">
+        <div className="grid items-center gap-4 md:grid-cols-2 md:gap-14">
           {/* ---------- STAGE ----------
               Mobile choreography: the tee + swatches PIN below the nav while
               the patch tray scrolls — every tap lands on a tee you can SEE.
               (Desktop keeps the side-by-side layout.) */}
-          <div className="max-md:sticky max-md:top-16 max-md:z-30 max-md:-mx-6 max-md:bg-doodle-canvas/95 max-md:px-6 max-md:pb-3 max-md:pt-2 max-md:backdrop-blur-sm">
-            <div className="relative mx-auto aspect-square w-full max-w-[270px] md:max-w-[460px]">
+          <div className="min-w-0 max-md:sticky max-md:top-16 max-md:z-30 max-md:-mx-6 max-md:bg-doodle-canvas/95 max-md:px-6 max-md:pb-3 max-md:pt-2 max-md:backdrop-blur-sm">
+            <div className="relative mx-auto aspect-square w-full max-w-[230px] md:max-w-[460px]">
               <div
                 className="absolute inset-8 rounded-[42%] blur-2xl transition-colors duration-500"
                 style={{ backgroundColor: `${tee.swatch}55` }}
@@ -148,49 +148,33 @@ export function BuildYourTee() {
             )}
           </div>
 
-          {/* ---------- CONTROLS ---------- */}
-          <div>
-            <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-doodle-berry">
+          {/* ---------- CONTROLS ----------
+              Mobile: the ENTIRE builder fits one phone screen (Ash's rule) —
+              headline shrinks to one line, the intro paragraph steps aside,
+              and the patch tray becomes a single row you SWIPE sideways. */}
+          {/* min-w-0: without it the horizontal tray's natural width forces
+              this grid column wider than the viewport */}
+          <div className="min-w-0">
+            <span className="hidden text-[12px] font-semibold uppercase tracking-[0.14em] text-doodle-berry md:block">
               Build your tee
             </span>
-            <h2 className="mt-3 font-display text-[clamp(1.9rem,4vw,3rem)] leading-[1.04] tracking-[-0.02em] text-doodle-ink">
+            <h2 className="font-display text-xl leading-[1.04] tracking-[-0.02em] text-doodle-ink md:mt-3 md:text-[clamp(1.9rem,4vw,3rem)]">
               Tap a patch. <span className="italic text-doodle-berry">Watch it land.</span>
             </h2>
-            <p className="mt-3 max-w-md text-base leading-relaxed text-doodle-ink/70">
+            <p className="mt-3 hidden max-w-md text-base leading-relaxed text-doodle-ink/70 md:block">
               Pick a colour, drop up to six patches onto the tee, and swap them
               anytime. Tap a patch on the shirt to take it off.
             </p>
 
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <span className="text-sm font-semibold text-doodle-ink">
-                {placed.length}/{MAX} patches
-              </span>
-              <button
-                type="button"
-                onClick={surprise}
-                className="rounded-full bg-doodle-canvas px-4 py-1.5 text-sm font-medium text-doodle-ink shadow-subtle transition-shadow hover:shadow-card"
-              >
-                Surprise me
-              </button>
-              <button
-                type="button"
-                onClick={clear}
-                disabled={placed.length === 0}
-                className="rounded-full px-3 py-1.5 text-sm font-medium text-doodle-ink/55 transition-colors hover:text-doodle-ink disabled:opacity-40"
-              >
-                Clear
-              </button>
-            </div>
-
-            {/* tabs */}
-            <div className="mt-6 flex gap-2">
+            {/* One compact control row on mobile: tabs + counter + surprise */}
+            <div className="mt-3 flex flex-wrap items-center gap-2 md:mt-5 md:gap-3">
               {(["silicone", "embroidered"] as const).map((t) => (
                 <button
                   key={t}
                   type="button"
                   onClick={() => setTab(t)}
                   aria-pressed={tab === t}
-                  className={`rounded-full px-4 py-1.5 text-sm font-medium capitalize transition-colors ${
+                  className={`rounded-full px-3.5 py-1.5 text-sm font-medium capitalize transition-colors ${
                     tab === t
                       ? "bg-doodle-ink text-doodle-canvas"
                       : "bg-doodle-stitch text-doodle-ink/60 hover:text-doodle-ink"
@@ -199,10 +183,29 @@ export function BuildYourTee() {
                   {t}
                 </button>
               ))}
+              <span className="ml-1 text-sm font-semibold text-doodle-ink">
+                {placed.length}/{MAX}
+              </span>
+              <button
+                type="button"
+                onClick={surprise}
+                className="rounded-full bg-doodle-canvas px-3.5 py-1.5 text-sm font-medium text-doodle-ink shadow-subtle transition-shadow hover:shadow-card"
+              >
+                Surprise me
+              </button>
+              <button
+                type="button"
+                onClick={clear}
+                disabled={placed.length === 0}
+                className="rounded-full px-2.5 py-1.5 text-sm font-medium text-doodle-ink/55 transition-colors hover:text-doodle-ink disabled:opacity-40"
+              >
+                Clear
+              </button>
             </div>
 
-            {/* patch tray — taller on mobile since the stage is pinned above */}
-            <div className="mt-3 grid max-h-[38vh] grid-cols-5 gap-2 overflow-y-auto rounded-[1.25rem] bg-doodle-stitch p-3 shadow-subtle sm:grid-cols-6 md:max-h-[230px]">
+            {/* patch tray — mobile: ONE horizontal row, swipe sideways;
+                desktop: the scrollable grid */}
+            <div className="mt-3 flex snap-x snap-mandatory gap-2 overflow-x-auto rounded-[1.25rem] bg-doodle-stitch p-3 shadow-subtle md:grid md:max-h-[230px] md:grid-cols-6 md:overflow-y-auto md:overflow-x-visible">
               {tray.map((p) => (
                 <button
                   key={p.key}
@@ -210,9 +213,9 @@ export function BuildYourTee() {
                   onClick={() => add(p)}
                   disabled={full}
                   title={p.name}
-                  className="group relative grid aspect-square place-items-center rounded-lg bg-doodle-canvas p-1.5 shadow-subtle transition hover:-translate-y-0.5 hover:shadow-card disabled:cursor-not-allowed disabled:opacity-40"
+                  className="group relative grid h-[70px] w-[70px] shrink-0 snap-start place-items-center rounded-lg bg-doodle-canvas p-1.5 shadow-subtle transition hover:-translate-y-0.5 hover:shadow-card disabled:cursor-not-allowed disabled:opacity-40 md:aspect-square md:h-auto md:w-auto"
                 >
-                  {/* The patch's personal doodle, tiny, on hover */}
+                  {/* The patch's personal doodle, tiny, on hover/tap */}
                   <PatchDoodle patchKey={p.key} className="w-[44%]" />
                   <Image src={p.src} alt={p.name} width={60} height={60} className="h-full w-full object-contain" />
                 </button>
@@ -221,7 +224,7 @@ export function BuildYourTee() {
 
             {/* Honest price only — no invented MRP anchor. In waitlist mode
                 the CTA reserves a spot instead of promising a cart. */}
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-4 flex flex-wrap items-center gap-4 md:mt-6">
               <span className="font-display text-2xl text-doodle-ink">₹999</span>
               <Link
                 href={isCommerceEnabled ? "/shop" : "/#join"}
@@ -230,7 +233,7 @@ export function BuildYourTee() {
                 {isCommerceEnabled ? "Add this kit" : "Reserve this kit"}
               </Link>
             </div>
-            <p className="mt-3 text-[12px] text-doodle-ink/50">
+            <p className="mt-3 hidden text-[12px] text-doodle-ink/50 md:block">
               Free shipping over ₹999 · Cash on delivery · 7-day exchange
             </p>
           </div>
