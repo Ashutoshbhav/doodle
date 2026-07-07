@@ -63,19 +63,26 @@ export function PatchDoodle({
         <g className={base.anim ? `doodle-anim dd-${base.anim}` : undefined}>
           {frames.map((frame, f) => (
             <g key={f} className={`dd-boil dd-boil-${f + 1}`}>
-              {frame.paths.map((p, i) => (
-                <path
-                  key={i}
-                  d={p.d}
-                  stroke="currentColor"
-                  strokeWidth={p.soft ? 1.3 : 2.1}
-                  strokeOpacity={p.soft ? 0.4 : 1}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  pathLength={1}
-                  suppressHydrationWarning
-                />
-              ))}
+              {frame.paths.map((p, i) => {
+                // Embroidered patches get SEWN outlines: running-stitch
+                // dashes (real user-unit dashes, so no pathLength draw-in —
+                // they fade in with the pop instead; see .stitch in CSS).
+                const stitch = base.stitched && !p.soft;
+                return (
+                  <path
+                    key={i}
+                    d={p.d}
+                    className={stitch ? "stitch" : undefined}
+                    stroke="currentColor"
+                    strokeWidth={p.soft ? 1.5 : stitch ? 2.5 : 3.1}
+                    strokeOpacity={p.soft ? 0.38 : 1}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    pathLength={stitch ? undefined : 1}
+                    suppressHydrationWarning
+                  />
+                );
+              })}
             </g>
           ))}
           {base.dots?.map((dot, i) => (

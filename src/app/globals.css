@@ -365,6 +365,18 @@
     stroke-dashoffset: 1;
     transition: stroke-dashoffset 340ms var(--ease-out);
   }
+  .doodle-ring path.stitch {
+    stroke-dasharray: 3.3 2.7; /* running stitch — thread, not pencil */
+    stroke-dashoffset: 0;
+    opacity: 0;
+    transition: opacity 220ms ease 80ms;
+  }
+  .group:hover .doodle-ring path.stitch,
+  .group:focus-visible .doodle-ring path.stitch,
+  .group:focus-within .doodle-ring path.stitch,
+  .group.doodle-live .doodle-ring path.stitch {
+    opacity: 1;
+  }
   .doodle-ring path:nth-child(2) { transition-delay: 90ms; }
   .doodle-ring path:nth-child(3) { transition-delay: 160ms; }
   .doodle-ring path:nth-child(4) { transition-delay: 230ms; }
@@ -497,6 +509,10 @@
     .doodle-personal path {
       stroke-dashoffset: 0 !important;
       transition: none;
+    }
+    .doodle-personal path.stitch {
+      stroke-dashoffset: 0 !important;
+      opacity: 1;
     }
     .doodle-personal .doodle-dot {
       opacity: 1;

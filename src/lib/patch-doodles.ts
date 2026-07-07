@@ -38,7 +38,19 @@ export type PatchDoodleSpec = {
   colorClass: string;
   rotate?: number;
   anim?: DoodleAnim;
+  /** Embroidered patches: outlines render as running-stitch dashes. */
+  stitched?: boolean;
 };
+
+/* The embroidered collection — their doodles are "sewn", not drawn:
+   running-stitch dashed outlines so the mark speaks the patch's material. */
+const EMBROIDERED = new Set([
+  "cosmo-frog", "spaced-out", "major-meow", "space-jam", "rocket-pup", "cosmo-koala",
+  "skater-koala", "beach-crab", "pool-party", "surfs-up", "chill-bunny", "snorkel-fox",
+  "game-on", "sir-brave", "catnap", "sneaky-ninja", "dj-whiskers",
+  "groovy-unicorn", "magic-pop", "lovecorn", "rainbow-mane", "blaze-mane", "sleepy-unicorn",
+  "lil-roadster", "rally-racer", "trail-boss", "midnight-cruiser", "hot-rod", "speedy",
+]);
 
 /* Every doodle's character animation — hearts beat, flames flicker,
    sleepers float, racers shoot, waves roll. Applied while hovered on
@@ -92,10 +104,14 @@ const SKY = "text-[#3E9CCB]";
 const GRAPE = "text-[#8B79D9]";
 const MINT = "text-[#2FA36B]";
 const INK = "text-doodle-ink/70";
+const PINKD = "text-[#E0679A]"; // deep bubblegum — for the pink characters
+const BROWN = "text-[#9C6B45]"; // warm cocoa — bears, mud
 
-/* Roughness presets — SOFT for small/curvy shapes, SKETCH for long strokes */
-const SOFT = { roughness: 0.8, bowing: 0.8, strokeWidth: 2, disableMultiStroke: true } as const;
-const SKETCH = { roughness: 1.3, bowing: 1.2, strokeWidth: 2, disableMultiStroke: true } as const;
+/* Roughness presets — PLUMP sticker lines, matching the puffy silicone
+   charms and thick-thread embroidery (Ash: the pencil-thin scratchy look
+   clashed with the patches' own design language). */
+const SOFT = { roughness: 0.6, bowing: 0.65, strokeWidth: 2, disableMultiStroke: true } as const;
+const SKETCH = { roughness: 0.95, bowing: 0.9, strokeWidth: 2, disableMultiStroke: true } as const;
 
 type Gen = ReturnType<typeof rough.generator>;
 type Drawable = ReturnType<Gen["line"]>;
@@ -191,7 +207,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         gen.path("M25 5 A13 13 0 1 0 34 27 A10 10 0 0 1 25 5 Z", { ...SOFT, ...FILL, ...s() }),
       ),
       dots: [{ cx: 10, cy: 10, r: 1.4 }],
-      colorClass: AMBER,
+      colorClass: PINKD,
       rotate: -12,
     },
     // Kingsley the Crown — "rules the playground": the winner's pennant
@@ -207,23 +223,23 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
           { ...SOFT, ...s() },
         ),
       ).concat(withFill(gen.polygon([[13, 5], [34, 10], [13, 16]], { ...SOFT, ...FILL, hachureGap: 2.6, ...s() }))),
-      colorClass: BERRY,
+      colorClass: AMBER,
     },
     // Bruno the Bear — "first to the hug": two little hearts, one for each arm
     "bear-brown": {
       paths: [...heartAt(13, 15, 0.85, true), ...heartAt(29, 26, 0.62, true)],
-      colorClass: BERRY,
+      colorClass: BROWN,
     },
     // Theo the Teddy — "softest in the bunch": soft as a cloud
     "bear-olive": {
       paths: ds(
         gen.path("M8 26 A5.5 5.5 0 0 1 13 17 A7 7 0 0 1 26 15 A6 6 0 0 1 33 26 Z", { ...SOFT, ...s() }),
       ),
-      colorClass: SKY,
+      colorClass: INK,
     },
     // Ellie the Elephant — "never forgets snack time": the choc-chip cookie
     elephant: {
-      paths: ds(gen.circle(19, 21, 28, { ...SOFT, ...s() })),
+      paths: withFill(gen.circle(19, 21, 28, { ...SOFT, ...FILL, hachureGap: 3, ...s() })),
       dots: [
         { cx: 14, cy: 16, r: 1.8 },
         { cx: 24, cy: 19, r: 1.8 },
@@ -265,7 +281,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
     // Otto the Octopus — "eight arms, all hugs": a heart floating in his bubble
     octopus: {
       paths: [...ds(gen.circle(20, 20, 30, { ...SOFT, ...s() })), ...heartAt(20, 20, 0.6, true)],
-      colorClass: SKY,
+      colorClass: PINKD,
     },
 
     /* ================= EMBROIDERED · SPACE ================= */
@@ -284,7 +300,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         ),
         gen.path("M4 33 Q20 28 36 33", { ...SOFT, ...s() }),
       ),
-      colorClass: BERRY,
+      colorClass: MINT,
     },
     // Nova the Cat — "took the UFO for snacks": the borrowed UFO
     "spaced-out": {
@@ -317,7 +333,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         { cx: 30, cy: 22, r: 1.3 },
         { cx: 34, cy: 14, r: 1.1 },
       ],
-      colorClass: GRAPE,
+      colorClass: BERRY,
       rotate: 8,
     },
     // Rocky the Rocket Pup — "counts down to zoomies": lift-off trail
@@ -336,7 +352,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         ...withFill(gen.circle(20, 20, 18, { ...SOFT, ...FILL, hachureGap: 2.8, ...s() })),
         ...ds(gen.ellipse(20, 21, 38, 10, { ...SOFT, ...s() })),
       ],
-      colorClass: GRAPE,
+      colorClass: AMBER,
       rotate: -14,
     },
 
@@ -349,7 +365,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         gen.circle(13, 25, 6, { ...SOFT, ...s() }),
         gen.circle(28, 25, 6, { ...SOFT, ...s() }),
       ),
-      colorClass: INK,
+      colorClass: SKY,
       rotate: -10,
     },
     // Cami the Crab — "beach days only": the beach umbrella
@@ -400,7 +416,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         { cx: 17, cy: 20, r: 1.2 },
         { cx: 22, cy: 26, r: 1.2 },
       ],
-      colorClass: BERRY,
+      colorClass: PINKD,
     },
     // Reef the Fox — "first one in the water": his bubble trail going down
     "snorkel-fox": {
@@ -497,7 +513,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
     // Lola the Unicorn — "all heart": THE heart
     lovecorn: {
       paths: heartAt(20, 20, 1.4, true),
-      colorClass: BERRY,
+      colorClass: PINKD,
     },
     // Iris the Unicorn — "mane of every colour": her rainbow
     "rainbow-mane": {
@@ -544,7 +560,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         gen.line(2, 19, 22, 19, { ...SKETCH, ...s() }),
         gen.line(8, 28, 26, 28, { ...SKETCH, ...s() }),
       ),
-      colorClass: INK,
+      colorClass: BERRY,
       rotate: -6,
     },
     // Dash the Racer — "always in fifth gear": the checkered flag
@@ -573,7 +589,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         { cx: 34, cy: 8, r: 1.6 },
         { cx: 38, cy: 34, r: 1.3 },
       ],
-      colorClass: INK,
+      colorClass: BROWN,
       rotate: -8,
     },
     // Shadow the Cruiser — "rolls in at midnight": headlight beams in the dark
@@ -601,7 +617,7 @@ function makeSpecs(seedBase: number): Record<string, PatchDoodleSpec> {
         gen.circle(34, 14, 4, { ...SOFT, ...s() }),
         gen.path("M6 26 A5 5 0 0 1 12 20 A5 5 0 0 1 20 22 A4 4 0 0 1 18 29 L9 29", { ...SOFT, ...s() }),
       ),
-      colorClass: INK,
+      colorClass: BERRY,
     },
   };
 }
@@ -622,6 +638,6 @@ export function patchDoodleFrames(key: string): PatchDoodleSpec[] {
   }
   return cache.map((frame) => {
     const spec = frame[key] ?? FALLBACK;
-    return { ...spec, anim: ANIMS[key] };
+    return { ...spec, anim: ANIMS[key], stitched: EMBROIDERED.has(key) };
   });
 }
