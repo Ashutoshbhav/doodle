@@ -199,11 +199,15 @@ export function Hero() {
             <div className="relative rounded-[1.25rem] bg-doodle-stitch p-5 shadow-card-hover sm:p-6">
               <HeroTee />
 
-              {/* Floating product chip — soft shadow, no dashed */}
-              <span className="absolute -right-3 -top-3 inline-flex rotate-[5deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3 py-1.5 text-xs font-semibold text-doodle-ink shadow-card">
+              {/* Floating chip — an actual DOOR to the builder, not a label
+                  (on mobile especially, this was a tease with no path) */}
+              <a
+                href="#shop"
+                className="absolute -right-3 -top-3 inline-flex rotate-[5deg] items-center gap-1.5 rounded-full bg-doodle-orange px-3.5 py-2 text-xs font-semibold text-doodle-ink shadow-card transition-transform hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-doodle-berry/40"
+              >
                 <Sparkle weight="fill" size={11} className="text-doodle-yellow" />
                 {content.realProduct}
-              </span>
+              </a>
             </div>
           </MagneticHover>
         </div>

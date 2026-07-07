@@ -47,10 +47,13 @@ export function BuildYourTee() {
   return (
     <section id="shop" className="relative py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
-        <div className="grid items-center gap-10 md:grid-cols-2 md:gap-14">
-          {/* ---------- STAGE ---------- */}
-          <div>
-            <div className="relative mx-auto aspect-square w-full max-w-[460px]">
+        <div className="grid items-center gap-6 md:grid-cols-2 md:gap-14">
+          {/* ---------- STAGE ----------
+              Mobile choreography: the tee + swatches PIN below the nav while
+              the patch tray scrolls — every tap lands on a tee you can SEE.
+              (Desktop keeps the side-by-side layout.) */}
+          <div className="max-md:sticky max-md:top-16 max-md:z-30 max-md:-mx-6 max-md:bg-doodle-canvas/95 max-md:px-6 max-md:pb-3 max-md:pt-2 max-md:backdrop-blur-sm">
+            <div className="relative mx-auto aspect-square w-full max-w-[270px] md:max-w-[460px]">
               <div
                 className="absolute inset-8 rounded-[42%] blur-2xl transition-colors duration-500"
                 style={{ backgroundColor: `${tee.swatch}55` }}
@@ -114,7 +117,7 @@ export function BuildYourTee() {
             </div>
 
             {/* colour picker */}
-            <div className="mt-7 flex items-center justify-center gap-3">
+            <div className="mt-3 flex items-center justify-center gap-3 md:mt-7">
               {TEES.map((t, i) => (
                 <button
                   key={t.key}
@@ -136,8 +139,9 @@ export function BuildYourTee() {
               ))}
             </div>
 
+            {/* Desktop only — on mobile this would grow the sticky block */}
             {placed.length > 0 && (
-              <p className="mt-5 text-center text-sm leading-relaxed text-doodle-ink/65">
+              <p className="mt-5 hidden text-center text-sm leading-relaxed text-doodle-ink/65 md:block">
                 <span className="font-semibold text-doodle-ink/85">On the tee: </span>
                 {placed.map((p) => p.name).join("  ·  ")}
               </p>
@@ -197,8 +201,8 @@ export function BuildYourTee() {
               ))}
             </div>
 
-            {/* patch tray */}
-            <div className="mt-3 grid max-h-[230px] grid-cols-5 gap-2 overflow-y-auto rounded-[1.25rem] bg-doodle-stitch p-3 shadow-subtle sm:grid-cols-6">
+            {/* patch tray — taller on mobile since the stage is pinned above */}
+            <div className="mt-3 grid max-h-[38vh] grid-cols-5 gap-2 overflow-y-auto rounded-[1.25rem] bg-doodle-stitch p-3 shadow-subtle sm:grid-cols-6 md:max-h-[230px]">
               {tray.map((p) => (
                 <button
                   key={p.key}
