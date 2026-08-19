@@ -5,6 +5,8 @@ import { CheckoutForm } from "@/components/shop/CheckoutForm"
 import { Eyebrow } from "@/components/ui/Eyebrow"
 import { getCart } from "@/lib/medusa/cart"
 import { formatINR } from "@/lib/medusa/types"
+import { getCheckoutUrl } from "@/lib/shopify/cart"
+import { env } from "@/env"
 
 export const dynamic = "force-dynamic"
 
@@ -16,6 +18,15 @@ export const metadata = {
 export default async function CheckoutPage() {
   const cart = await getCart()
   if (!cart || (cart.items?.length ?? 0) === 0) redirect("/cart")
+
+  // This page's CheckoutForm is Medusa-specific (custom shipping/payment
+  // session flow) — it doesn't understand Shopify carts. In Shopify mode
+  // the real checkout is Shopify's own hosted page; skip straight there
+  // rather than let CheckoutForm run broken mutations against a cart id
+  // it can't actually operate on.
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    redirect(await getCheckoutUrl())
+  }
 
   return (
     <>
