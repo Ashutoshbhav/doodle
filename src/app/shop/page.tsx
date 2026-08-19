@@ -18,7 +18,10 @@ export const metadata = {
   },
   // Waitlist mode serves an empty state — don't ask Google to index it.
   // Flips to indexable automatically when the commerce env vars land.
-  robots: isCommerceConfigured ? undefined : { index: false, follow: true },
+  robots:
+    isCommerceConfigured || env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify"
+      ? undefined
+      : { index: false, follow: true },
 }
 
 export const dynamic = "force-dynamic"

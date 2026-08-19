@@ -89,7 +89,7 @@ export default async function PDPPage({
   const product = await fetchProduct(handle)
 
   // Commerce ON + unknown handle = a real 404, not a soft-404 lookalike.
-  if (!product && isCommerceConfigured) {
+  if (!product && (isCommerceConfigured || env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify")) {
     notFound()
   }
 

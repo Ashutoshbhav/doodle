@@ -1,15 +1,20 @@
 import type { MetadataRoute } from "next";
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client";
+import { listProducts as listShopifyProducts } from "@/lib/shopify/products";
+import { env } from "@/env";
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://doodlebycanvas.in";
+
+const commerceIsOn =
+  env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify" || isCommerceConfigured;
 
 // Static route list — always emitted, no network dependency. /shop joins
 // only when commerce is actually on (in waitlist mode it's a noindexed
 // empty state and has no business in the sitemap).
 const ROUTES = [
   { path: "/", priority: 1, changeFrequency: "weekly" as const },
-  ...(isCommerceConfigured
+  ...(commerceIsOn
     ? [{ path: "/shop", priority: 0.9, changeFrequency: "weekly" as const }]
     : []),
   { path: "/about", priority: 0.6, changeFrequency: "monthly" as const },
@@ -27,6 +32,10 @@ type SitemapProduct = { handle?: string | null; updated_at?: string | null };
 // Build-safe product fetch — same field/query style as the shop pages, with a
 // try/catch → [] fallback so a backend outage never breaks the build.
 async function fetchProductEntries(): Promise<SitemapProduct[]> {
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    const products = await listShopifyProducts(250);
+    return products.map((p: { handle: string }) => ({ handle: p.handle, updated_at: null }));
+  }
   if (!isCommerceConfigured) return [];
   try {
     const { products } = await medusa.store.product.list({
