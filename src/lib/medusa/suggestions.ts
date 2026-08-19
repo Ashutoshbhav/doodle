@@ -2,6 +2,8 @@ import "server-only"
 
 import { medusa, isCommerceConfigured } from "./client"
 import { getIndiaRegionId } from "./cart"
+import { listSuggestions as listShopifySuggestions } from "@/lib/shopify/products"
+import { env } from "@/env"
 import type { Product } from "./types"
 import type { CartSuggestion } from "@/components/shop/CartDrawer"
 
@@ -11,6 +13,9 @@ import type { CartSuggestion } from "@/components/shop/CartDrawer"
 export async function fetchSuggestions(
   excludeHandles: string[],
 ): Promise<CartSuggestion[]> {
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    return listShopifySuggestions(excludeHandles)
+  }
   if (!isCommerceConfigured) return []
   try {
     const regionId = await getIndiaRegionId()
