@@ -1,12 +1,114 @@
 # DOODLE — Session State
 
-_Last updated: 2026-07-05 (frontend catalogue reconcile shipped)_
+_Last updated: 2026-08-19/20 (headless Shopify cutover — see top entry)_
 
 When Ash says **"DOODLE"** in a future session, read this file first, then `docs/BRIEF.md`, then resume.
+**"DOODLE" now means this Shopify-backed site by default.** The old self-hosted
+Medusa/Railway backend has its own codename, **"MEDUSA"** — say that instead if
+you specifically want the legacy system (e.g. to decommission it later). See
+the memory `doodle-doc-map` for the full split.
 
 ---
 
-## 📌 CURRENT (2026-07-05) — details live in Claude's memory (`doodle-current-state`)
+## 🚀 HEADLESS SHOPIFY CUTOVER — SHIPPED 2026-08-19/20 (commits `89a7449`..`08efe15`, all on `main`, all live)
+
+**Why this happened:** DOODLE's Medusa backend (self-hosted, Railway) had zero
+running instances — Railway's free trial expired, and separately, before that
+was even discovered, the backend had *already* been silently down for 49 days
+(deployment stuck at a June 30 commit, real root cause documented in the
+commit history/PR — a Railway account issue, not a code bug). Rather than pay
+to revive a system already being replaced, cut straight over to Shopify.
+
+**Architecture: headless, not full Shopify.** This frontend (Next.js, Vercel,
+all the bespoke design work — candy-pastel system, rough.js hand-drawn patch
+doodles, the one-screen mobile builder) is UNCHANGED and stays exactly where
+it is. Shopify only replaces the backend: catalog, cart, checkout, inventory.
+Customers never see `*.myshopify.com` — checkout redirects to Shopify's own
+hosted checkout page, which is the entire "checkout" implementation needed
+(no custom payment-session code the way Medusa required).
+
+**What's live right now:**
+- Shopify store: `3bwadq-q0.myshopify.com`, named "DOODLE" in admin, Basic
+  plan at the ₹20/mo promo rate (reverts to ₹1,994/mo ~November 21, 2026).
+- Custom app "DOODLE Storefront" (Dev Dashboard, non-embedded) holds the
+  Admin API + Storefront API access. Tokens live in `.env.local` (gitignored)
+  and on Vercel Production env vars — never committed.
+- `NEXT_PUBLIC_COMMERCE_BACKEND=shopify` is set on Vercel Production. This is
+  the master switch — `env.ts` still supports `"medusa"` as a value (defaults
+  to it if unset) so the old code path isn't deleted, just unused.
+- Real catalogue, 9 products, all with real Cloudinary-sourced photos:
+  DOODLE Modular Tee (6 colours × 4 sizes, ₹999, real per-variant stock from
+  the stock sheet), 5 real patch packs (₹799 each), single patch (₹100,
+  stock 880), Starter Kit (4 sizes, ₹999/MRP ₹1499, **stock 0 — real count
+  never established, don't invent one**), Pattern Pack "Mix Your Six" (₹600,
+  **stock 0**, same caveat).
+- Payment: **Cash on Delivery only**, configured as a Shopify manual payment
+  method with DOODLE-voiced copy. Real online payment (Razorpay) needs Ash's
+  2FA + business KYC on the Shopify/Razorpay side — not started.
+- Shipping: Shopify's generic default rates (checkout completes). Real
+  Shiprocket courier automation needs Ash to connect his Shiprocket account
+  via the Shopify App Store app — not started. The OLD Medusa backend had a
+  working custom Shiprocket integration; that's gone with the cutover.
+- Verified end-to-end **on the real live site**, not just locally: browse →
+  PDP → variant picker → add to cart → cart page → cross-sell → checkout
+  redirect to the real Shopify hosted checkout. Zero console errors.
+
+**Code map (new):**
+- `src/lib/shopify/client.ts` — `shopifyRequest()`, a *lazily*-constructed
+  Storefront API client. This MUST stay lazy — an earlier version called
+  `createStorefrontApiClient()` eagerly at module scope, which crashed the
+  **entire** Vercel production build (not just Shopify-mode code) the moment
+  any file imported it, because Vercel had no Shopify env vars set yet at
+  that point. Real incident, three failed prod deploys before the fix
+  (commit `78326d1`). If touching this file again: never construct the
+  client outside a function call.
+- `src/lib/shopify/{cart,products,normalize,types}.ts` — cart CRUD, product
+  fetch, and normalizers that convert Shopify's GraphQL shapes into the same
+  shape Medusa's SDK types already used (`as unknown as Product/Cart`, same
+  loose-typing pattern already established in this codebase). This is *why*
+  VariantPicker, ProductCard, ProductGallery, CartLine needed zero changes —
+  swap the data layer, reuse 100% of the polished UI.
+- `scripts/shopify/import-catalog.mjs` — the catalogue source of truth,
+  idempotent (`productSet` keyed by handle, looks up existing id first). Run
+  again any time real stock numbers for Starter Kit/Pattern Pack land, or to
+  add new products.
+- Every Medusa-backend file that's shared across both modes now branches on
+  `env.NEXT_PUBLIC_COMMERCE_BACKEND` at the lowest layer it can (e.g.
+  `medusa/cart.ts`'s `getCart()`/`getCartLineCount()`, `medusa/suggestions.ts`'s
+  `fetchSuggestions()`) so callers never needed to change.
+- `/checkout` (the old Medusa multi-step form) redirects straight to
+  Shopify's hosted checkout in Shopify mode — it doesn't understand Shopify
+  carts and would silently misbehave if reached directly.
+- `isCommerceEnabled` (`src/lib/commerce.ts`, gates hero CTA / nav icons /
+  PacksShowcase / BuildYourTee) recognizes either backend now — this was a
+  landmine found by audit, not by a bug report: if Medusa's env vars are ever
+  removed from Vercel (the natural next step of fully retiring MEDUSA), the
+  whole site would have silently reverted to waitlist mode despite Shopify
+  commerce being genuinely live.
+
+**Known gaps, not urgent (site sells right now without them):**
+- `/account` login is still Medusa-only auth. Fails safely (redirects to
+  login, doesn't crash) but isn't functional for Shopify-mode customers —
+  real Shopify Customer Account API integration is a separate, bigger piece.
+- Legal pages still carry placeholder entity/grievance-officer details —
+  needs real facts from Ash + a lawyer, not something to fabricate.
+- A visual discrepancy Ash flagged in the rough.js hand-drawn doodles
+  (comparing this session's dev server against "our own site") — never
+  diagnosed, both screenshot tooling (Playwright file paths unlocatable) and
+  the Chrome extension (kept failing to connect all session) blocked visual
+  comparison. Deferred; needs a screenshot or specific description to resume.
+- Shopify's Admin API doesn't have Shiprocket/Razorpay set up — see Payment/
+  Shipping above.
+
+**How to resume this thread specifically:** say "DOODLE" — this file plus
+the `doodle-*` memories cover it. `.env.local` already has the working
+Shopify tokens (never committed, don't need to regenerate). Dev server:
+`NEXT_PUBLIC_COMMERCE_BACKEND=shopify npm run dev` to test locally against
+the same real Shopify store production uses.
+
+---
+
+## 📌 CURRENT (2026-07-05) — pre-Shopify-cutover state, superseded above. Details live in Claude's memory (`doodle-current-state`)
 
 - Production = waitlist at doodlebycanvas.in (no commerce env vars — deliberate). Preview = commerce test surface. Posture: **"reconcile now, hold the flip"** — flip only on Ash's explicit go.
 - Backend live on Railway (`doodle-backend-production-32b1.up.railway.app`): live Razorpay, real images, stock matches the stock sheet. Repo HEAD `ccc88b8`.
