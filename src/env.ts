@@ -37,6 +37,12 @@ export const env = createEnv({
     // Medusa commerce backend (optional during pre-launch; required once /shop ships)
     NEXT_PUBLIC_MEDUSA_BASE_URL: z.string().url().optional(),
     NEXT_PUBLIC_MEDUSA_PUB_KEY: z.string().min(1).optional(),
+    // Shopify headless (Storefront API) — replaces Medusa once the migration lands.
+    // Both sides can be configured at once during the parallel-build period; the
+    // active backend is chosen by NEXT_PUBLIC_COMMERCE_BACKEND at read time.
+    NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: z.string().min(1).optional(),
+    NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN: z.string().min(1).optional(),
+    NEXT_PUBLIC_COMMERCE_BACKEND: z.enum(["medusa", "shopify"]).default("medusa"),
     // Razorpay PUBLIC key id (safe to expose; secret + webhook secret stay on the
     // backend). Used to open Razorpay Checkout. Optional until payments go live.
     NEXT_PUBLIC_RAZORPAY_KEY_ID: z.string().min(1).optional(),
@@ -55,6 +61,9 @@ export const env = createEnv({
       process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL,
     NEXT_PUBLIC_MEDUSA_BASE_URL: process.env.NEXT_PUBLIC_MEDUSA_BASE_URL,
     NEXT_PUBLIC_MEDUSA_PUB_KEY: process.env.NEXT_PUBLIC_MEDUSA_PUB_KEY,
+    NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN,
+    NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN: process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN,
+    NEXT_PUBLIC_COMMERCE_BACKEND: process.env.NEXT_PUBLIC_COMMERCE_BACKEND,
     NEXT_PUBLIC_RAZORPAY_KEY_ID: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
     NEXT_PUBLIC_WHATSAPP_NUMBER: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER,
   },

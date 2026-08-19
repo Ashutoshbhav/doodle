@@ -19,6 +19,7 @@
     "@phosphor-icons/react": "^2.1.10",
     "@react-email/components": "^1.0.12",
     "@sentry/nextjs": "^10.51.0",
+    "@shopify/storefront-api-client": "^2.0.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
