@@ -2,12 +2,19 @@ import "server-only"
 
 import { cookies } from "next/headers"
 import { medusa, isCommerceConfigured } from "./client"
+import { env } from "@/env"
+import * as shopifyCart from "@/lib/shopify/cart"
+import { normalizeCart } from "@/lib/shopify/normalize"
 import type { Cart } from "./types"
 
 const CART_COOKIE = "doodle_cart_id"
 const CART_TTL_DAYS = 30
 
 export async function getCart(): Promise<Cart | null> {
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    const cart = await shopifyCart.getCart()
+    return cart ? (normalizeCart(cart) as unknown as Cart) : null
+  }
   if (!isCommerceConfigured) return null
   const jar = await cookies()
   const id = jar.get(CART_COOKIE)?.value
@@ -71,6 +78,9 @@ export async function getIndiaRegionId(): Promise<string> {
 }
 
 export async function getCartLineCount(): Promise<number> {
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    return shopifyCart.getCartLineCount()
+  }
   const cart = await getCart()
   return cart?.items?.reduce((n, i) => n + (i.quantity ?? 0), 0) ?? 0
 }

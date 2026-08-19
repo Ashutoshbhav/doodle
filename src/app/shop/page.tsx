@@ -1,10 +1,12 @@
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { getIndiaRegionId } from "@/lib/medusa/cart"
+import { listProducts as listShopifyProducts } from "@/lib/shopify/products"
 import { ProductCard } from "@/components/shop/ProductCard"
 import { NavWithCart } from "@/components/sections/NavWithCart"
 import { Footer } from "@/components/sections/Footer"
 import { Eyebrow } from "@/components/ui/Eyebrow"
 import { WaitlistForm } from "@/components/ui/WaitlistForm"
+import { env } from "@/env"
 import type { Product } from "@/lib/medusa/types"
 
 export const metadata = {
@@ -22,6 +24,9 @@ export const metadata = {
 export const dynamic = "force-dynamic"
 
 async function safeListProducts(): Promise<Product[]> {
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    return (await listShopifyProducts()) as unknown as Product[]
+  }
   if (!isCommerceConfigured) return []
   try {
     const regionId = await getIndiaRegionId()

@@ -10,6 +10,8 @@ import { PillButton } from "@/components/ui/PillButton"
 import { getCart } from "@/lib/medusa/cart"
 import { fetchSuggestions } from "@/lib/medusa/suggestions"
 import { formatINR } from "@/lib/medusa/types"
+import { getCheckoutUrl } from "@/lib/shopify/cart"
+import { env } from "@/env"
 
 export const dynamic = "force-dynamic"
 
@@ -27,6 +29,8 @@ export default async function CartPage() {
     .map((l) => l.product_handle ?? l.variant?.product?.handle)
     .filter((h): h is string => Boolean(h))
   const suggestions = items.length > 0 ? (await fetchSuggestions(inCartHandles)).slice(0, 3) : []
+  const isShopify = env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify"
+  const checkoutHref = isShopify && items.length > 0 ? await getCheckoutUrl() : "/checkout"
 
   return (
     <>
@@ -130,7 +134,7 @@ export default async function CartPage() {
                 </p>
 
                 <div className="mt-7">
-                  <Link href="/checkout" className="block">
+                  <Link href={checkoutHref} className="block">
                     <PillButton variant="primary" size="lg" className="w-full">
                       Continue to checkout
                     </PillButton>

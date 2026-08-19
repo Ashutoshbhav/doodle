@@ -4,6 +4,7 @@ import { createHmac, timingSafeEqual } from "node:crypto"
 import { revalidatePath } from "next/cache"
 import { getCart, getOrCreateCart, getIndiaRegionId } from "@/lib/medusa/cart"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
+import * as shopifyCart from "@/lib/shopify/cart"
 import { env } from "@/env"
 import { rateLimit } from "@/lib/ratelimit"
 import { rememberPlacedOrder } from "@/lib/medusa/auth"
@@ -106,9 +107,23 @@ export async function addToCart(input: {
   variantId: string
   quantity: number
 }): Promise<Result<AddResult>> {
-  if (!isCommerceConfigured) return notConfigured() as Result<AddResult>
   if (!input.variantId || !validQty(input.quantity))
     return fail("Invalid item or quantity.") as Result<AddResult>
+
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    try {
+      await shopifyCart.addLine(input.variantId, input.quantity)
+      revalidatePath("/cart")
+      revalidatePath("/", "layout")
+      // Shopify's own inventory system rejects overselling at checkout —
+      // no client-visible clamp step the way the Medusa guard needed.
+      return ok({ adjustedTo: undefined })
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : "Unknown error") as Result<AddResult>
+    }
+  }
+
+  if (!isCommerceConfigured) return notConfigured() as Result<AddResult>
   try {
     const regionId = await getIndiaRegionId()
     const cart = await getOrCreateCart(regionId)
@@ -130,8 +145,20 @@ export async function updateLine(input: {
   lineId: string
   quantity: number
 }): Promise<Result> {
-  if (!isCommerceConfigured) return notConfigured()
   if (!input.lineId || !validQty(input.quantity)) return fail("Invalid quantity.")
+
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    try {
+      await shopifyCart.updateLine(input.lineId, input.quantity)
+      revalidatePath("/cart")
+      revalidatePath("/", "layout")
+      return ok(undefined)
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : "Unknown error")
+    }
+  }
+
+  if (!isCommerceConfigured) return notConfigured()
   try {
     const cart = await getCart()
     if (!cart) return fail("Your cart was cleared. Add items again.")
@@ -151,6 +178,17 @@ export async function updateLine(input: {
 }
 
 export async function removeLine(input: { lineId: string }): Promise<Result> {
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    try {
+      await shopifyCart.removeLine(input.lineId)
+      revalidatePath("/cart")
+      revalidatePath("/", "layout")
+      return ok(undefined)
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : "Unknown error")
+    }
+  }
+
   if (!isCommerceConfigured) return notConfigured()
   try {
     const cart = await getCart()

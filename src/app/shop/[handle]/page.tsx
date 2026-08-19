@@ -3,6 +3,8 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { medusa, isCommerceConfigured } from "@/lib/medusa/client"
 import { getIndiaRegionId } from "@/lib/medusa/cart"
+import { getProductByHandle as getShopifyProductByHandle } from "@/lib/shopify/products"
+import { env } from "@/env"
 import { VariantPicker } from "@/components/shop/VariantPicker"
 import { LazyPatchScrubber } from "@/components/ui/LazyPatchScrubber"
 import { NavWithCart } from "@/components/sections/NavWithCart"
@@ -23,6 +25,9 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://doodlebycanvas.in"
 
 async function fetchProduct(handle: string): Promise<Product | null> {
+  if (env.NEXT_PUBLIC_COMMERCE_BACKEND === "shopify") {
+    return (await getShopifyProductByHandle(handle)) as unknown as Product | null
+  }
   if (!isCommerceConfigured) return null
   try {
     const regionId = await getIndiaRegionId()
