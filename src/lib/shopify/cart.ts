@@ -132,3 +132,12 @@ export async function getCartLineCount(): Promise<number> {
   const cart = await getCart()
   return cart?.totalQuantity ?? 0
 }
+
+// Headless Shopify checkout is a redirect, not a custom flow: Shopify's own
+// hosted checkout page collects address, shipping method, and payment
+// (Razorpay/COD, once configured in the store) — none of that needs to be
+// rebuilt here the way it did for Medusa's custom session-based checkout.
+export async function getCheckoutUrl(): Promise<string> {
+  const cart = await getOrCreateCart()
+  return cart.checkoutUrl
+}
