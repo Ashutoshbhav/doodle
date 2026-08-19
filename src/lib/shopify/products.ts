@@ -1,6 +1,6 @@
 import "server-only"
 
-import { shopify, isShopifyConfigured } from "./client"
+import { shopifyRequest, isShopifyConfigured } from "./client"
 import { normalizeProduct } from "./normalize"
 
 const PRODUCT_FRAGMENT = `
@@ -27,7 +27,7 @@ const PRODUCT_FRAGMENT = `
 export async function listProducts(limit = 50) {
   if (!isShopifyConfigured) return []
   try {
-    const { data } = await shopify.request(
+    const { data } = await shopifyRequest(
       `query ListProducts($first: Int!) { products(first: $first) { nodes { ${PRODUCT_FRAGMENT} } } }`,
       { variables: { first: limit } }
     )
@@ -42,7 +42,7 @@ export async function listProducts(limit = 50) {
 export async function listSuggestions(excludeHandles: string[]) {
   if (!isShopifyConfigured) return []
   try {
-    const { data } = await shopify.request(
+    const { data } = await shopifyRequest(
       `query { products(first: 20) { nodes { handle title featuredImage { url } variants(first: 5) { nodes { id title price { amount } } } } } }`
     )
     const excluded = new Set(excludeHandles)
@@ -69,7 +69,7 @@ export async function listSuggestions(excludeHandles: string[]) {
 export async function getProductByHandle(handle: string) {
   if (!isShopifyConfigured) return null
   try {
-    const { data } = await shopify.request(
+    const { data } = await shopifyRequest(
       `query GetProduct($handle: String!) { product(handle: $handle) { ${PRODUCT_FRAGMENT} } }`,
       { variables: { handle } }
     )

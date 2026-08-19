@@ -1,7 +1,7 @@
 import "server-only"
 
 import { cookies } from "next/headers"
-import { shopify, isShopifyConfigured } from "./client"
+import { shopifyRequest, isShopifyConfigured } from "./client"
 import type { ShopifyCart } from "./types"
 
 // Separate cookie from Medusa's doodle_cart_id so both backends can be
@@ -44,7 +44,7 @@ export async function getCart(): Promise<ShopifyCart | null> {
   const id = jar.get(CART_COOKIE)?.value
   if (!id) return null
 
-  const { data } = await shopify.request(`query GetCart($id: ID!) { cart(id: $id) { ${CART_FRAGMENT} } }`, {
+  const { data } = await shopifyRequest(`query GetCart($id: ID!) { cart(id: $id) { ${CART_FRAGMENT} } }`, {
     variables: { id },
   })
   if (!data?.cart) {
@@ -58,7 +58,7 @@ export async function getOrCreateCart(): Promise<ShopifyCart> {
   const existing = await getCart()
   if (existing) return existing
 
-  const { data, errors } = await shopify.request(
+  const { data, errors } = await shopifyRequest(
     `mutation CreateCart($input: CartInput!) { cartCreate(input: $input) { cart { ${CART_FRAGMENT} } userErrors { field message } } }`,
     { variables: { input: { buyerIdentity: { countryCode: "IN" } } } }
   )
@@ -82,7 +82,7 @@ export async function getOrCreateCart(): Promise<ShopifyCart> {
 
 export async function addLine(variantId: string, quantity: number): Promise<ShopifyCart> {
   const cart = await getOrCreateCart()
-  const { data, errors } = await shopify.request(
+  const { data, errors } = await shopifyRequest(
     `mutation AddLine($cartId: ID!, $lines: [CartLineInput!]!) { cartLinesAdd(cartId: $cartId, lines: $lines) { cart { ${CART_FRAGMENT} } userErrors { field message } } }`,
     { variables: { cartId: cart.id, lines: [{ merchandiseId: variantId, quantity }] } }
   )
@@ -94,7 +94,7 @@ export async function addLine(variantId: string, quantity: number): Promise<Shop
 
 export async function updateLine(lineId: string, quantity: number): Promise<ShopifyCart> {
   const cart = await getOrCreateCart()
-  const { data, errors } = await shopify.request(
+  const { data, errors } = await shopifyRequest(
     `mutation UpdateLine($cartId: ID!, $lines: [CartLineUpdateInput!]!) { cartLinesUpdate(cartId: $cartId, lines: $lines) { cart { ${CART_FRAGMENT} } userErrors { field message } } }`,
     { variables: { cartId: cart.id, lines: [{ id: lineId, quantity }] } }
   )
@@ -106,7 +106,7 @@ export async function updateLine(lineId: string, quantity: number): Promise<Shop
 
 export async function removeLine(lineId: string): Promise<ShopifyCart> {
   const cart = await getOrCreateCart()
-  const { data, errors } = await shopify.request(
+  const { data, errors } = await shopifyRequest(
     `mutation RemoveLine($cartId: ID!, $lineIds: [ID!]!) { cartLinesRemove(cartId: $cartId, lineIds: $lineIds) { cart { ${CART_FRAGMENT} } userErrors { field message } } }`,
     { variables: { cartId: cart.id, lineIds: [lineId] } }
   )
@@ -118,7 +118,7 @@ export async function removeLine(lineId: string): Promise<ShopifyCart> {
 
 export async function setNote(note: string): Promise<ShopifyCart> {
   const cart = await getOrCreateCart()
-  const { data, errors } = await shopify.request(
+  const { data, errors } = await shopifyRequest(
     `mutation SetNote($cartId: ID!, $note: String) { cartNoteUpdate(cartId: $cartId, note: $note) { cart { ${CART_FRAGMENT} } userErrors { field message } } }`,
     { variables: { cartId: cart.id, note } }
   )
