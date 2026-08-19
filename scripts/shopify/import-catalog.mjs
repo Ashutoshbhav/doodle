@@ -61,6 +61,15 @@ const PACKS = [
 
 const PATCH_IMAGE = `${CLOUDINARY}/patch.jpg`
 
+// Bundle products from the old Medusa catalogue's seed-doodle.ts /
+// setup-catalog.ts (real structure + prices, pulled from source since the
+// Medusa backend itself is no longer live to query). Real per-variant stock
+// was never established for these (reconcile-catalog.ts deliberately left
+// them untouched, "set aside for Ash's decision") — stock 0 on purpose
+// rather than inventing a number; bump once real counts are confirmed.
+const STARTER_KIT_IMAGE = `${CLOUDINARY}/starter-kit.jpg`
+const PATTERN_PACK_IMAGE = `${CLOUDINARY}/pattern-pack.jpg`
+
 const PATCH_STOCK = 880
 
 async function getPrimaryLocationId() {
@@ -170,7 +179,47 @@ async function main() {
     ],
   })
 
-  console.log("\nDone. 7 products created/updated.")
+  // --- DOODLE Starter Kit: one tee + 3 patches, bundle SKU (not linked
+  // inventory) — matches how the old Medusa catalogue modeled it ---
+  await upsertProduct({
+    title: "DOODLE Starter Kit",
+    handle: "starter-kit",
+    descriptionHtml:
+      "One DOODLE tee + 3 stick-on patches. Mix, match and remake the look as often as you like. The easiest way to begin.",
+    status: "ACTIVE",
+    productOptions: [{ name: "Size", position: 1, values: SIZES.map((s) => ({ name: s })) }],
+    files: [{ originalSource: STARTER_KIT_IMAGE, contentType: "IMAGE" }],
+    variants: SIZES.map((s) => ({
+      sku: `STARTER-${s}`,
+      price: "999.00",
+      compareAtPrice: "1499.00",
+      optionValues: [{ optionName: "Size", name: s }],
+      inventoryQuantities: [{ locationId, name: "available", quantity: 0 }],
+      file: { originalSource: STARTER_KIT_IMAGE, contentType: "IMAGE" },
+    })),
+  })
+
+  // --- DOODLE Pattern Pack ("Mix Your Six"): 6 patches, one of each theme ---
+  await upsertProduct({
+    title: "DOODLE Pattern Pack",
+    handle: "pattern-pack",
+    descriptionHtml:
+      "Six stick-on patches, mixed. Refresh any DOODLE tee in seconds — peel, place, restyle.",
+    status: "ACTIVE",
+    productOptions: [{ name: "Pack", position: 1, values: [{ name: "Set of 6" }] }],
+    files: [{ originalSource: PATTERN_PACK_IMAGE, contentType: "IMAGE" }],
+    variants: [
+      {
+        sku: "PATTERN-PACK-6",
+        price: "600.00",
+        optionValues: [{ optionName: "Pack", name: "Set of 6" }],
+        inventoryQuantities: [{ locationId, name: "available", quantity: 0 }],
+        file: { originalSource: PATTERN_PACK_IMAGE, contentType: "IMAGE" },
+      },
+    ],
+  })
+
+  console.log("\nDone. 9 products created/updated.")
 }
 
 main().catch((err) => {
