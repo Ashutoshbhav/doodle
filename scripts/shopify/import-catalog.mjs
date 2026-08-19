@@ -33,24 +33,33 @@ async function adminGraphQL(query, variables) {
 // Sizes match the real signed spec sheet (src/app/size-guide in the frontend).
 const SIZES = ["3-4Y", "5-6Y", "7-8Y", "9-10Y"]
 
+// Same Cloudinary assets doodle-backend's attach-images.ts already uploaded
+// for the Medusa catalogue (cloud "dfdj6sbwr", folder "doodle/products") —
+// reused as-is rather than re-uploading; every URL below was verified live
+// (HTTP 200) before wiring in.
+const CLOUDINARY = "https://res.cloudinary.com/dfdj6sbwr/image/upload/doodle/products"
+
 // colourKey -> [stock per size, in SIZES order] — from doodle-backend's
-// reconcile-catalog.ts, verified against Ash's stock sheet.
+// reconcile-catalog.ts, verified against Ash's stock sheet. image matches
+// attach-images.ts's MULTI["modular-tee"] file order (1-indexed).
 const TEE_STOCK = {
-  blue: { name: "Sky Blue", stock: [29, 30, 29, 30] },
-  pink: { name: "Blossom Pink", stock: [3, 3, 4, 2] },
-  charcoal: { name: "Charcoal Grey", stock: [5, 4, 5, 5] },
-  coral: { name: "Happy Orange", stock: [5, 2, 5, 5] },
-  purple: { name: "Magic Lavender", stock: [3, 2, 4, 5] },
-  yellow: { name: "Sunny Yellow", stock: [5, 5, 5, 3] },
+  pink: { name: "Blossom Pink", stock: [3, 3, 4, 2], image: `${CLOUDINARY}/modular-tee-1` },
+  blue: { name: "Sky Blue", stock: [29, 30, 29, 30], image: `${CLOUDINARY}/modular-tee-2` },
+  coral: { name: "Happy Orange", stock: [5, 2, 5, 5], image: `${CLOUDINARY}/modular-tee-3` },
+  purple: { name: "Magic Lavender", stock: [3, 2, 4, 5], image: `${CLOUDINARY}/modular-tee-4` },
+  yellow: { name: "Sunny Yellow", stock: [5, 5, 5, 3], image: `${CLOUDINARY}/modular-tee-5` },
+  charcoal: { name: "Charcoal Grey", stock: [5, 4, 5, 5], image: `${CLOUDINARY}/modular-tee-6` },
 }
 
 const PACKS = [
-  { handle: "epic-quest", title: "Epic Quest", stock: 0 },
-  { handle: "moodicorns", title: "Moodicorns", stock: 0 },
-  { handle: "space-squad", title: "Space Squad", stock: 1 },
-  { handle: "sunny-pals", title: "Sunny Pals", stock: 1 },
-  { handle: "tiny-travellers", title: "Tiny Travellers", stock: 1 },
+  { handle: "epic-quest", title: "Epic Quest", stock: 0, image: `${CLOUDINARY}/epic-quest.jpg` },
+  { handle: "moodicorns", title: "Moodicorns", stock: 0, image: `${CLOUDINARY}/moodicorns.jpg` },
+  { handle: "space-squad", title: "Space Squad", stock: 1, image: `${CLOUDINARY}/space-squad.jpg` },
+  { handle: "sunny-pals", title: "Sunny Pals", stock: 1, image: `${CLOUDINARY}/sunny-pals.jpg` },
+  { handle: "tiny-travellers", title: "Tiny Travellers", stock: 1, image: `${CLOUDINARY}/tiny-travellers.jpg` },
 ]
+
+const PATCH_IMAGE = `${CLOUDINARY}/patch.jpg`
 
 const PATCH_STOCK = 880
 
@@ -70,7 +79,17 @@ mutation ProductSet($input: ProductSetInput!) {
   }
 }`
 
+async function findProductIdByHandle(handle) {
+  const data = await adminGraphQL(
+    `query($q: String!) { products(first: 1, query: $q) { nodes { id } } }`,
+    { q: `handle:${handle}` }
+  )
+  return data.products.nodes[0]?.id ?? null
+}
+
 async function upsertProduct(input) {
+  const existingId = await findProductIdByHandle(input.handle)
+  if (existingId) input = { ...input, id: existingId }
   const data = await adminGraphQL(PRODUCT_SET_MUTATION, { input })
   const { product, userErrors } = data.productSet
   if (userErrors?.length) {
@@ -96,6 +115,7 @@ async function main() {
       { name: "Colour", position: 1, values: colours.map(([, c]) => ({ name: c.name })) },
       { name: "Size", position: 2, values: SIZES.map((s) => ({ name: s })) },
     ],
+    files: colours.map(([, c]) => ({ originalSource: c.image, contentType: "IMAGE" })),
     variants: colours.flatMap(([ck, c]) =>
       SIZES.map((s, i) => ({
         sku: `TEE-${ck.toUpperCase()}-${s}`,
@@ -105,6 +125,7 @@ async function main() {
           { optionName: "Size", name: s },
         ],
         inventoryQuantities: [{ locationId, name: "available", quantity: c.stock[i] }],
+        file: { originalSource: c.image, contentType: "IMAGE" },
       }))
     ),
   })
@@ -117,12 +138,14 @@ async function main() {
       descriptionHtml: `${p.title} — a pack of 6 themed DOODLE patches. Snap them on, swap them out, collect the gang.`,
       status: "ACTIVE",
       productOptions: [{ name: "Pack", position: 1, values: [{ name: "Set of 6" }] }],
+      files: [{ originalSource: p.image, contentType: "IMAGE" }],
       variants: [
         {
           sku: `PACK-${p.handle.toUpperCase()}`,
           price: "799.00",
           optionValues: [{ optionName: "Pack", name: "Set of 6" }],
           inventoryQuantities: [{ locationId, name: "available", quantity: p.stock }],
+          file: { originalSource: p.image, contentType: "IMAGE" },
         },
       ],
     })
@@ -135,12 +158,14 @@ async function main() {
     descriptionHtml: "One silicone DOODLE patch. Mix, match, and build your own set.",
     status: "ACTIVE",
     productOptions: [{ name: "Style", position: 1, values: [{ name: "Classic" }] }],
+    files: [{ originalSource: PATCH_IMAGE, contentType: "IMAGE" }],
     variants: [
       {
         sku: "PATCH-01",
         price: "100.00",
         optionValues: [{ optionName: "Style", name: "Classic" }],
         inventoryQuantities: [{ locationId, name: "available", quantity: PATCH_STOCK }],
+        file: { originalSource: PATCH_IMAGE, contentType: "IMAGE" },
       },
     ],
   })
